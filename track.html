@@ -12,7 +12,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', surfaceBg: '#F0F4F2' },
+          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', brandRed: '#D9381E', surfaceBg: '#F0F4F2' },
           fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
         }
       }
@@ -20,8 +20,8 @@
   </script>
   <style>
     input, select, textarea, button { font-size: 16px !important; }
-    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
-    .glass-nav { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-nav { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
   </style>
 </head>
@@ -100,7 +100,7 @@
           </button>
         </div>
         <div class="text-right">
-          <button type="button" onclick="alert('Password reset link sent to your email!')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
+          <button type="button" onclick="showAlert('Reset Sent', 'A password reset link has been sent to your email.')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
         </div>
         <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition">Log In & Track</button>
       </form>
@@ -148,15 +148,45 @@
     </div>
   </main>
 
+  <!-- Custom Branded Alert -->
+  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
+      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition">Got it</button>
+    </div>
+  </div>
+
+  <!-- Floating Chat Widget -->
+  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Live chat will be available when our support agents are online. Please check back later!')">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap">Chat with us</span>
+  </button>
+
   <script>
     let activeEmail = "";
+
+    // Custom Alert Logic
+    function showAlert(title, message, isError = false) {
+      document.getElementById('alertTitle').innerText = title;
+      document.getElementById('alertMessage').innerText = message;
+      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeAlert() {
+      document.getElementById('customAlert').classList.add('hidden');
+      document.getElementById('customAlert').classList.remove('flex');
+    }
 
     // On Load, check if redirected from checkout with email in URL
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('email')) {
         document.getElementById('trackEmail').value = urlParams.get('email');
-        handleEmailCheck(new Event('submit'));
+        handleEmailCheck(null);
       }
     });
 
@@ -187,7 +217,7 @@
       } else if (hasOrder) {
         switchStep('step-register');
       } else {
-        alert("No active orders found for this email.");
+        showAlert("No Orders Found", "We couldn't find any active orders for that email.", true);
       }
     }
 
@@ -207,7 +237,7 @@
       if(users[activeEmail] === pwd) {
         loadDashboard();
       } else {
-        alert("Incorrect password.");
+        showAlert("Access Denied", "Incorrect password. Please try again.", true);
       }
     }
 
