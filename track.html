@@ -20,7 +20,7 @@
   </script>
   <style>
     input, select, textarea, button { font-size: 16px !important; }
-    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-panel { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
     .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
   </style>
@@ -28,6 +28,7 @@
 <body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col pb-24 sm:pb-0">
   <div class="bg-blob-1"></div>
 
+  <!-- TOP HEADER -->
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
@@ -62,7 +63,7 @@
     </a>
   </nav>
 
-  <main class="relative z-10 max-w-md mx-auto px-4 sm:px-6 pt-12 pb-10 flex-grow w-full flex flex-col items-center justify-center">
+  <main class="relative z-10 max-w-md mx-auto px-4 sm:px-6 pt-10 pb-10 flex-grow w-full flex flex-col items-center justify-center">
     
     <!-- STEP 1: Enter Email -->
     <div id="step-email" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg">
@@ -70,22 +71,28 @@
       <p class="text-sm text-slate-600 mb-6">Enter the email you used at checkout.</p>
       <form onsubmit="handleEmailCheck(event)" class="space-y-4">
         <input type="email" id="trackEmail" required placeholder="name@email.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-center"/>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Continue</button>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Continue</button>
       </form>
     </div>
 
-    <!-- STEP 2: Register (Set Password) -->
+    <!-- STEP 2: Register with Skip to WhatsApp Option -->
     <div id="step-register" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
       <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Order Found!</h2>
-      <p class="text-sm text-slate-600 mb-6">Create a password to secure your account and track this shipment.</p>
-      <form onsubmit="handleRegister(event)" class="space-y-4 text-left">
+      <p class="text-sm text-slate-600 mb-6">Create a password to track this shipment, or skip and receive live status updates on WhatsApp.</p>
+      <form onsubmit="handleRegister(event)" class="space-y-3 text-left">
         <div class="relative">
           <input type="password" id="regPassword" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3"/>
           <button type="button" onclick="toggleVisibility('regPassword')" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer">
             <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
           </button>
         </div>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Save Profile & Track</button>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Save Profile & Track</button>
+        
+        <!-- SKIP TO WHATSAPP BUTTON -->
+        <button type="button" onclick="skipToWhatsAppTracking()" class="w-full bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 py-3.5 rounded-xl font-bold text-sm cursor-pointer transition active:scale-95 flex items-center justify-center gap-2 mt-2 shadow-sm">
+          <svg class="w-4 h-4 text-emerald-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+          <span>Skip & Track on WhatsApp</span>
+        </button>
       </form>
     </div>
 
@@ -101,15 +108,25 @@
           </button>
         </div>
         <div class="text-right">
-          <button type="button" onclick="showAlert('Reset Sent', 'A password reset link has been dispatched to your email address.')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
+          <button type="button" onclick="showAlert('Reset Dispatched', 'A password reset link has been dispatched to your email address.')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
         </div>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Log In & Track</button>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Log In & Track</button>
       </form>
     </div>
 
     <!-- STEP 4: Tracking Dashboard -->
     <div id="step-tracking" class="w-full hidden">
       <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-lg">
+        
+        <!-- WhatsApp Concierge Confirmation Banner -->
+        <div id="waBanner" class="hidden mb-6 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left flex items-start gap-3">
+          <svg class="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div class="text-xs text-slate-700">
+            <span class="font-bold text-emerald-900 block mb-0.5">WhatsApp Concierge Active</span>
+            The OgaMarket fulfillment team will reach out directly to your WhatsApp with live market pictures and dispatch waybills.
+          </div>
+        </div>
+
         <div class="flex justify-between items-center border-b border-slate-200/70 pb-4 mb-6">
           <div>
             <h2 class="text-xl font-extrabold text-slate-900">Order Status</h2>
@@ -135,7 +152,7 @@
             </div>
             <div class="pt-0.5">
               <p class="font-bold text-sm text-slate-900">Sourcing in Market</p>
-              <p class="text-xs text-slate-500" id="trackSourcingText">Field shopper is handpicking batches at Mile 12.</p>
+              <p class="text-xs text-slate-500" id="trackSourcingText">Field shopper is handpicking batches at open market.</p>
             </div>
           </div>
           <div class="flex gap-4">
@@ -152,7 +169,7 @@
     </div>
   </main>
 
-  <!-- BRANDED MODAL ALERT -->
+  <!-- BRANDED MODAL ALERT (No browser alerts) -->
   <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
@@ -163,7 +180,7 @@
   </div>
 
   <!-- FLOATING CHAT WIDGET -->
-  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Live market agents will be online shortly. Leave a note or contact us via WhatsApp!')">
+  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Our fulfillment line is active on WhatsApp: +234 800 OGAMARKET')">
     <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
     <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap pointer-events-none">Chat with us</span>
   </button>
@@ -185,7 +202,6 @@
       modal.classList.remove('flex');
     }
 
-    // Seed sample orders & accounts if first time visit
     function seedSampleData() {
       if(!localStorage.getItem('ogamarket_orders')) {
         const sampleOrders = [
@@ -195,9 +211,7 @@
         localStorage.setItem('ogamarket_orders', JSON.stringify(sampleOrders));
       }
       if(!localStorage.getItem('ogamarket_users')) {
-        const sampleUsers = {
-          "emeka@gmail.com": "password123"
-        };
+        const sampleUsers = { "emeka@gmail.com": "password123" };
         localStorage.setItem('ogamarket_users', JSON.stringify(sampleUsers));
       }
     }
@@ -237,8 +251,16 @@
       } else if (hasOrder) {
         switchStep('step-register');
       } else {
-        // If it's a completely new user testing, let them register or view status directly
-        showAlert("No Past Orders", "We haven't found an order for " + activeEmail + " yet. You can create an account or order from our Store first!", true);
+        // If it's a new email, create a demo order for it immediately so user can test seamlessly
+        const newDemoOrder = {
+          email: activeEmail,
+          date: new Date().toLocaleDateString(),
+          status: "Sourcing in Market",
+          ref: "#OGA-" + Math.floor(10000 + Math.random() * 90000)
+        };
+        orders.push(newDemoOrder);
+        localStorage.setItem('ogamarket_orders', JSON.stringify(orders));
+        switchStep('step-register');
       }
     }
 
@@ -248,7 +270,11 @@
       const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
       users[activeEmail] = pwd;
       localStorage.setItem('ogamarket_users', JSON.stringify(users));
-      loadDashboard();
+      loadDashboard(false);
+    }
+
+    function skipToWhatsAppTracking() {
+      loadDashboard(true);
     }
 
     function handleLogin(e) {
@@ -256,19 +282,22 @@
       const pwd = document.getElementById('loginPassword').value;
       const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
       if(users[activeEmail] === pwd) {
-        loadDashboard();
+        loadDashboard(false);
       } else {
         showAlert("Access Denied", "Incorrect password. Please verify your credentials.", true);
       }
     }
 
-    function loadDashboard() {
+    function loadDashboard(showWhatsAppBanner = false) {
       switchStep('step-tracking');
       const orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
       const myOrder = orders.slice().reverse().find(o => o.email.toLowerCase() === activeEmail);
       if(myOrder) {
         document.getElementById('trackStatusBadge').innerText = myOrder.status;
         if(myOrder.ref) document.getElementById('trackOrderRef').innerText = myOrder.ref;
+      }
+      if(showWhatsAppBanner) {
+        document.getElementById('waBanner').classList.remove('hidden');
       }
     }
   </script>
