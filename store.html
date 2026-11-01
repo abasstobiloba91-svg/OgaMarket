@@ -12,7 +12,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', surfaceBg: '#F0F4F2' },
+          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', brandRed: '#D9381E', surfaceBg: '#F0F4F2' },
           fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
         }
       }
@@ -75,6 +75,7 @@
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
+  <!-- CART DRAWER -->
   <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity">
     <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto cursor-pointer"></div>
     <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col pointer-events-auto transform translate-x-full transition-transform" id="cartPanel">
@@ -87,6 +88,7 @@
     </div>
   </div>
 
+  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto pb-24">
     <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative">
       <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-xl cursor-pointer">&times;</button>
@@ -105,6 +107,22 @@
     </div>
   </div>
 
+  <!-- Custom Branded Alert -->
+  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
+      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition">Got it</button>
+    </div>
+  </div>
+
+  <!-- Floating Chat Widget -->
+  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Live chat will be available when our support agents are online. Please check back later!')">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap">Chat with us</span>
+  </button>
+
   <script>
     const initialCatalog = [
       { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
@@ -113,9 +131,31 @@
       { id: "prod-4", name: "Oron Smoked Crayfish", category: "SOUPS", gauge: "1 Large Derica", price: 4200, image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80" }
     ];
     
-    let catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || initialCatalog;
+    // Fallback if localstorage is empty or corrupted
+    let catalog = [];
+    try {
+      let saved = JSON.parse(localStorage.getItem('ogamarket_catalog'));
+      if(saved && saved.length > 0) catalog = saved;
+      else catalog = [...initialCatalog];
+    } catch(e) {
+      catalog = [...initialCatalog];
+    }
+
     let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
     let currentCategory = 'ALL';
+
+    function showAlert(title, message, isError = false) {
+      document.getElementById('alertTitle').innerText = title;
+      document.getElementById('alertMessage').innerText = message;
+      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeAlert() {
+      document.getElementById('customAlert').classList.add('hidden');
+      document.getElementById('customAlert').classList.remove('flex');
+    }
 
     function initStore() { renderProducts(); updateCartUI(); }
     
@@ -149,15 +189,22 @@
     }
     
     function addToCart(id) {
+      if(!catalog || catalog.length === 0) catalog = initialCatalog; // Safety check
       const p = catalog.find(i => i.id === id);
+      if(!p) { showAlert("Error", "Product not found.", true); return; }
+      
       const ex = cart.find(c => c.id === id);
       if(ex) ex.quantity++; else cart.push({...p, quantity: 1});
+      
       saveCart(); updateCartUI(); toggleCart(true);
     }
     
     function updateCartQuantity(id, delta) {
       const idx = cart.findIndex(c => c.id === id);
-      if(idx > -1) { cart[idx].quantity += delta; if(cart[idx].quantity <= 0) cart.splice(idx,1); }
+      if(idx > -1) { 
+        cart[idx].quantity += delta; 
+        if(cart[idx].quantity <= 0) cart.splice(idx,1); 
+      }
       saveCart(); updateCartUI();
     }
     
@@ -202,7 +249,7 @@
 
       cart = []; saveCart(); updateCartUI(); closeCheckoutModal();
       
-      // Redirect to track page which will handle the account creation flow automatically based on their email
+      // Redirect to track page
       window.location.href = "track.html?email=" + encodeURIComponent(email);
     }
     
