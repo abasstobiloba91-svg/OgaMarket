@@ -33,17 +33,17 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"/>
-          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"/>
-          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"/>
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
         </svg>
         <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
       </a>
       <div class="flex items-center gap-3">
-        <a href="admin.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Staff Portal</a>
+        <a href="track.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Track Order</a>
         <button onclick="toggleCart(true)" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer">
           <span class="hidden sm:inline">Bag</span>
-          <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
           <span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full font-black">0</span>
         </button>
       </div>
@@ -51,17 +51,17 @@
   </header>
 
   <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] cursor-pointer">
-    <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
       <span class="text-[10px] font-bold">Home</span>
     </a>
-    <a href="store.html" class="flex flex-col items-center gap-1 text-brandGreen p-2">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    <a href="store.html" class="flex flex-col items-center gap-1 text-brandGreen p-2 cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
       <span class="text-[10px] font-bold">Store</span>
     </a>
-    <a href="admin.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      <span class="text-[10px] font-bold">Admin</span>
+    <a href="track.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
+      <span class="text-[10px] font-bold">Track</span>
     </a>
   </nav>
 
@@ -93,6 +93,7 @@
       <h3 class="text-xl font-extrabold mb-6">Delivery Details</h3>
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
         <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
+        <input type="email" id="custEmail" required placeholder="Email Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
         <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
         <select id="custDestination" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-semibold text-sm">
           <option value="lagos">Lagos Doorstep Dispatch (&#8358;2,500)</option>
@@ -103,23 +104,6 @@
       </form>
     </div>
   </div>
-  
-  <div id="lazyRegModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="glass-panel rounded-3xl max-w-md w-full p-6 text-center relative">
-      <button onclick="document.getElementById('lazyRegModal').classList.add('hidden'); document.getElementById('lazyRegModal').classList.remove('flex');" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-xl cursor-pointer">&times;</button>
-      <h3 class="text-xl font-extrabold mb-2 text-brandGreen">Order Confirmed!</h3>
-      <p class="mb-5 text-sm text-slate-600">Enter a password below to track your order and buy again next time without filling forms.</p>
-      <form onsubmit="handleLazyRegistration(event)">
-        <input type="password" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 mb-4 text-center"/>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer">Save Profile</button>
-      </form>
-    </div>
-  </div>
-
-  <button class="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="alert('Chat connecting to OgaMarket Concierge Team...')">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap">Chat with us</span>
-  </button>
 
   <script>
     const initialCatalog = [
@@ -209,11 +193,18 @@
     function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); document.getElementById('checkoutModal').classList.remove('flex'); }
     
     function handleCheckoutSubmit(e) {
-      e.preventDefault(); cart = []; saveCart(); updateCartUI(); closeCheckoutModal();
-      document.getElementById('lazyRegModal').classList.remove('hidden'); document.getElementById('lazyRegModal').classList.add('flex');
+      e.preventDefault(); 
+      const email = document.getElementById('custEmail').value;
+      // Save order to mock database for tracking page
+      let mockOrders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
+      mockOrders.push({ email: email, date: new Date().toLocaleDateString(), status: "Sourcing in Market" });
+      localStorage.setItem('ogamarket_orders', JSON.stringify(mockOrders));
+
+      cart = []; saveCart(); updateCartUI(); closeCheckoutModal();
+      
+      // Redirect to track page which will handle the account creation flow automatically based on their email
+      window.location.href = "track.html?email=" + encodeURIComponent(email);
     }
-    
-    function handleLazyRegistration(e) { e.preventDefault(); alert('Profile Saved!'); document.getElementById('lazyRegModal').classList.add('hidden'); document.getElementById('lazyRegModal').classList.remove('flex'); }
     
     window.addEventListener('DOMContentLoaded', initStore);
   </script>
