@@ -133,10 +133,10 @@
   </div>
 
   <script>
-    // Initialize Supabase Live Connection
+    // RENAMED FROM 'supabase' to 'db' TO FIX SYNTAX COLLISION ERROR
     const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
     const supabaseKey = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     let catalog = [];
     let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
@@ -162,7 +162,7 @@
     }
 
     async function fetchProducts() {
-      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      const { data, error } = await db.from('products').select('*').order('created_at', { ascending: false });
       document.getElementById('loader').classList.add('hidden');
       if (error) {
         console.error(error);
@@ -286,7 +286,7 @@
         status: 'Sourcing in Market'
       };
 
-      const { error } = await supabase.from('orders').insert([newOrder]);
+      const { error } = await db.from('orders').insert([newOrder]);
 
       if (error) {
         showAlert("Checkout failed", error.message, true);
