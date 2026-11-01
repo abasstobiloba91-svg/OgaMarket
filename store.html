@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>OgaMarket | Storefront</title>
+  <title>OgaMarket | Online Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +12,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', surfaceBg: '#F7FAF8' },
+          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', surfaceBg: '#F0F4F2' },
           fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
         }
       }
@@ -21,81 +20,95 @@
   </script>
   <style>
     input, select, textarea, button { font-size: 16px !important; }
-    .glass-nav { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
-    .glass-card { background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.95); box-shadow: 0 14px 30px -10px rgba(8, 90, 54, 0.06); transition: transform 0.2s; }
-    .glass-card:hover { transform: translateY(-2px); }
-    .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(28px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); transition: transform 0.2s; }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
   </style>
 </head>
-<body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col justify-between">
-  
-  <header class="sticky top-0 z-40 glass-nav">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
-      <a href="index.html" class="flex items-center gap-3 flex-shrink-0 group">
-        <svg class="w-10 h-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen pb-20 sm:pb-0">
+  <div class="bg-blob-1"></div>
+
+  <header class="sticky top-0 z-40 glass-nav shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 sm:gap-3">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"/>
           <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"/>
           <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"/>
         </svg>
-        <div class="flex flex-col text-left">
-          <span class="text-2xl font-extrabold text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
-        </div>
+        <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
       </a>
       <div class="flex items-center gap-3">
         <a href="admin.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100">Staff Portal</a>
-        <button onclick="toggleCart(true)" class="relative bg-brandGreen text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2">
-          <span>Bag</span><span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full">0</span>
+        <button onclick="toggleCart(true)" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2">
+          <span class="hidden sm:inline">Bag</span>
+          <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full font-black">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-24 flex-grow">
-    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-8 no-scrollbar">
-      <button onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-brandGreen text-white">All Foodstuffs</button>
-      <button onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-600 border border-slate-200">Grains & Tubers</button>
-      <button onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-600 border border-slate-200">Soups & Spices</button>
+  <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <span class="text-[10px] font-bold">Home</span>
+    </a>
+    <a href="store.html" class="flex flex-col items-center gap-1 text-brandGreen p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      <span class="text-[10px] font-bold">Store</span>
+    </a>
+    <a href="admin.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <span class="text-[10px] font-bold">Admin</span>
+    </a>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-10 flex-grow w-full">
+    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar">
+      <button onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap">All</button>
+      <button onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap">Grains & Tubers</button>
+      <button onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap">Soups & Spices</button>
     </div>
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    
+    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
-  <!-- CART DRAWER -->
   <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity">
-    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 pointer-events-auto"></div>
+    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto"></div>
     <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col pointer-events-auto transform translate-x-full transition-transform" id="cartPanel">
-      <div class="p-5 border-b border-slate-100 flex justify-between"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-500 font-bold">Close X</button></div>
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-400 font-bold p-2 text-xl">&times;</button></div>
       <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5"></div>
-      <div class="p-5 bg-slate-50">
-        <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText">₦0</span></div>
-        <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold">Proceed to Checkout</button>
+      <div class="p-5 bg-slate-50 border-t border-slate-100">
+        <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText" class="font-mono">₦0</span></div>
+        <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-sm">Proceed to Checkout</button>
       </div>
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto">
-    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8">
-      <h3 class="text-xl font-extrabold mb-6">Delivery Information</h3>
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto pb-24">
+    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl">
+      <h3 class="text-xl font-extrabold mb-6">Delivery Details</h3>
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
-        <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3"/>
-        <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3"/>
-        <select id="custDestination" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+        <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
+        <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
+        <select id="custDestination" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-semibold text-sm">
           <option value="lagos">Lagos Doorstep Dispatch (₦2,500)</option>
           <option value="interstate">Interstate Motor Park Waybill (₦6,500)</option>
         </select>
-        <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3" rows="3"></textarea>
-        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-4">Pay Securely via Paystack</button>
+        <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
+        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-2 shadow-sm">Pay Securely via Paystack</button>
       </form>
     </div>
   </div>
   
-  <!-- LAZY REGISTRATION -->
   <div id="lazyRegModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="glass-panel rounded-3xl max-w-md w-full p-6 text-center">
-      <h3 class="text-2xl font-extrabold mb-2">Order Confirmed</h3>
-      <p class="mb-4 text-sm text-slate-600">Set a password to track your order.</p>
+      <h3 class="text-xl font-extrabold mb-2 text-brandGreen">Order Confirmed!</h3>
+      <p class="mb-5 text-sm text-slate-600">Enter a password below to track your order and buy again next time without filling forms.</p>
       <form onsubmit="handleLazyRegistration(event)">
-        <input type="password" required placeholder="Create Password" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 mb-4 text-center"/>
+        <input type="password" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 mb-4 text-center"/>
         <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold">Save Profile</button>
       </form>
     </div>
@@ -103,9 +116,10 @@
 
   <script>
     const initialCatalog = [
-      { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, interstateSafe: true, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
-      { id: "prod-2", name: "Heavy Benue Yams", category: "SWALLOWS", gauge: "Set of 3 Heavy Tubers", price: 14000, interstateSafe: true, image: "https://images.unsplash.com/photo-1596450514735-111a2fe02935?w=600&q=80" },
-      { id: "prod-3", name: "Clean Egusi", category: "SOUPS", gauge: "Paint Bucket (4L)", price: 9200, interstateSafe: true, image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80" }
+      { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
+      { id: "prod-2", name: "Heavy Benue Yams", category: "SWALLOWS", gauge: "Set of 3 Heavy Tubers", price: 14000, image: "https://images.unsplash.com/photo-1596450514735-111a2fe02935?w=600&q=80" },
+      { id: "prod-3", name: "Clean Egusi", category: "SOUPS", gauge: "Paint Bucket (4L)", price: 9200, image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80" },
+      { id: "prod-4", name: "Oron Smoked Crayfish", category: "SOUPS", gauge: "1 Large Derica", price: 4200, image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80" }
     ];
     
     let catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || initialCatalog;
@@ -118,10 +132,16 @@
       const grid = document.getElementById('productGrid');
       const filtered = catalog.filter(i => currentCategory === 'ALL' || i.category === currentCategory);
       grid.innerHTML = filtered.map(item => `
-        <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between">
-          <img src="${item.image}" class="h-48 w-full object-cover"/>
-          <div class="p-5"><h3 class="font-bold">${item.name}</h3><p class="text-xs text-slate-500">${item.gauge}</p><p class="text-xl font-extrabold mt-2 font-mono">₦${Number(item.price).toLocaleString()}</p></div>
-          <div class="p-5 pt-0"><button onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold">Add to Bag</button></div>
+        <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm">
+          <img src="${item.image}" class="h-32 sm:h-48 w-full object-cover"/>
+          <div class="p-3 sm:p-4">
+            <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight mb-1 truncate">${item.name}</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500 mb-2 truncate">${item.gauge}</p>
+            <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">₦${Number(item.price).toLocaleString()}</p>
+          </div>
+          <div class="p-3 pt-0">
+            <button onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition">Add</button>
+          </div>
         </div>
       `).join('');
     }
@@ -156,12 +176,16 @@
       document.getElementById('cartCountBadge').innerText = cart.reduce((a,c)=>a+c.quantity,0);
       const cont = document.getElementById('cartItemsContainer');
       cont.innerHTML = cart.map(i => `
-        <div class="flex justify-between items-center py-3 border-b border-slate-100 last:border-0">
-          <div><p class="font-bold text-sm text-slate-900">${i.name}</p><p class="text-xs font-mono text-brandGreen font-bold">₦${Number(i.price).toLocaleString()}</p></div>
-          <div class="flex gap-3 bg-slate-100 p-1.5 rounded-lg items-center">
-            <button class="w-6 h-6 bg-white rounded font-bold shadow-sm" onclick="updateCartQuantity('${i.id}',-1)">-</button>
-            <span class="font-mono text-sm font-bold">${i.quantity}</span>
-            <button class="w-6 h-6 bg-white rounded font-bold shadow-sm" onclick="updateCartQuantity('${i.id}',1)">+</button>
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center py-4 border-b border-slate-100 last:border-0 gap-3">
+          <div>
+            <p class="font-bold text-sm text-slate-900">${i.name}</p>
+            <p class="text-[11px] text-slate-500">${i.gauge}</p>
+            <p class="text-xs font-mono text-brandGreen font-bold mt-1">₦${Number(i.price).toLocaleString()}</p>
+          </div>
+          <div class="flex gap-3 bg-slate-100 p-1 rounded-lg items-center self-start sm:self-auto">
+            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',-1)">-</button>
+            <span class="font-mono text-sm font-bold w-4 text-center">${i.quantity}</span>
+            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',1)">+</button>
           </div>
         </div>`).join('');
       document.getElementById('cartSubtotalText').innerText = '₦' + cart.reduce((a,c)=>a+(c.price*c.quantity),0).toLocaleString();
@@ -182,7 +206,7 @@
       document.getElementById('lazyRegModal').classList.remove('hidden'); document.getElementById('lazyRegModal').classList.add('flex');
     }
     
-    function handleLazyRegistration(e) { e.preventDefault(); alert('Saved Profile Successfully!'); document.getElementById('lazyRegModal').classList.add('hidden'); document.getElementById('lazyRegModal').classList.remove('flex'); }
+    function handleLazyRegistration(e) { e.preventDefault(); alert('Profile Saved!'); document.getElementById('lazyRegModal').classList.add('hidden'); document.getElementById('lazyRegModal').classList.remove('flex'); }
     
     window.addEventListener('DOMContentLoaded', initStore);
   </script>
