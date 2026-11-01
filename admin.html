@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>OgaMarket | Admin Operations</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -69,15 +70,15 @@
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pending Orders</span>
-        <span class="text-2xl font-extrabold text-brandGold mt-1">2</span>
+        <span class="text-2xl font-extrabold text-brandGold mt-1" id="kpi-orders">0</span>
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Vendor Leads</span>
         <span class="text-2xl font-extrabold text-brandGreenDark mt-1">3</span>
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Today's Sales</span>
-        <span class="text-xl font-extrabold text-slate-900 mt-1 font-mono">&#8358;142,500</span>
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Sales</span>
+        <span class="text-xl font-extrabold text-slate-900 mt-1 font-mono" id="kpi-sales">&#8358;0</span>
       </div>
     </div>
 
@@ -86,14 +87,8 @@
         <!-- Active Orders -->
         <div>
           <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Active Pipeline</h2>
-          <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-slate-100 last:border-0 gap-2">
-              <div><p class="font-bold text-sm">#OGA-99104 - Bolanle Adeyemi</p><p class="text-xs text-slate-500 mt-1">2x White Ijebu Garri, 1x Clean Egusi</p></div>
-              <div class="flex gap-2">
-                <span class="bg-amber-100 border border-amber-200 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full w-max">Sourcing</span>
-                <button type="button" onclick="showAlert('Pipeline Updated', 'Order #OGA-99104 marked as Dispatched.')" class="bg-brandGreen text-white px-3 py-1 rounded text-xs font-bold cursor-pointer hover:bg-brandGreenDark active:scale-95">Dispatch</button>
-              </div>
-            </div>
+          <div id="ordersContainer" class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3 max-h-96 overflow-y-auto">
+            <p class="text-xs text-slate-400">Loading orders...</p>
           </div>
         </div>
 
@@ -120,7 +115,7 @@
               </div>
               <div id="imgUploadText">
                 <svg class="w-6 h-6 text-brandGreen mx-auto mb-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="text-xs font-bold text-slate-500">Tap to upload real image</span>
+                <span class="text-xs font-bold text-slate-500">Tap to select photo</span>
               </div>
               <input type="file" id="imgUpload" accept="image/*" class="hidden" onchange="previewImage(event)"/>
             </div>
@@ -136,11 +131,7 @@
               <span class="font-bold text-slate-500">&#8358;</span>
               <input type="number" id="newProdPrice" required placeholder="Live Price" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono font-bold"/>
             </div>
-            <label class="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer">
-              <input type="checkbox" id="interstateSafe" checked class="rounded border-slate-300 text-brandGreen focus:ring-brandGreen" />
-              Interstate Safe (Non-Perishable)
-            </label>
-            <button type="submit" class="w-full bg-brandGreen text-white py-2.5 rounded-lg font-bold text-sm mt-2 shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Publish to Store</button>
+            <button id="uploadBtn" type="submit" class="w-full bg-brandGreen text-white py-2.5 rounded-lg font-bold text-sm mt-2 shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Publish to Store</button>
           </form>
         </div>
 
@@ -152,7 +143,6 @@
     </div>
   </div>
 
-  <!-- BRANDED MODAL ALERT -->
   <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
@@ -163,6 +153,10 @@
   </div>
 
   <script>
+    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
+    const supabaseKey = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
     function showAlert(title, message, isError = false) {
       document.getElementById('alertTitle').innerText = title;
       document.getElementById('alertMessage').innerText = message;
@@ -184,7 +178,7 @@
         document.getElementById('adminLoginView').classList.add('hidden');
         document.getElementById('adminDashboardView').classList.remove('hidden');
         document.body.classList.remove('items-center', 'justify-center');
-        renderAdminInventory();
+        fetchAdminData();
       } else {
         showAlert("Access Denied", "Incorrect security key.", true);
       }
@@ -197,18 +191,61 @@
       document.body.classList.add('items-center', 'justify-center');
     }
 
-    let catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || [];
-    let uploadedImageBase64 = "";
+    async function fetchAdminData() {
+      // Products
+      const { data: prods } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      if(prods) {
+        document.getElementById('kpi-products').innerText = prods.length;
+        renderAdminInventory(prods);
+      }
 
-    function renderAdminInventory() {
+      // Orders
+      const { data: ords } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+      if(ords) {
+        document.getElementById('kpi-orders').innerText = ords.length;
+        
+        let total = 0;
+        const ctn = document.getElementById('ordersContainer');
+        if(ords.length === 0) {
+          ctn.innerHTML = '<p class="text-xs text-slate-400">No active orders yet.</p>';
+        } else {
+          ctn.innerHTML = ords.map(o => {
+             // Calculate actual total from items array if it exists
+             let orderTotal = 0;
+             if (o.items && Array.isArray(o.items)) {
+                orderTotal = o.items.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
+             }
+             total += orderTotal;
+             
+             return `
+             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-slate-100 last:border-0 gap-2">
+               <div><p class="font-bold text-sm">${o.order_ref} - ${o.customer_name || 'Customer'}</p><p class="text-xs text-slate-500 mt-1">${o.email}</p></div>
+               <div class="flex gap-2">
+                 <span class="bg-amber-100 border border-amber-200 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full w-max">${o.status}</span>
+                 <button type="button" onclick="markDispatched('${o.id}')" class="bg-brandGreen text-white px-3 py-1 rounded text-xs font-bold cursor-pointer hover:bg-brandGreenDark active:scale-95">Dispatch</button>
+               </div>
+             </div>`;
+          }).join('');
+        }
+        document.getElementById('kpi-sales').innerHTML = '&#8358;' + total.toLocaleString();
+      }
+    }
+
+    async function markDispatched(orderId) {
+      const { error } = await supabase.from('orders').update({ status: 'Dispatched' }).eq('id', orderId);
+      if(!error) {
+        showAlert('Pipeline Updated', 'Order marked as Dispatched.');
+        fetchAdminData();
+      }
+    }
+
+    function renderAdminInventory(catalog) {
       const container = document.getElementById('adminInv');
-      document.getElementById('kpi-products').innerText = catalog.length;
-      
       if (catalog.length === 0) {
         container.innerHTML = '<p class="text-sm text-slate-500 py-2">No items in store.</p>';
         return;
       }
-      container.innerHTML = catalog.slice().reverse().map(i => `
+      container.innerHTML = catalog.map(i => `
         <li class="flex flex-col sm:flex-row sm:items-center justify-between py-2 gap-2">
           <div class="flex items-center gap-3">
             <img src="${i.image}" class="w-10 h-10 rounded-md object-cover border border-slate-200" />
@@ -217,20 +254,8 @@
               <span class="text-[9px] text-slate-400 font-medium truncate w-32 sm:w-40">${i.gauge}</span>
             </div>
           </div>
-          <div class="flex items-center gap-1 bg-slate-50 p-1 rounded-lg border border-slate-200 w-max">
-            <span class="text-[10px] font-bold text-slate-400 pl-1">&#8358;</span>
-            <input type="number" value="${i.price}" onchange="updatePrice('${i.id}', this.value)" class="w-16 bg-transparent font-mono text-xs font-bold text-brandGreen focus:outline-none"/>
-          </div>
         </li>
       `).join('');
-    }
-
-    function updatePrice(id, newPrice) {
-      const idx = catalog.findIndex(p => String(p.id) === String(id));
-      if (idx !== -1) {
-        catalog[idx].price = Number(newPrice);
-        localStorage.setItem('ogamarket_catalog', JSON.stringify(catalog));
-      }
     }
 
     function previewImage(event) {
@@ -238,8 +263,7 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          uploadedImageBase64 = e.target.result;
-          document.getElementById('imgPreview').src = uploadedImageBase64;
+          document.getElementById('imgPreview').src = e.target.result;
           document.getElementById('imgPreviewContainer').classList.remove('hidden');
           document.getElementById('imgUploadText').classList.add('hidden');
         };
@@ -247,31 +271,59 @@
       }
     }
 
-    function handleProductUpload(e) {
+    async function handleProductUpload(e) {
       e.preventDefault();
-      if (!uploadedImageBase64) {
+      
+      const fileInput = document.getElementById('imgUpload');
+      const file = fileInput.files[0];
+      if (!file) {
         showAlert("Missing Image", "Please tap the box to upload a product photo.", true);
         return;
       }
+
+      const btn = document.getElementById('uploadBtn');
+      btn.innerText = "Uploading to Database...";
+      btn.disabled = true;
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = Date.now() + "." + fileExt;
+      const { data: uploadData, error: uploadError } = await supabase.storage.from('product-images').upload(fileName, file);
+
+      if (uploadError) {
+        showAlert("Upload Failed", "Storage error: " + uploadError.message, true);
+        btn.innerText = "Publish to Store";
+        btn.disabled = false;
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
+      const imgUrl = publicUrlData.publicUrl;
+
       const newProduct = {
         id: "prod-" + Date.now(),
         name: document.getElementById('newProdName').value,
         category: document.getElementById('newProdCategory').value,
         gauge: document.getElementById('newProdGauge').value,
         price: Number(document.getElementById('newProdPrice').value),
-        interstateSafe: document.getElementById('interstateSafe').checked,
-        image: uploadedImageBase64
+        interstate_safe: document.getElementById('interstateSafe').checked,
+        image: imgUrl
       };
       
-      catalog.push(newProduct);
-      localStorage.setItem('ogamarket_catalog', JSON.stringify(catalog));
-      
+      const { error: dbError } = await supabase.from('products').insert([newProduct]);
+
+      btn.innerText = "Publish to Store";
+      btn.disabled = false;
+
+      if(dbError) {
+        showAlert("Database Error", dbError.message, true);
+        return;
+      }
+
       e.target.reset();
-      uploadedImageBase64 = "";
       document.getElementById('imgPreviewContainer').classList.add('hidden');
       document.getElementById('imgUploadText').classList.remove('hidden');
       
-      renderAdminInventory();
+      fetchAdminData();
       showAlert("Success", "New product published directly to the live storefront!");
     }
   </script>
