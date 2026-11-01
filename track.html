@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>OgaMarket | Track Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', surfaceBg: '#F0F4F2' },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    input, select, textarea, button { font-size: 16px !important; }
+    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-nav { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
+  </style>
+</head>
+<body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col pb-20 sm:pb-0">
+  <div class="bg-blob-1"></div>
+
+  <header class="sticky top-0 z-40 glass-nav shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
+        </svg>
+        <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
+      </a>
+      <div class="hidden sm:flex items-center gap-4">
+        <a href="store.html" class="font-semibold text-sm text-slate-600 hover:text-brandGreen cursor-pointer">Browse Market</a>
+        <a href="store.html" class="bg-brandGreen text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-brandGreenDark cursor-pointer">Start Shopping</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 cursor-pointer transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span class="text-[10px] font-bold">Home</span>
+    </a>
+    <a href="store.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+      <span class="text-[10px] font-bold">Store</span>
+    </a>
+    <a href="track.html" class="flex flex-col items-center gap-1 text-brandGreen p-2 transition cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
+      <span class="text-[10px] font-bold">Track</span>
+    </a>
+  </nav>
+
+  <main class="relative z-10 max-w-md mx-auto px-4 sm:px-6 pt-12 pb-10 flex-grow w-full flex flex-col items-center justify-center">
+    
+    <!-- STEP 1: Enter Email -->
+    <div id="step-email" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Track Your Order</h2>
+      <p class="text-sm text-slate-600 mb-6">Enter the email you used at checkout.</p>
+      <form onsubmit="handleEmailCheck(event)" class="space-y-4">
+        <input type="email" id="trackEmail" required placeholder="Email Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-center"/>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition">Continue</button>
+      </form>
+    </div>
+
+    <!-- STEP 2: Register (Set Password) -->
+    <div id="step-register" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Order Found!</h2>
+      <p class="text-sm text-slate-600 mb-6">Create a quick password to secure your account and track your order.</p>
+      <form onsubmit="handleRegister(event)" class="space-y-4 text-left">
+        <div class="relative">
+          <input type="password" id="regPassword" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3"/>
+          <button type="button" onclick="toggleVisibility('regPassword')" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </button>
+        </div>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition">Save Profile & Track</button>
+      </form>
+    </div>
+
+    <!-- STEP 3: Login (Enter Password) -->
+    <div id="step-login" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Welcome Back</h2>
+      <p class="text-sm text-slate-600 mb-6">Enter your password to view your orders.</p>
+      <form onsubmit="handleLogin(event)" class="space-y-4 text-left">
+        <div class="relative">
+          <input type="password" id="loginPassword" required placeholder="Enter Password" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3"/>
+          <button type="button" onclick="toggleVisibility('loginPassword')" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </button>
+        </div>
+        <div class="text-right">
+          <button type="button" onclick="alert('Password reset link sent to your email!')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
+        </div>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition">Log In & Track</button>
+      </form>
+    </div>
+
+    <!-- STEP 4: Tracking Dashboard -->
+    <div id="step-tracking" class="w-full hidden">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-lg">
+        <div class="flex justify-between items-center border-b border-slate-200/70 pb-4 mb-6">
+          <h2 class="text-xl font-extrabold text-slate-900">Order Status</h2>
+          <span class="bg-amber-100 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full" id="trackStatusBadge">Processing</span>
+        </div>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-brandGreen text-white flex items-center justify-center"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+              <div class="w-1 h-12 bg-brandGreen"></div>
+            </div>
+            <div class="pt-0.5">
+              <p class="font-bold text-sm text-slate-900">Order Confirmed</p>
+              <p class="text-xs text-slate-500">Payment received via Paystack</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-amber-400 text-white flex items-center justify-center border-2 border-white shadow-sm"></div>
+              <div class="w-1 h-12 bg-slate-200"></div>
+            </div>
+            <div class="pt-0.5">
+              <p class="font-bold text-sm text-slate-900">Sourcing in Market</p>
+              <p class="text-xs text-slate-500" id="trackSourcingText">Field agent is buying items.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-slate-200"></div>
+            </div>
+            <div class="pt-0.5 opacity-50">
+              <p class="font-bold text-sm text-slate-900">Dispatched</p>
+              <p class="text-xs text-slate-500">Waybill tracking will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let activeEmail = "";
+
+    // On Load, check if redirected from checkout with email in URL
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.has('email')) {
+        document.getElementById('trackEmail').value = urlParams.get('email');
+        handleEmailCheck(new Event('submit'));
+      }
+    });
+
+    function toggleVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if(input.type === "password") { input.type = "text"; } 
+      else { input.type = "password"; }
+    }
+
+    function switchStep(stepId) {
+      document.getElementById('step-email').classList.add('hidden');
+      document.getElementById('step-register').classList.add('hidden');
+      document.getElementById('step-login').classList.add('hidden');
+      document.getElementById('step-tracking').classList.add('hidden');
+      document.getElementById(stepId).classList.remove('hidden');
+    }
+
+    function handleEmailCheck(e) {
+      if(e) e.preventDefault();
+      activeEmail = document.getElementById('trackEmail').value.toLowerCase();
+      
+      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+      const orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
+      const hasOrder = orders.find(o => o.email.toLowerCase() === activeEmail);
+      
+      if(users[activeEmail]) {
+        switchStep('step-login');
+      } else if (hasOrder) {
+        switchStep('step-register');
+      } else {
+        alert("No active orders found for this email.");
+      }
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('regPassword').value;
+      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+      users[activeEmail] = pwd;
+      localStorage.setItem('ogamarket_users', JSON.stringify(users));
+      loadDashboard();
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('loginPassword').value;
+      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+      if(users[activeEmail] === pwd) {
+        loadDashboard();
+      } else {
+        alert("Incorrect password.");
+      }
+    }
+
+    function loadDashboard() {
+      switchStep('step-tracking');
+      const orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
+      const myOrder = orders.reverse().find(o => o.email.toLowerCase() === activeEmail);
+      if(myOrder) {
+        document.getElementById('trackStatusBadge').innerText = myOrder.status;
+      }
+    }
+  </script>
+</body>
+</html>
