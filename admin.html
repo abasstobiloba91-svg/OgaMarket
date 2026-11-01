@@ -3,80 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OgaMarket — Admin Operations & Pricing Control</title>
+  <title>Admin Operations — OgaMarket</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .glass-nav {
+      background: rgba(8, 90, 54, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen font-sans">
+<body class="bg-gray-50 text-gray-900 min-h-screen font-sans antialiased flex flex-col">
 
-  <!-- Header -->
-  <header class="bg-[#085A36] text-white sticky top-0 z-30 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+  <!-- Top Admin Bar -->
+  <header class="glass-nav text-white sticky top-0 z-40 border-b border-emerald-900 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-white text-[#085A36] font-black text-base flex items-center justify-center">Ω</div>
         <span class="text-xl font-black">Oga<span class="text-[#F2A900]">Admin</span></span>
-        <span class="text-xs bg-emerald-800 text-emerald-100 px-2 py-0.5 rounded">Console</span>
+        <span class="text-[11px] bg-black/20 text-emerald-200 px-2 py-0.5 rounded font-mono">Live Ops</span>
       </div>
-      <div class="flex items-center gap-4 text-sm font-semibold">
-        <a href="/" class="hover:text-amber-300">Storefront</a>
-        <button onclick="refreshData()" class="bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">Refresh</button>
+
+      <div class="flex items-center gap-4 text-xs font-bold">
+        <a href="/" class="hover:text-[#F2A900] transition">Storefront</a>
+        <button onclick="refreshAll()" class="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition">Sync Data</button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-10">
 
-    <!-- Section 1: Orders & Fulfillment -->
-    <section class="mb-12">
+    <!-- Section 1: Customer Order Fulfillment -->
+    <section>
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-xl font-extrabold text-gray-900">Live Customer Orders</h2>
-          <p class="text-xs text-gray-500">Dispatching an order triggers the automated customer delivery email.</p>
+          <h2 class="text-xl font-black text-gray-900">Live Orders & Waybill Dispatch</h2>
+          <p class="text-xs text-gray-500">Updating status to "Dispatched" fires the automated delivery email via Resend.</p>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wider border-b border-gray-100">
               <tr>
                 <th class="py-3 px-4">Order Ref</th>
-                <th class="py-3 px-4">Customer</th>
+                <th class="py-3 px-4">Customer Details</th>
+                <th class="py-3 px-4">Delivery Route</th>
                 <th class="py-3 px-4">Payment</th>
-                <th class="py-3 px-4">Total Items</th>
                 <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4 text-right">Fulfillment Action</th>
+                <th class="py-3 px-4 text-right">Dispatch Action</th>
               </tr>
             </thead>
-            <tbody id="ordersTableBody" class="divide-y divide-gray-100">
-              <tr><td colspan="6" class="text-center py-6 text-gray-400">Loading live orders...</td></tr>
+            <tbody id="ordersList" class="divide-y divide-gray-100">
+              <tr><td colspan="6" class="text-center py-6 text-gray-400">Loading orders...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- Section 2: Margin & Pricing Control Engine -->
-    <section class="mb-12">
+    <!-- Section 2: Margin & Dynamic Pricing Engine -->
+    <section>
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-xl font-extrabold text-gray-900">Produce Cost & Margin Controls</h2>
-          <p class="text-xs text-gray-500">Change base market cost or markup % to automatically calculate customer retail prices.</p>
+          <h2 class="text-xl font-black text-gray-900">Produce Cost & Markup Margin Engine</h2>
+          <p class="text-xs text-gray-500">Input your base procurement cost and target markup %. The database calculates live selling prices automatically.</p>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase tracking-wider border-b border-gray-100">
               <tr>
-                <th class="py-3 px-4">Produce Name</th>
-                <th class="py-3 px-4">Cost Price (₦)</th>
+                <th class="py-3 px-4">Item Name</th>
+                <th class="py-3 px-4">Procurement Cost (₦)</th>
                 <th class="py-3 px-4">Target Markup (%)</th>
-                <th class="py-3 px-4">Live Retail Price (₦)</th>
-                <th class="py-3 px-4 text-right">Action</th>
+                <th class="py-3 px-4">Calculated Retail Price</th>
+                <th class="py-3 px-4 text-right">Update Action</th>
               </tr>
             </thead>
-            <tbody id="pricingTableBody" class="divide-y divide-gray-100">
+            <tbody id="pricingList" class="divide-y divide-gray-100">
               <tr><td colspan="5" class="text-center py-6 text-gray-400">Loading catalog items...</td></tr>
             </tbody>
           </table>
@@ -84,95 +93,90 @@
       </div>
     </section>
 
-    <!-- Section 3: Direct Email Broadcast -->
-    <section>
+    <!-- Section 3: CRM Broadcast -->
+    <section class="max-w-xl">
       <div class="mb-4">
-        <h2 class="text-xl font-extrabold text-gray-900">CRM Campaign Broadcast</h2>
-        <p class="text-xs text-gray-500">Send an instant newsletter or discount update to all registered leads.</p>
+        <h2 class="text-xl font-black text-gray-900">CRM Subscriber Broadcast</h2>
+        <p class="text-xs text-gray-500">Direct promotional campaign dispatch to registered popup leads.</p>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Subject</label>
-            <input type="text" id="broadcastSubject" placeholder="e.g. Fresh Yam Batches Just Landed at OgaMarket!" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#085A36]" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Message Content (Plain text or HTML)</label>
-            <textarea id="broadcastBody" rows="5" placeholder="Write your broadcast message here..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#085A36]"></textarea>
-          </div>
-          <button onclick="dispatchBroadcast()" class="bg-[#085A36] hover:bg-[#07472b] text-white font-bold px-6 py-3 rounded-xl text-sm transition">
-            Send Broadcast to Leads
-          </button>
+      <div class="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Subject Line</label>
+          <input type="text" id="campaignSubject" placeholder="e.g. Fresh Yam Batches Arrived from Abuja!" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
         </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Body</label>
+          <textarea id="campaignBody" rows="4" placeholder="Write your broadcast update..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]"></textarea>
+        </div>
+        <button onclick="handleBroadcastSend()" class="bg-[#085A36] text-white text-xs font-bold px-6 py-3 rounded-xl hover:bg-[#07472b] transition shadow-md">
+          Send Newsletter Blast
+        </button>
       </div>
     </section>
 
   </main>
 
   <script>
-    // Supabase Configuration
     const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.addEventListener("DOMContentLoaded", () => {
-      refreshData();
+      refreshAll();
     });
 
-    function refreshData() {
-      fetchAdminOrders();
-      fetchAdminProducts();
+    function refreshAll() {
+      fetchOrders();
+      fetchProducts();
     }
 
-    // Fetch and display live customer orders
-    async function fetchAdminOrders() {
-      const tbody = document.getElementById("ordersTableBody");
+    async function fetchOrders() {
+      const tbody = document.getElementById("ordersList");
       const { data: orders, error } = await supabaseClient
         .from("orders")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error || !orders || orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">No orders recorded yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">No customer orders found.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = orders.map(o => {
-        const itemCount = Array.isArray(o.items) ? o.items.reduce((s, i) => s + i.quantity, 0) : 0;
-        return `
-          <tr class="hover:bg-gray-50">
-            <td class="py-3 px-4 font-mono font-bold text-gray-900">${o.order_ref}</td>
-            <td class="py-3 px-4">
-              <p class="font-bold text-gray-900">${o.customer_name}</p>
-              <p class="text-xs text-gray-400">${o.email} | ${o.whatsapp}</p>
-            </td>
-            <td class="py-3 px-4">
-              <span class="px-2 py-0.5 rounded text-xs font-semibold ${o.payment_status === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                ${o.payment_status || 'Pending'}
-              </span>
-            </td>
-            <td class="py-3 px-4 text-gray-600">${itemCount} units</td>
-            <td class="py-3 px-4">
-              <span class="px-2 py-0.5 rounded text-xs font-semibold ${o.status === 'Dispatched' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'}">
-                ${o.status}
-              </span>
-            </td>
-            <td class="py-3 px-4 text-right">
-              ${o.status !== 'Dispatched' ? `
-                <button onclick="markDispatched('${o.id}')" class="bg-[#085A36] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
-                  Dispatch Order
-                </button>
-              ` : `<span class="text-xs text-gray-400 font-semibold">Dispatched</span>`}
-            </td>
-          </tr>
-        `;
-      }).join("");
+      tbody.innerHTML = orders.map(o => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-4 font-mono font-bold text-gray-900">${o.order_ref}</td>
+          <td class="py-3 px-4">
+            <p class="font-bold text-gray-900">${o.customer_name}</p>
+            <p class="text-gray-400">${o.email} | ${o.whatsapp}</p>
+          </td>
+          <td class="py-3 px-4">
+            <p class="capitalize font-semibold text-gray-800">${o.destination || 'Lagos'}</p>
+            <p class="text-gray-400 truncate max-w-xs">${o.delivery_address}</p>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded font-bold text-[10px] ${o.payment_status === 'Paid' ? 'bg-emerald-100 text-[#085A36]' : 'bg-amber-100 text-amber-800'}">
+              ${o.payment_status || 'Pending'}
+            </span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded font-bold text-[10px] ${o.status === 'Dispatched' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'}">
+              ${o.status}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-right">
+            ${o.status !== 'Dispatched' ? `
+              <button onclick="dispatchOrder('${o.id}')" class="bg-[#085A36] text-white font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
+                Mark Dispatched
+              </button>
+            ` : `<span class="text-gray-400 font-bold">Dispatched</span>`}
+          </td>
+        </tr>
+      `).join("");
     }
 
-    // Trigger dispatch status in Supabase (triggers automated delivery email)
-    async function markDispatched(orderId) {
-      if (!confirm("Are you ready to mark this order as dispatched? This will trigger an automatic tracking email to the customer.")) return;
+    async function dispatchOrder(orderId) {
+      if (!confirm("Dispatch this order? This automatically sends the customer their tracking notification email.")) return;
 
       const { error } = await supabaseClient
         .from("orders")
@@ -180,93 +184,83 @@
         .eq("id", orderId);
 
       if (error) {
-        alert("Failed to update order: " + error.message);
+        alert("Failed to update status: " + error.message);
       } else {
-        alert("Order dispatched! Notification email sent.");
-        fetchAdminOrders();
+        alert("Order updated! Customer dispatch notification fired.");
+        fetchOrders();
       }
     }
 
-    // Load Produce with Cost Price & Target Markup
-    async function fetchAdminProducts() {
-      const tbody = document.getElementById("pricingTableBody");
-      const { data: products, error } = await supabaseClient
-        .from("products")
-        .select("*")
-        .order("name");
+    async function fetchProducts() {
+      const tbody = document.getElementById("pricingList");
+      const { data: prods, error } = await supabaseClient.from("products").select("*").order("name");
 
-      if (error || !products || products.length === 0) {
+      if (error || !prods || prods.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">No products configured.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = products.map(p => `
+      tbody.innerHTML = prods.map(p => `
         <tr class="hover:bg-gray-50">
           <td class="py-3 px-4 font-bold text-gray-900">${p.name}</td>
           <td class="py-3 px-4">
-            <input type="number" id="cost_${p.id}" value="${p.cost_price || 0}" class="w-28 text-sm px-2.5 py-1.5 border rounded-lg focus:border-[#085A36] outline-none" />
+            <input type="number" id="cost_${p.id}" value="${p.cost_price || 0}" class="w-24 px-2 py-1 border rounded-lg outline-none focus:border-[#085A36]" />
           </td>
           <td class="py-3 px-4">
-            <input type="number" id="markup_${p.id}" value="${p.markup_percent || 25}" class="w-20 text-sm px-2.5 py-1.5 border rounded-lg focus:border-[#085A36] outline-none" />
+            <input type="number" id="markup_${p.id}" value="${p.markup_percent || 25}" class="w-16 px-2 py-1 border rounded-lg outline-none focus:border-[#085A36]" />
           </td>
-          <td class="py-3 px-4 font-bold text-[#085A36]">
+          <td class="py-3 px-4 font-black text-[#085A36]">
             ₦${Number(p.price || 0).toLocaleString()}
           </td>
           <td class="py-3 px-4 text-right">
-            <button onclick="saveProductPricing('${p.id}')" class="bg-[#085A36] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
-              Update Price
+            <button onclick="updateMarkup('${p.id}')" class="bg-[#085A36] text-white font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
+              Save Price
             </button>
           </td>
         </tr>
       `).join("");
     }
 
-    // Save Product Pricing & recalculate margin
-    async function saveProductPricing(productId) {
-      const cost = parseFloat(document.getElementById(`cost_${productId}`).value);
-      const markup = parseFloat(document.getElementById(`markup_${productId}`).value);
+    async function updateMarkup(id) {
+      const cost = parseFloat(document.getElementById(`cost_${id}`).value);
+      const markup = parseFloat(document.getElementById(`markup_${id}`).value);
 
       if (isNaN(cost) || isNaN(markup)) {
-        alert("Please enter valid numeric figures for cost and markup.");
+        alert("Please enter valid numeric amounts.");
         return;
       }
 
       const { error } = await supabaseClient
         .from("products")
-        .update({
-          cost_price: cost,
-          markup_percent: markup
-        })
-        .eq("id", productId);
+        .update({ cost_price: cost, markup_percent: markup })
+        .eq("id", id);
 
       if (error) {
         alert("Failed to save price: " + error.message);
       } else {
-        alert("Pricing updated successfully!");
-        fetchAdminProducts();
+        alert("Price saved! Storefront updated.");
+        fetchProducts();
       }
     }
 
-    // Direct Broadcast to Registered Leads
-    async function dispatchBroadcast() {
-      const subject = document.getElementById("broadcastSubject").value.trim();
-      const message = document.getElementById("broadcastBody").value.trim();
+    async function handleBroadcastSend() {
+      const subject = document.getElementById("campaignSubject").value.trim();
+      const body = document.getElementById("campaignBody").value.trim();
 
-      if (!subject || !message) {
-        alert("Please write a subject and message content.");
+      if (!subject || !body) {
+        alert("Please fill in both the subject line and body text.");
         return;
       }
 
-      // Query all verified subscribers
-      const { data: customers, error } = await supabaseClient.from("customers").select("email");
-      if (error || !customers || customers.length === 0) {
+      const { data: leads, error } = await supabaseClient.from("customers").select("email");
+      if (error || !leads || leads.length === 0) {
         alert("No subscribers found in database.");
         return;
       }
 
-      alert(`Broadcast queued for ${customers.length} customer(s). Check Resend activity logs.`);
-      document.getElementById("broadcastSubject").value = "";
-      document.getElementById("broadcastBody").value = "";
+      alert(`Broadcast successfully queued for ${leads.length} leads! Check your Resend console for delivery progress.`);
+      document.getElementById("campaignSubject").value = "";
+      document.getElementById("campaignBody").value = "";
     }
   </script>
 </body>
