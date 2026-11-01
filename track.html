@@ -3,51 +3,103 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OgaMarket — Track Your Delivery</title>
+  <title>Track Order — OgaMarket</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-dock {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .badge-pill {
+      background-color: #E8F8F0;
+      color: #085A36;
+    }
+  </style>
 </head>
-<body class="bg-[#F8FAF9] text-gray-900 min-h-screen flex flex-col font-sans">
+<body class="bg-[#FBFDFB] text-[#111827] min-h-screen flex flex-col pb-28 antialiased selection:bg-[#F2A900] selection:text-black">
 
-  <!-- Navigation -->
-  <nav class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <span class="text-2xl font-black text-[#085A36] tracking-tight">Oga<span class="text-[#F2A900]">Market</span></span>
+  <!-- Consistent Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-md mx-auto px-5 h-20 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full border-2 border-dashed border-[#F2A900] p-0.5 flex items-center justify-center bg-white shadow-sm">
+          <div class="w-full h-full rounded-full bg-[#085A36] flex items-center justify-center text-[#F2A900] font-black text-xs">Ω</div>
+        </div>
+        <div>
+          <div class="text-xl font-extrabold tracking-tight leading-none text-[#085A36]">
+            Oga<span class="text-[#F2A900]">Market</span>
+          </div>
+          <span class="block text-[8px] font-extrabold tracking-widest text-[#085A36] mt-1 uppercase">Shop Like The Oga</span>
+        </div>
       </a>
-      <div class="flex items-center gap-6">
-        <a href="/" class="text-sm font-semibold text-gray-600 hover:text-[#085A36] transition">Home</a>
-        <a href="store" class="text-sm font-semibold text-gray-600 hover:text-[#085A36] transition">Market Store</a>
-        <a href="track" class="text-sm font-semibold text-[#085A36]">Track Order</a>
-      </div>
-    </div>
-  </nav>
 
-  <!-- Tracker Engine -->
-  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-extrabold text-gray-900">Track Your Market Order</h1>
-      <p class="text-sm text-gray-500 mt-2">Check the real-time preparation and dispatch state of your delivery.</p>
+      <a href="store" class="bg-[#085A36] text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-[#06482B] transition shadow-sm">
+        Shop Now
+      </a>
+    </div>
+  </header>
+
+  <!-- Track Hero Area -->
+  <main class="max-w-md mx-auto px-5 pt-8 w-full flex-1">
+    
+    <div class="text-center space-y-3 mb-6">
+      <span class="inline-block badge-pill px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
+        Real-Time Concierge Tracking
+      </span>
+      <h1 class="text-3xl font-extrabold text-[#0B1A13] tracking-tight leading-tight">
+        Track your market<br/>dispatch live.
+      </h1>
+      <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
+        Enter the email address you entered at checkout to monitor preparation, sorting, and rider handoff.
+      </p>
     </div>
 
-    <!-- Search Box -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 flex gap-2 mb-8">
-      <input type="email" id="trackEmailInput" placeholder="Enter the email address used at checkout" class="w-full px-4 py-2 text-sm outline-none" />
-      <button onclick="handleTrackSearch()" class="bg-[#085A36] text-white text-sm font-bold px-6 py-2.5 rounded-xl hover:bg-[#07472b] transition">
+    <!-- Search Input -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-2 shadow-sm flex items-center gap-2 mb-6">
+      <input type="email" id="trackEmail" placeholder="Enter your checkout email" class="w-full px-3 py-2 text-xs outline-none bg-transparent" />
+      <button onclick="searchOrders()" class="bg-[#085A36] text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-[#06482B] transition shrink-0">
         Track
       </button>
     </div>
 
-    <!-- Results Box -->
-    <div id="trackingResultArea" class="space-y-4">
-      <!-- Injected via JavaScript -->
+    <!-- Results Area -->
+    <div id="resultsArea" class="space-y-4">
+      <!-- Populated via JS -->
     </div>
+
   </main>
 
-  <footer class="bg-white border-t border-gray-100 py-6 text-center text-xs text-gray-500">
-    <p class="font-bold text-[#085A36]">Shopping like the Oga!</p>
-    <p class="mt-1">© 2026 OgaMarket. All rights reserved.</p>
-  </footer>
+  <!-- WhatsApp Floating Action Bubble -->
+  <a href="https://wa.me/234XXXXXXXXXX" target="_blank" class="fixed right-5 bottom-24 z-40 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform" aria-label="Chat with concierge">
+    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  </a>
+
+  <!-- Fixed Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 glass-dock">
+    <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-around">
+      <a href="/" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-bold">Home</span>
+      </a>
+
+      <a href="store" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span class="text-[10px] font-bold">Store</span>
+      </a>
+
+      <a href="track" class="flex flex-col items-center gap-1 text-[#085A36]">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+        <span class="text-[10px] font-bold">Track</span>
+      </a>
+    </div>
+  </nav>
 
   <script>
     const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
@@ -55,26 +107,26 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      const email = params.get("email");
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email");
       if (email) {
-        document.getElementById("trackEmailInput").value = email;
+        document.getElementById("trackEmail").value = email;
         fetchOrderTracking(email);
       }
     });
 
-    function handleTrackSearch() {
-      const email = document.getElementById("trackEmailInput").value.trim();
+    function searchOrders() {
+      const email = document.getElementById("trackEmail").value.trim();
       if (!email) {
-        alert("Please enter your email.");
+        alert("Please enter an email address.");
         return;
       }
       fetchOrderTracking(email);
     }
 
     async function fetchOrderTracking(email) {
-      const container = document.getElementById("trackingResultArea");
-      container.innerHTML = `<p class="text-center py-8 text-gray-400 text-sm">Locating market orders...</p>`;
+      const area = document.getElementById("resultsArea");
+      area.innerHTML = `<p class="text-center py-8 text-xs text-gray-400">Searching market records...</p>`;
 
       const { data: orders, error } = await supabaseClient
         .from("orders")
@@ -83,36 +135,35 @@
         .order("created_at", { ascending: false });
 
       if (error || !orders || orders.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white rounded-2xl p-8 text-center border border-gray-200">
-            <p class="text-gray-500 text-sm">No orders found for <strong>${email}</strong>.</p>
+        area.innerHTML = `
+          <div class="bg-white border border-gray-100 rounded-3xl p-6 text-center shadow-sm">
+            <p class="text-xs text-gray-400">No market orders found for <strong class="text-gray-700">${email}</strong>.</p>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = orders.map(o => `
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+      area.innerHTML = orders.map(o => `
+        <div class="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between pb-3 border-b border-gray-50">
             <div>
-              <span class="text-xs font-bold text-gray-400 uppercase">Order Reference</span>
-              <h3 class="text-lg font-black text-gray-900">${o.order_ref}</h3>
+              <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block">Order Reference</span>
+              <p class="text-sm font-extrabold text-[#0B1A13] font-mono">${o.order_ref}</p>
             </div>
-            <span class="px-3 py-1 rounded-full text-xs font-bold ${o.status === 'Dispatched' ? 'bg-emerald-100 text-[#085A36]' : 'bg-amber-100 text-amber-800'}">
+            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold ${o.status === 'Dispatched' ? 'bg-blue-50 text-blue-700' : 'badge-pill'}">
               ${o.status}
             </span>
           </div>
 
-          <div class="space-y-2 text-sm text-gray-600 mb-4">
+          <div class="text-xs text-gray-500 space-y-1">
             <p><strong>Customer:</strong> ${o.customer_name}</p>
-            <p><strong>Delivery Method:</strong> ${o.destination === 'lagos' ? 'Lagos Doorstep Dispatch' : 'Interstate Motor Park Waybill'}</p>
-            <p><strong>Destination:</strong> ${o.delivery_address}</p>
-            ${o.payment_status ? `<p><strong>Payment Status:</strong> <span class="text-emerald-700 font-bold">${o.payment_status}</span></p>` : ''}
+            <p><strong>Destination:</strong> ${o.destination === 'lagos' ? 'Lagos Doorstep Dispatch' : 'Interstate Motor Park Waybill'}</p>
+            <p class="truncate"><strong>Address:</strong> ${o.delivery_address}</p>
           </div>
 
-          <div class="bg-gray-50 p-4 rounded-xl text-xs text-gray-500">
-            <p class="font-bold text-gray-700 mb-1">Status Overview:</p>
-            <p>${o.status === 'Dispatched' ? 'Your package has left the market floor and is on its way with the dispatch agent.' : 'Our agents are currently handpicking your order from fresh morning stocks.'}</p>
+          <div class="bg-[#F8FAF9] p-3 rounded-2xl text-[11px] text-gray-500 border border-gray-100">
+            <span class="font-bold text-[#085A36] block mb-0.5">Live Status:</span>
+            ${o.status === 'Dispatched' ? 'Your fresh items have departed the market and are on route with the dispatch agent.' : 'Market agents are actively picking fresh morning cuts and sorting measurements.'}
           </div>
         </div>
       `).join("");
