@@ -76,7 +76,6 @@
       <button type="button" onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Soups & Spices</button>
     </div>
     
-    <!-- Loader -->
     <div id="loader" class="text-center py-12 text-slate-400 font-bold">Loading live market inventory...</div>
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
@@ -117,12 +116,11 @@
     </div>
   </div>
 
-  <button type="button" class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-40 flex items-center gap-2 cursor-pointer" onclick="showAlert('Our market concierge line is active on WhatsApp: +234 800 OGAMARKET')">
+  <button type="button" class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-40 flex items-center gap-2 cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Our market concierge line is active on WhatsApp: +234 800 OGAMARKET')">
     <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
     <span class="font-bold text-sm hidden sm:inline-block pointer-events-none">Chat with us</span>
   </button>
 
-  <!-- BRANDED MODAL ALERT -->
   <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
@@ -133,7 +131,6 @@
   </div>
 
   <script>
-    // Corrected JWT API Key
     const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
     const db = window.supabase.createClient(supabaseUrl, supabaseKey);
