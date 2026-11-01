@@ -81,7 +81,7 @@
       <div class="p-5 border-b border-slate-100 flex justify-between items-center"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-400 font-bold p-2 text-xl">&times;</button></div>
       <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5"></div>
       <div class="p-5 bg-slate-50 border-t border-slate-100">
-        <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText" class="font-mono">₦0</span></div>
+        <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText" class="font-mono">&#8358;0</span></div>
         <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-sm">Proceed to Checkout</button>
       </div>
     </div>
@@ -94,8 +94,8 @@
         <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
         <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
         <select id="custDestination" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-semibold text-sm">
-          <option value="lagos">Lagos Doorstep Dispatch (₦2,500)</option>
-          <option value="interstate">Interstate Motor Park Waybill (₦6,500)</option>
+          <option value="lagos">Lagos Doorstep Dispatch (&#8358;2,500)</option>
+          <option value="interstate">Interstate Motor Park Waybill (&#8358;6,500)</option>
         </select>
         <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
         <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-2 shadow-sm">Pay Securely via Paystack</button>
@@ -137,7 +137,7 @@
           <div class="p-3 sm:p-4">
             <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight mb-1 truncate">${item.name}</h3>
             <p class="text-[10px] sm:text-xs text-slate-500 mb-2 truncate">${item.gauge}</p>
-            <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">₦${Number(item.price).toLocaleString()}</p>
+            <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">&#8358;${Number(item.price).toLocaleString()}</p>
           </div>
           <div class="p-3 pt-0">
             <button onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition">Add</button>
@@ -180,7 +180,7 @@
           <div>
             <p class="font-bold text-sm text-slate-900">${i.name}</p>
             <p class="text-[11px] text-slate-500">${i.gauge}</p>
-            <p class="text-xs font-mono text-brandGreen font-bold mt-1">₦${Number(i.price).toLocaleString()}</p>
+            <p class="text-xs font-mono text-brandGreen font-bold mt-1">&#8358;${Number(i.price).toLocaleString()}</p>
           </div>
           <div class="flex gap-3 bg-slate-100 p-1 rounded-lg items-center self-start sm:self-auto">
             <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',-1)">-</button>
@@ -188,7 +188,7 @@
             <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',1)">+</button>
           </div>
         </div>`).join('');
-      document.getElementById('cartSubtotalText').innerText = '₦' + cart.reduce((a,c)=>a+(c.price*c.quantity),0).toLocaleString();
+      document.getElementById('cartSubtotalText').innerHTML = '&#8358;' + cart.reduce((a,c)=>a+(c.price*c.quantity),0).toLocaleString();
       document.getElementById('checkoutTriggerBtn').disabled = cart.length === 0;
     }
 
