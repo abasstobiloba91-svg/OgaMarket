@@ -20,6 +20,10 @@
     }
   </script>
   <style>
+    html, body {
+      overscroll-behavior-y: none;
+      overscroll-behavior: none;
+    }
     input, select, textarea, button { font-size: 16px !important; }
     .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); }
     .glass-panel { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 4px 24px 0 rgba(8, 90, 54, 0.05); }
@@ -56,7 +60,7 @@
       </div>
       <div class="flex gap-2">
         <a href="store" class="text-xs bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl font-bold transition cursor-pointer flex items-center justify-center">Live Store</a>
-        <button onclick="logoutAdmin()" class="text-xs bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-bold transition cursor-pointer">Lock</button>
+        <button onclick="logoutAdmin(true)" class="text-xs bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-bold transition cursor-pointer">Lock</button>
       </div>
     </div>
 
@@ -162,6 +166,8 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
     const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+    const ADMIN_SESSION_DURATION = 60 * 60 * 1000; // 1 Hour in milliseconds
+
     function showAlert(title, message, isError = false) {
       document.getElementById('alertTitle').innerText = title;
       document.getElementById('alertMessage').innerText = message;
@@ -177,24 +183,45 @@
       modal.classList.remove('flex');
     }
 
+    function checkAdminSession() {
+      const authTimestamp = localStorage.getItem('oga_admin_auth_time');
+      if (authTimestamp) {
+        const elapsed = Date.now() - Number(authTimestamp);
+        if (elapsed < ADMIN_SESSION_DURATION) {
+          showDashboardView();
+          return;
+        }
+      }
+      logoutAdmin(false);
+    }
+
+    function showDashboardView() {
+      document.getElementById('adminLoginView').classList.add('hidden');
+      document.getElementById('adminDashboardView').classList.remove('hidden');
+      document.body.classList.remove('items-center', 'justify-center');
+      fetchAdminData();
+    }
+
     function handleAdminLogin(e) {
       e.preventDefault();
       const pwd = document.getElementById('adminPassword').value.trim();
       if(pwd === "oga2026") {
-        document.getElementById('adminLoginView').classList.add('hidden');
-        document.getElementById('adminDashboardView').classList.remove('hidden');
-        document.body.classList.remove('items-center', 'justify-center');
-        fetchAdminData();
+        localStorage.setItem('oga_admin_auth_time', Date.now().toString());
+        showDashboardView();
       } else {
         showAlert("Access Denied", "Incorrect security key.", true);
       }
     }
 
-    function logoutAdmin() {
+    function logoutAdmin(isManual = false) {
+      localStorage.removeItem('oga_admin_auth_time');
       document.getElementById('adminPassword').value = '';
       document.getElementById('adminDashboardView').classList.add('hidden');
       document.getElementById('adminLoginView').classList.remove('hidden');
       document.body.classList.add('items-center', 'justify-center');
+      if (isManual) {
+        showAlert("Logged Out", "Admin session locked.");
+      }
     }
 
     async function fetchAdminData() {
@@ -407,7 +434,6 @@
       }
     }
 
-    // NEWSLETTER BROADCAST HANDLER
     async function handleSendNewsletter(e) {
       e.preventDefault();
       const subject = document.getElementById('nlSubject').value.trim();
@@ -437,19 +463,11 @@
           broadcast_body: message
         });
 
-        if (!rpcError) {
-          showAlert("Broadcast Sent! 🚀", `Dispatched newsletter to ${rpcData?.count || 'all'} registered customer(s).`);
-          document.getElementById('newsletterForm').reset();
-          return;
+        if (rpcError) {
+          throw new Error(rpcError.message);
         }
 
-        const { data: leads, error: leadsError } = await db.from('customers').select('email');
-        if (leadsError || !leads || leads.length === 0) {
-          showAlert("No Subscribers Found", "There are no subscriber emails in the database yet.", true);
-          return;
-        }
-
-        showAlert("Broadcast Queued! 🚀", `Newsletter queued for ${leads.length} customer(s). Check your Resend dashboard.`);
+        showAlert("Broadcast Sent! 🚀", `Dispatched newsletter to ${rpcData?.count || 'registered'} customer(s).`);
         document.getElementById('newsletterForm').reset();
       } catch (err) {
         showAlert("Broadcast Failed", err.message, true);
@@ -458,6 +476,8 @@
         btn.disabled = false;
       }
     }
+
+    window.addEventListener('DOMContentLoaded', checkAdminSession);
   </script>
 </body>
 </html>
