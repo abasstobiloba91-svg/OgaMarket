@@ -23,7 +23,6 @@
     .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
     .glass-card { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); }
     .glass-nav { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
-    
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
     .bg-blob-2 { position: fixed; bottom: 10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(242,169,0,0.12) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
   </style>
@@ -36,10 +35,10 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"/>
-          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"/>
-          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"/>
-          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"/>
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
         </svg>
         <div class="flex flex-col text-left">
           <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
@@ -48,7 +47,7 @@
       </a>
       <div class="hidden sm:flex items-center gap-4">
         <a href="store.html" class="font-semibold text-sm text-slate-600 hover:text-brandGreen cursor-pointer">Browse Market</a>
-        <a href="admin.html" class="font-semibold text-sm text-slate-600 hover:text-brandGreen cursor-pointer">Staff Portal</a>
+        <a href="track.html" class="font-semibold text-sm text-slate-600 hover:text-brandGreen cursor-pointer">Track Order</a>
         <a href="store.html" class="bg-brandGreen text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-brandGreenDark cursor-pointer">Start Shopping</a>
       </div>
       <a href="store.html" class="sm:hidden bg-brandGreen text-white px-4 py-2 rounded-lg font-bold text-xs shadow-sm cursor-pointer">Shop Now</a>
@@ -57,16 +56,16 @@
 
   <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
     <a href="index.html" class="flex flex-col items-center gap-1 text-brandGreen p-2 cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
       <span class="text-[10px] font-bold">Home</span>
     </a>
     <a href="store.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
       <span class="text-[10px] font-bold">Store</span>
     </a>
-    <a href="admin.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      <span class="text-[10px] font-bold">Admin</span>
+    <a href="track.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
+      <span class="text-[10px] font-bold">Track</span>
     </a>
   </nav>
 
@@ -129,15 +128,10 @@
       </div>
       <div class="flex gap-4">
         <a href="store.html" class="text-xs font-bold text-slate-600 hover:text-brandGreen cursor-pointer">Browse Store</a>
-        <a href="admin.html" class="text-xs font-bold text-slate-600 hover:text-brandGreen cursor-pointer">Vendor Leads</a>
+        <a href="track.html" class="text-xs font-bold text-slate-600 hover:text-brandGreen cursor-pointer">Track Order</a>
         <a href="#" class="text-xs font-bold text-slate-600 hover:text-brandGreen cursor-pointer">Contact Support</a>
       </div>
     </div>
   </footer>
-
-  <button class="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="alert('Chat connecting to OgaMarket Concierge Team...')">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap">Chat with us</span>
-  </button>
 </body>
 </html>
