@@ -31,7 +31,7 @@
 
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 sm:gap-3">
+      <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"/>
           <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"/>
@@ -40,8 +40,8 @@
         <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
       </a>
       <div class="flex items-center gap-3">
-        <a href="admin.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100">Staff Portal</a>
-        <button onclick="toggleCart(true)" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2">
+        <a href="admin.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Staff Portal</a>
+        <button onclick="toggleCart(true)" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer">
           <span class="hidden sm:inline">Bag</span>
           <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           <span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full font-black">0</span>
@@ -50,7 +50,7 @@
     </div>
   </header>
 
-  <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+  <nav class="sm:hidden fixed bottom-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] cursor-pointer">
     <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-bold">Home</span>
@@ -67,28 +67,29 @@
 
   <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-10 flex-grow w-full">
     <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar">
-      <button onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap">All</button>
-      <button onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap">Grains & Tubers</button>
-      <button onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap">Soups & Spices</button>
+      <button onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap cursor-pointer">All</button>
+      <button onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer">Grains & Tubers</button>
+      <button onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer">Soups & Spices</button>
     </div>
     
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
   <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity">
-    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto"></div>
+    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto cursor-pointer"></div>
     <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col pointer-events-auto transform translate-x-full transition-transform" id="cartPanel">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-400 font-bold p-2 text-xl">&times;</button></div>
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-400 font-bold p-2 text-xl cursor-pointer">&times;</button></div>
       <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5"></div>
       <div class="p-5 bg-slate-50 border-t border-slate-100">
         <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText" class="font-mono">&#8358;0</span></div>
-        <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-sm">Proceed to Checkout</button>
+        <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-sm cursor-pointer">Proceed to Checkout</button>
       </div>
     </div>
   </div>
 
   <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto pb-24">
-    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl">
+    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative">
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-xl cursor-pointer">&times;</button>
       <h3 class="text-xl font-extrabold mb-6">Delivery Details</h3>
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
         <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
@@ -98,21 +99,27 @@
           <option value="interstate">Interstate Motor Park Waybill (&#8358;6,500)</option>
         </select>
         <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
-        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-2 shadow-sm">Pay Securely via Paystack</button>
+        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-2 shadow-sm cursor-pointer">Pay Securely via Paystack</button>
       </form>
     </div>
   </div>
   
   <div id="lazyRegModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="glass-panel rounded-3xl max-w-md w-full p-6 text-center">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-6 text-center relative">
+      <button onclick="document.getElementById('lazyRegModal').classList.add('hidden'); document.getElementById('lazyRegModal').classList.remove('flex');" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-xl cursor-pointer">&times;</button>
       <h3 class="text-xl font-extrabold mb-2 text-brandGreen">Order Confirmed!</h3>
       <p class="mb-5 text-sm text-slate-600">Enter a password below to track your order and buy again next time without filling forms.</p>
       <form onsubmit="handleLazyRegistration(event)">
         <input type="password" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 mb-4 text-center"/>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold">Save Profile</button>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer">Save Profile</button>
       </form>
     </div>
   </div>
+
+  <button class="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="alert('Chat connecting to OgaMarket Concierge Team...')">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap">Chat with us</span>
+  </button>
 
   <script>
     const initialCatalog = [
@@ -140,7 +147,7 @@
             <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">&#8358;${Number(item.price).toLocaleString()}</p>
           </div>
           <div class="p-3 pt-0">
-            <button onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition">Add</button>
+            <button onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition cursor-pointer">Add</button>
           </div>
         </div>
       `).join('');
@@ -183,9 +190,9 @@
             <p class="text-xs font-mono text-brandGreen font-bold mt-1">&#8358;${Number(i.price).toLocaleString()}</p>
           </div>
           <div class="flex gap-3 bg-slate-100 p-1 rounded-lg items-center self-start sm:self-auto">
-            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',-1)">-</button>
+            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer" onclick="updateCartQuantity('${i.id}',-1)">-</button>
             <span class="font-mono text-sm font-bold w-4 text-center">${i.quantity}</span>
-            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50" onclick="updateCartQuantity('${i.id}',1)">+</button>
+            <button class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer" onclick="updateCartQuantity('${i.id}',1)">+</button>
           </div>
         </div>`).join('');
       document.getElementById('cartSubtotalText').innerHTML = '&#8358;' + cart.reduce((a,c)=>a+(c.price*c.quantity),0).toLocaleString();
