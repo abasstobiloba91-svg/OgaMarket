@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generate OgaMarket Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+  <div class="bg-white p-6 rounded-3xl shadow-xl max-w-md w-full text-center">
+    <h1 class="text-lg font-bold text-slate-800 mb-2">Generating Social Preview...</h1>
+    <p id="status" class="text-xs text-slate-500 mb-4">Rendering exact header SVG to PNG...</p>
+    <canvas id="logoCanvas" width="1200" height="630" class="w-full rounded-xl border border-slate-200 mb-4"></canvas>
+    <div id="result" class="hidden">
+      <a id="downloadBtn" download="ogamarket-preview.png" class="block w-full bg-[#085A36] text-white py-3 rounded-xl font-bold text-sm mb-2 cursor-pointer">Save to Phone/Laptop</a>
+      <p class="text-[11px] text-emerald-700 font-bold" id="uploadStatus"></p>
+    </div>
+  </div>
+
+  <script>
+    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await document.fonts.ready;
+      const canvas = document.getElementById('logoCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // 1. Background
+      ctx.fillStyle = '#F0F4F2';
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // 2. Ambient Gradient Blobs
+      const g1 = ctx.createRadialGradient(200, 150, 0, 200, 150, 400);
+      g1.addColorStop(0, 'rgba(8, 90, 54, 0.12)');
+      g1.addColorStop(1, 'rgba(240, 244, 242, 0)');
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // 3. Render exact SVG Logo from header
+      const svgString = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="170" height="170">
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"></circle>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"></circle>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round" fill="none"></path>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
+        </svg>
+      `;
+      const img = new Image();
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+
+      img.onload = () => {
+        ctx.drawImage(img, (1200 - 170) / 2, 110);
+
+        // 4. Exact Typography
+        ctx.font = '900 82px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        
+        // Measure text for dual color "Oga" and "Market"
+        const totalW = ctx.measureText("OgaMarket").width;
+        const ogaW = ctx.measureText("Oga").width;
+        const startX = 600 - (totalW / 2);
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#085A36';
+        ctx.fillText("Oga", startX, 395);
+
+        ctx.fillStyle = '#F2A900';
+        ctx.fillText("Market", startX + ogaW, 395);
+
+        // Subtitle
+        ctx.textAlign = 'center';
+        ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#053E25';
+        ctx.letterSpacing = '6px';
+        ctx.fillText("SHOP LIKE THE OGA", 600, 445);
+
+        // URL Tag
+        ctx.fillStyle = '#085A36';
+        ctx.beginPath();
+        ctx.roundRect(470, 490, 260, 44, 22);
+        ctx.fill();
+
+        ctx.font = '700 16px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText("ogamarket.com.ng", 600, 518);
+
+        // Upload to Supabase Storage
+        canvas.toBlob(async (blob) => {
+          document.getElementById('downloadBtn').href = URL.createObjectURL(blob);
+          document.getElementById('result').classList.remove('hidden');
+          document.getElementById('status').innerText = 'Uploading directly to Supabase...';
+
+          const { error } = await db.storage
+            .from('product-images')
+            .upload('ogamarket-preview.png', blob, { upsert: true, contentType: 'image/png' });
+
+          if (!error) {
+            document.getElementById('status').innerText = '✅ Live Preview Image Created!';
+            document.getElementById('uploadStatus').innerText = 'Saved to: product-images/ogamarket-preview.png';
+          } else {
+            document.getElementById('status').innerText = 'Ready to save manually below:';
+          }
+        }, 'image/png');
+      };
+    });
+  </script>
+</body>
+</html>
