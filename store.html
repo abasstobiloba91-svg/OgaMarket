@@ -24,6 +24,13 @@
     .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); }
     .glass-nav { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
+    
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .badge-pop { animation: badgePop 0.25s ease-in-out; }
   </style>
 </head>
 <body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen pb-24 sm:pb-0">
@@ -42,7 +49,7 @@
       </a>
       <div class="flex items-center gap-3">
         <a href="track.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Track Order</a>
-        <button id="cartBtnTop" type="button" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
+        <button id="cartBtnTop" type="button" onclick="openCart()" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer active:scale-95 transition-transform">
           <span class="hidden sm:inline">Bag</span>
           <svg class="w-4 h-4 sm:hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
           <span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full font-black">0</span>
@@ -53,15 +60,15 @@
 
   <!-- MOBILE BOTTOM BAR -->
   <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[50] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95">
+    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Home</span>
     </a>
-    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95">
+    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Store</span>
     </a>
-    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95">
+    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Track</span>
     </a>
@@ -78,7 +85,7 @@
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
-  <!-- CART SLIDE-OVER (Visible toggle directly via inline display) -->
+  <!-- CART SLIDE-OVER -->
   <div id="cartModal" class="fixed inset-0 z-[70] hidden">
     <div onclick="closeCart()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm cursor-pointer"></div>
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col z-10">
@@ -152,7 +159,6 @@
     function init() {
       renderProducts();
       updateCartUI();
-      document.getElementById('cartBtnTop').addEventListener('click', openCart);
     }
 
     function renderProducts() {
@@ -168,7 +174,9 @@
             <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">&#8358;${Number(item.price).toLocaleString()}</p>
           </div>
           <div class="p-3 pt-0">
-            <button type="button" onclick="addToCart('${item.id}')" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition cursor-pointer">Add to Bag</button>
+            <button type="button" onclick="addToCart('${item.id}', this)" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1.5">
+              <span>Add to Bag</span>
+            </button>
           </div>
         </div>
       `).join('');
@@ -188,7 +196,8 @@
       renderProducts();
     }
 
-    function addToCart(id) {
+    // SILENT ADD: Increments count and pulses the bag button without opening the drawer
+    function addToCart(id, btnElem) {
       const item = catalog.find(p => String(p.id) === String(id));
       if (!item) return;
 
@@ -201,7 +210,19 @@
 
       saveCart();
       updateCartUI();
-      openCart();
+
+      // Button feedback
+      if(btnElem) {
+        const originalText = btnElem.innerHTML;
+        btnElem.innerHTML = `<svg class="w-4 h-4 text-brandGold pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span>Added</span>`;
+        setTimeout(() => { btnElem.innerHTML = originalText; }, 900);
+      }
+
+      // Pulse badge
+      const badge = document.getElementById('cartCountBadge');
+      badge.classList.remove('badge-pop');
+      void badge.offsetWidth; // trigger reflow
+      badge.classList.add('badge-pop');
     }
 
     function updateQuantity(id, delta) {
@@ -255,13 +276,11 @@
     }
 
     function openCart() {
-      const modal = document.getElementById('cartModal');
-      modal.classList.remove('hidden');
+      document.getElementById('cartModal').classList.remove('hidden');
     }
 
     function closeCart() {
-      const modal = document.getElementById('cartModal');
-      modal.classList.add('hidden');
+      document.getElementById('cartModal').classList.add('hidden');
     }
 
     function openCheckout() {
