@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>OgaMarket | Track Order</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -28,7 +29,6 @@
 <body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col pb-24 sm:pb-0">
   <div class="bg-blob-1"></div>
 
-  <!-- TOP HEADER -->
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
@@ -47,7 +47,6 @@
     </div>
   </header>
 
-  <!-- MOBILE BOTTOM BAR -->
   <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[60] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
     <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -71,7 +70,7 @@
       <p class="text-sm text-slate-600 mb-6">Enter the email you used at checkout.</p>
       <form onsubmit="handleEmailCheck(event)" class="space-y-4">
         <input type="email" id="trackEmail" required placeholder="name@email.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-center"/>
-        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Continue</button>
+        <button id="checkEmailBtn" type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Continue</button>
       </form>
     </div>
 
@@ -96,7 +95,7 @@
       </form>
     </div>
 
-    <!-- STEP 3: Login (Enter Password) -->
+    <!-- STEP 3: Login -->
     <div id="step-login" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
       <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Welcome Back</h2>
       <p class="text-sm text-slate-600 mb-6">Enter your password to view your active delivery status.</p>
@@ -118,7 +117,6 @@
     <div id="step-tracking" class="w-full hidden">
       <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-lg">
         
-        <!-- WhatsApp Concierge Confirmation Banner -->
         <div id="waBanner" class="hidden mb-6 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left flex items-start gap-3">
           <svg class="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           <div class="text-xs text-slate-700">
@@ -130,7 +128,7 @@
         <div class="flex justify-between items-center border-b border-slate-200/70 pb-4 mb-6">
           <div>
             <h2 class="text-xl font-extrabold text-slate-900">Order Status</h2>
-            <p class="text-xs text-slate-500 font-mono mt-0.5" id="trackOrderRef">#OGA-99104</p>
+            <p class="text-xs text-slate-500 font-mono mt-0.5" id="trackOrderRef"></p>
           </div>
           <span class="bg-amber-100 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full" id="trackStatusBadge">Sourcing in Market</span>
         </div>
@@ -148,7 +146,7 @@
           <div class="flex gap-4">
             <div class="flex flex-col items-center">
               <div class="w-6 h-6 rounded-full bg-amber-400 text-white flex items-center justify-center border-2 border-white shadow-sm"></div>
-              <div class="w-1 h-12 bg-slate-200"></div>
+              <div class="w-1 h-12 bg-slate-200" id="dispatchLine"></div>
             </div>
             <div class="pt-0.5">
               <p class="font-bold text-sm text-slate-900">Sourcing in Market</p>
@@ -157,9 +155,9 @@
           </div>
           <div class="flex gap-4">
             <div class="flex flex-col items-center">
-              <div class="w-6 h-6 rounded-full bg-slate-200"></div>
+              <div class="w-6 h-6 rounded-full bg-slate-200" id="dispatchDot"></div>
             </div>
-            <div class="pt-0.5 opacity-50">
+            <div class="pt-0.5" id="dispatchText" style="opacity: 0.5;">
               <p class="font-bold text-sm text-slate-900">Dispatched</p>
               <p class="text-xs text-slate-500">Waybill/Bike dispatch details will appear here.</p>
             </div>
@@ -169,7 +167,6 @@
     </div>
   </main>
 
-  <!-- BRANDED MODAL ALERT (No browser alerts) -->
   <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
@@ -186,7 +183,12 @@
   </button>
 
   <script>
+    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
+    const supabaseKey = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
     let activeEmail = "";
+    let myLiveOrder = null;
 
     function showAlert(title, message, isError = false) {
       document.getElementById('alertTitle').innerText = title;
@@ -202,22 +204,7 @@
       modal.classList.remove('flex');
     }
 
-    function seedSampleData() {
-      if(!localStorage.getItem('ogamarket_orders')) {
-        const sampleOrders = [
-          { email: "bolanle@gmail.com", date: "Today", status: "Sourcing in Market", ref: "#OGA-99104" },
-          { email: "emeka@gmail.com", date: "Today", status: "Dispatched", ref: "#OGA-99105" }
-        ];
-        localStorage.setItem('ogamarket_orders', JSON.stringify(sampleOrders));
-      }
-      if(!localStorage.getItem('ogamarket_users')) {
-        const sampleUsers = { "emeka@gmail.com": "password123" };
-        localStorage.setItem('ogamarket_users', JSON.stringify(sampleUsers));
-      }
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
-      seedSampleData();
       const urlParams = new URLSearchParams(window.location.search);
       if(urlParams.has('email')) {
         document.getElementById('trackEmail').value = urlParams.get('email');
@@ -238,29 +225,27 @@
       document.getElementById(stepId).classList.remove('hidden');
     }
 
-    function handleEmailCheck(e) {
+    async function handleEmailCheck(e) {
       if(e) e.preventDefault();
+      const btn = document.getElementById('checkEmailBtn');
+      if(btn) btn.innerText = "Checking...";
+      
       activeEmail = document.getElementById('trackEmail').value.trim().toLowerCase();
       
-      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
-      const orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
-      const hasOrder = orders.find(o => o.email.toLowerCase() === activeEmail);
+      const { data, error } = await supabase.from('orders').select('*').eq('email', activeEmail).order('created_at', { ascending: false }).limit(1);
       
-      if(users[activeEmail]) {
-        switchStep('step-login');
-      } else if (hasOrder) {
-        switchStep('step-register');
+      if(btn) btn.innerText = "Continue";
+
+      if (data && data.length > 0) {
+        myLiveOrder = data[0];
+        const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+        if(users[activeEmail]) {
+          switchStep('step-login');
+        } else {
+          switchStep('step-register');
+        }
       } else {
-        // If it's a new email, create a demo order for it immediately so user can test seamlessly
-        const newDemoOrder = {
-          email: activeEmail,
-          date: new Date().toLocaleDateString(),
-          status: "Sourcing in Market",
-          ref: "#OGA-" + Math.floor(10000 + Math.random() * 90000)
-        };
-        orders.push(newDemoOrder);
-        localStorage.setItem('ogamarket_orders', JSON.stringify(orders));
-        switchStep('step-register');
+        showAlert("No Past Orders", "We haven't found an order for " + activeEmail + " in the database yet.", true);
       }
     }
 
@@ -290,11 +275,15 @@
 
     function loadDashboard(showWhatsAppBanner = false) {
       switchStep('step-tracking');
-      const orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
-      const myOrder = orders.slice().reverse().find(o => o.email.toLowerCase() === activeEmail);
-      if(myOrder) {
-        document.getElementById('trackStatusBadge').innerText = myOrder.status;
-        if(myOrder.ref) document.getElementById('trackOrderRef').innerText = myOrder.ref;
+      if(myLiveOrder) {
+        document.getElementById('trackStatusBadge').innerText = myLiveOrder.status;
+        document.getElementById('trackOrderRef').innerText = myLiveOrder.order_ref;
+        
+        if (myLiveOrder.status === 'Dispatched') {
+           document.getElementById('dispatchDot').classList.replace('bg-slate-200', 'bg-brandGreen');
+           document.getElementById('dispatchLine').classList.replace('bg-slate-200', 'bg-brandGreen');
+           document.getElementById('dispatchText').style.opacity = "1";
+        }
       }
       if(showWhatsAppBanner) {
         document.getElementById('waBanner').classList.remove('hidden');
