@@ -20,15 +20,16 @@
   </script>
   <style>
     input, select, textarea, button { font-size: 16px !important; }
-    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
-    .glass-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); transition: transform 0.2s; }
-    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .glass-panel { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); }
+    .glass-nav { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
   </style>
 </head>
 <body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen pb-24 sm:pb-0">
   <div class="bg-blob-1"></div>
 
+  <!-- TOP HEADER -->
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
@@ -41,7 +42,7 @@
       </a>
       <div class="flex items-center gap-3">
         <a href="track.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Track Order</a>
-        <button onclick="toggleCart(true)" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
+        <button id="cartBtnTop" type="button" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
           <span class="hidden sm:inline">Bag</span>
           <svg class="w-4 h-4 sm:hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
           <span id="cartCountBadge" class="bg-brandGold text-slate-900 text-xs px-2 py-0.5 rounded-full font-black">0</span>
@@ -51,124 +52,116 @@
   </header>
 
   <!-- MOBILE BOTTOM BAR -->
-  <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[60] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+  <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[50] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Home</span>
     </a>
-    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95 transition-transform">
+    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Store</span>
     </a>
-    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Track</span>
     </a>
   </nav>
 
+  <!-- STOREFRONT -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-10 flex-grow w-full">
     <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar">
-      <button onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap cursor-pointer active:scale-95">All</button>
-      <button onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Grains & Tubers</button>
-      <button onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Soups & Spices</button>
+      <button type="button" onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap cursor-pointer active:scale-95">All</button>
+      <button type="button" onclick="filterCategory('SWALLOWS')" id="tab-SWALLOWS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Grains & Tubers</button>
+      <button type="button" onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Soups & Spices</button>
     </div>
     
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
-  <!-- CART DRAWER -->
-  <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity">
-    <div onclick="toggleCart(false)" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm pointer-events-auto cursor-pointer"></div>
-    <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col pointer-events-auto transform translate-x-full transition-transform" id="cartPanel">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center"><h2 class="text-lg font-extrabold text-slate-900">Your Bag</h2><button onclick="toggleCart(false)" class="text-slate-400 font-bold p-2 text-2xl cursor-pointer">&times;</button></div>
-      <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5"></div>
+  <!-- CART SLIDE-OVER (Visible toggle directly via inline display) -->
+  <div id="cartModal" class="fixed inset-0 z-[70] hidden">
+    <div onclick="closeCart()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm cursor-pointer"></div>
+    <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col z-10">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h2 class="text-lg font-extrabold text-slate-900">Your Shopping Bag</h2>
+        <button type="button" onclick="closeCart()" class="text-slate-400 hover:text-slate-700 font-bold p-2 text-2xl cursor-pointer leading-none">&times;</button>
+      </div>
+      <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5 space-y-3"></div>
       <div class="p-5 bg-slate-50 border-t border-slate-100">
-        <div class="flex justify-between font-bold mb-4"><span>Subtotal:</span><span id="cartSubtotalText" class="font-mono">&#8358;0</span></div>
-        <button id="checkoutTriggerBtn" onclick="openCheckoutModal()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-sm cursor-pointer active:scale-95 transition">Proceed to Checkout</button>
+        <div class="flex justify-between font-bold mb-4 text-base">
+          <span>Subtotal:</span>
+          <span id="cartSubtotalText" class="font-mono text-brandGreen font-extrabold text-lg">&#8358;0</span>
+        </div>
+        <button id="checkoutTriggerBtn" type="button" onclick="openCheckout()" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Proceed to Checkout</button>
       </div>
     </div>
   </div>
 
   <!-- CHECKOUT MODAL -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm overflow-y-auto pb-24">
-    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative">
-      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-2xl cursor-pointer">&times;</button>
-      <h3 class="text-xl font-extrabold mb-6">Delivery Details</h3>
-      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
-        <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
-        <input type="email" id="custEmail" required placeholder="Email Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
-        <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3"/>
-        <select id="custDestination" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-semibold text-sm">
+  <div id="checkoutModal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+    <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative bg-white">
+      <button type="button" onclick="closeCheckout()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-2xl cursor-pointer leading-none">&times;</button>
+      <h3 class="text-xl font-extrabold mb-4 text-slate-900">Delivery Details</h3>
+      <form id="checkoutForm" onsubmit="handleCheckout(event)" class="space-y-4">
+        <input type="text" id="custName" required placeholder="Full Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3"/>
+        <input type="email" id="custEmail" required placeholder="Email Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3"/>
+        <input type="tel" id="custWhatsApp" required placeholder="WhatsApp Number" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3"/>
+        <select id="custDestination" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-semibold text-sm">
           <option value="lagos">Lagos Doorstep Dispatch (&#8358;2,500)</option>
           <option value="interstate">Interstate Motor Park Waybill (&#8358;6,500)</option>
         </select>
-        <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
-        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold mt-2 shadow-sm cursor-pointer active:scale-95 transition">Pay Securely via Paystack</button>
+        <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
+        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Pay Securely via Paystack</button>
       </form>
     </div>
   </div>
 
-  <!-- BRANDED MODAL ALERT -->
-  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
-      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
-      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
-      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
-      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Got it</button>
-    </div>
-  </div>
-
-  <!-- FLOATING CHAT WIDGET -->
-  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Live market agents will be online shortly. Leave a note or contact us via WhatsApp!')">
+  <!-- FLOATING SUPPORT BUTTON -->
+  <button type="button" class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-40 flex items-center gap-2 cursor-pointer" onclick="alert('Our market concierge line is active on WhatsApp: +234 800 OGAMARKET')">
     <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap pointer-events-none">Chat with us</span>
+    <span class="font-bold text-sm hidden sm:inline-block pointer-events-none">Chat with us</span>
   </button>
 
   <script>
-    const initialCatalog = [
+    const defaultCatalog = [
       { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
       { id: "prod-2", name: "Heavy Benue Yams", category: "SWALLOWS", gauge: "Set of 3 Heavy Tubers", price: 14000, image: "https://images.unsplash.com/photo-1596450514735-111a2fe02935?w=600&q=80" },
       { id: "prod-3", name: "Clean Egusi", category: "SOUPS", gauge: "Paint Bucket (4L)", price: 9200, image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80" },
       { id: "prod-4", name: "Oron Smoked Crayfish", category: "SOUPS", gauge: "1 Large Derica", price: 4200, image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80" }
     ];
-    
-    let catalog = [];
+
+    let catalog = defaultCatalog;
     try {
-      let saved = JSON.parse(localStorage.getItem('ogamarket_catalog'));
-      if(saved && Array.isArray(saved) && saved.length > 0) catalog = saved;
-      else {
-        catalog = [...initialCatalog];
-        localStorage.setItem('ogamarket_catalog', JSON.stringify(catalog));
-      }
-    } catch(e) {
-      catalog = [...initialCatalog];
+      const stored = JSON.parse(localStorage.getItem('ogamarket_catalog'));
+      if (Array.isArray(stored) && stored.length > 0) catalog = stored;
+      else localStorage.setItem('ogamarket_catalog', JSON.stringify(defaultCatalog));
+    } catch (e) {
+      catalog = defaultCatalog;
     }
 
-    let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
+    let cart = [];
+    try {
+      const storedCart = JSON.parse(localStorage.getItem('ogamarket_cart'));
+      if (Array.isArray(storedCart)) cart = storedCart;
+    } catch(e) {
+      cart = [];
+    }
+
     let currentCategory = 'ALL';
 
-    function showAlert(title, message, isError = false) {
-      document.getElementById('alertTitle').innerText = title;
-      document.getElementById('alertMessage').innerText = message;
-      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
-      const modal = document.getElementById('customAlert');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-    function closeAlert() {
-      const modal = document.getElementById('customAlert');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+    function init() {
+      renderProducts();
+      updateCartUI();
+      document.getElementById('cartBtnTop').addEventListener('click', openCart);
     }
 
-    function initStore() { renderProducts(); updateCartUI(); }
-    
     function renderProducts() {
       const grid = document.getElementById('productGrid');
-      const filtered = catalog.filter(i => currentCategory === 'ALL' || i.category === currentCategory);
+      const filtered = catalog.filter(item => currentCategory === 'ALL' || item.category === currentCategory);
+      
       grid.innerHTML = filtered.map(item => `
-        <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm">
-          <img src="${item.image}" class="h-32 sm:h-48 w-full object-cover"/>
+        <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm bg-white">
+          <img src="${item.image}" alt="${item.name}" class="h-32 sm:h-48 w-full object-cover"/>
           <div class="p-3 sm:p-4">
             <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight mb-1 truncate">${item.name}</h3>
             <p class="text-[10px] sm:text-xs text-slate-500 mb-2 truncate">${item.gauge}</p>
@@ -181,80 +174,130 @@
       `).join('');
     }
 
-    function filterCategory(cat) { 
-      currentCategory = cat; 
-      document.querySelectorAll('.category-tab').forEach(b => {
-        b.classList.remove('bg-brandGreen', 'text-white');
-        b.classList.add('bg-white', 'text-slate-600');
+    function filterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-tab').forEach(btn => {
+        btn.classList.remove('bg-brandGreen', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-600');
       });
-      document.getElementById(`tab-${cat}`).classList.add('bg-brandGreen', 'text-white');
-      document.getElementById(`tab-${cat}`).classList.remove('bg-white', 'text-slate-600');
-      renderProducts(); 
-    }
-    
-    function addToCart(id) {
-      if(!catalog || catalog.length === 0) catalog = initialCatalog;
-      const p = catalog.find(i => String(i.id) === String(id));
-      if(!p) { showAlert("Error", "Product could not be found.", true); return; }
-      
-      const ex = cart.find(c => String(c.id) === String(id));
-      if(ex) ex.quantity++; else cart.push({...p, quantity: 1});
-      
-      saveCart(); updateCartUI(); toggleCart(true);
-    }
-    
-    function updateCartQuantity(id, delta) {
-      const idx = cart.findIndex(c => String(c.id) === String(id));
-      if(idx > -1) { 
-        cart[idx].quantity += delta; 
-        if(cart[idx].quantity <= 0) cart.splice(idx,1); 
+      const activeBtn = document.getElementById('tab-' + cat);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brandGreen', 'text-white');
+        activeBtn.classList.remove('bg-white', 'text-slate-600');
       }
-      saveCart(); updateCartUI();
+      renderProducts();
     }
-    
-    function saveCart() { localStorage.setItem('ogamarket_cart', JSON.stringify(cart)); }
-    
+
+    function addToCart(id) {
+      const item = catalog.find(p => String(p.id) === String(id));
+      if (!item) return;
+
+      const existing = cart.find(c => String(c.id) === String(id));
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+
+      saveCart();
+      updateCartUI();
+      openCart();
+    }
+
+    function updateQuantity(id, delta) {
+      const index = cart.findIndex(c => String(c.id) === String(id));
+      if (index > -1) {
+        cart[index].quantity += delta;
+        if (cart[index].quantity <= 0) cart.splice(index, 1);
+      }
+      saveCart();
+      updateCartUI();
+    }
+
+    function saveCart() {
+      localStorage.setItem('ogamarket_cart', JSON.stringify(cart));
+    }
+
     function updateCartUI() {
-      document.getElementById('cartCountBadge').innerText = cart.reduce((a,c)=>a+c.quantity,0);
-      const cont = document.getElementById('cartItemsContainer');
-      cont.innerHTML = cart.map(i => `
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center py-4 border-b border-slate-100 last:border-0 gap-3">
-          <div>
-            <p class="font-bold text-sm text-slate-900">${i.name}</p>
-            <p class="text-[11px] text-slate-500">${i.gauge}</p>
-            <p class="text-xs font-mono text-brandGreen font-bold mt-1">&#8358;${Number(i.price).toLocaleString()}</p>
+      const totalCount = cart.reduce((acc, cur) => acc + (cur.quantity || 1), 0);
+      document.getElementById('cartCountBadge').innerText = totalCount;
+
+      const container = document.getElementById('cartItemsContainer');
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <p class="text-sm">Your shopping bag is empty.</p>
           </div>
-          <div class="flex gap-3 bg-slate-100 p-1 rounded-lg items-center self-start sm:self-auto">
-            <button type="button" class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer" onclick="updateCartQuantity('${i.id}',-1)">-</button>
-            <span class="font-mono text-sm font-bold w-4 text-center">${i.quantity}</span>
-            <button type="button" class="w-8 h-8 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer" onclick="updateCartQuantity('${i.id}',1)">+</button>
+        `;
+        document.getElementById('checkoutTriggerBtn').disabled = true;
+        document.getElementById('checkoutTriggerBtn').classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        container.innerHTML = cart.map(item => `
+          <div class="flex justify-between items-center py-3 border-b border-slate-100 last:border-0 gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-900">${item.name}</p>
+              <p class="text-[11px] text-slate-500">${item.gauge}</p>
+              <p class="text-xs font-mono text-brandGreen font-bold mt-0.5">&#8358;${Number(item.price).toLocaleString()}</p>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+              <button type="button" onclick="updateQuantity('${item.id}', -1)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">-</button>
+              <span class="font-mono text-sm font-bold w-4 text-center">${item.quantity}</span>
+              <button type="button" onclick="updateQuantity('${item.id}', 1)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">+</button>
+            </div>
           </div>
-        </div>`).join('');
-      document.getElementById('cartSubtotalText').innerHTML = '&#8358;' + cart.reduce((a,c)=>a+(c.price*c.quantity),0).toLocaleString();
-      document.getElementById('checkoutTriggerBtn').disabled = cart.length === 0;
+        `).join('');
+        document.getElementById('checkoutTriggerBtn').disabled = false;
+        document.getElementById('checkoutTriggerBtn').classList.remove('opacity-50', 'pointer-events-none');
+      }
+
+      const subtotal = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
+      document.getElementById('cartSubtotalText').innerHTML = '&#8358;' + subtotal.toLocaleString();
     }
 
-    function toggleCart(open) {
-      const d = document.getElementById('cartDrawer'), p = document.getElementById('cartPanel');
-      if(open){ d.classList.remove('pointer-events-none','opacity-0'); p.classList.remove('translate-x-full'); }
-      else { d.classList.add('opacity-0'); p.classList.add('translate-x-full'); setTimeout(()=>d.classList.add('pointer-events-none'),300); }
+    function openCart() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.remove('hidden');
     }
-    
-    function openCheckoutModal() { toggleCart(false); document.getElementById('checkoutModal').classList.remove('hidden'); document.getElementById('checkoutModal').classList.add('flex'); }
-    function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); document.getElementById('checkoutModal').classList.remove('flex'); }
-    
-    function handleCheckoutSubmit(e) {
-      e.preventDefault(); 
+
+    function closeCart() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.add('hidden');
+    }
+
+    function openCheckout() {
+      closeCart();
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCheckout() {
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleCheckout(e) {
+      e.preventDefault();
       const email = document.getElementById('custEmail').value.trim().toLowerCase();
-      let mockOrders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
-      mockOrders.push({ email: email, date: new Date().toLocaleDateString(), status: "Sourcing in Market" });
-      localStorage.setItem('ogamarket_orders', JSON.stringify(mockOrders));
+      let orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
+      orders.push({
+        email: email,
+        ref: '#OGA-' + Math.floor(10000 + Math.random() * 90000),
+        status: 'Sourcing in Market',
+        date: new Date().toLocaleDateString()
+      });
+      localStorage.setItem('ogamarket_orders', JSON.stringify(orders));
 
-      cart = []; saveCart(); updateCartUI(); closeCheckoutModal();
+      cart = [];
+      saveCart();
+      updateCartUI();
+      closeCheckout();
+
       window.location.href = "track.html?email=" + encodeURIComponent(email);
     }
-    
-    window.addEventListener('DOMContentLoaded', initStore);
+
+    window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
