@@ -35,7 +35,7 @@
 
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
+      <a href="/" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
           <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
@@ -45,7 +45,7 @@
         <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none pointer-events-none">Oga<span class="text-brandGold">Market</span></span>
       </a>
       <div class="flex items-center gap-3">
-        <a href="track.html" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Track Order</a>
+        <a href="track" class="hidden sm:inline-flex text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer">Track Order</a>
         <button id="cartBtnTop" type="button" onclick="openCart()" class="bg-brandGreen text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm flex items-center gap-2 cursor-pointer active:scale-95 transition-transform">
           <span class="hidden sm:inline">Bag</span>
           <svg class="w-4 h-4 sm:hidden pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
@@ -56,15 +56,15 @@
   </header>
 
   <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[50] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+    <a href="/" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Home</span>
     </a>
-    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95 transition-transform">
+    <a href="store" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Store</span>
     </a>
-    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+    <a href="track" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
       <span class="text-[10px] font-bold mt-1 pointer-events-none">Track</span>
     </a>
@@ -89,7 +89,7 @@
         <span class="text-3xl">🎁</span>
       </div>
       <h3 class="text-2xl font-extrabold mb-2 text-slate-900">Get ₦500 Off!</h3>
-      <p class="text-sm text-slate-600 mb-6">Enter your details to receive your single-use ₦500 market voucher code.</p>
+      <p class="text-sm text-slate-600 mb-6">Enter your details to unlock your first-timer market discount voucher.</p>
       <form id="discountForm" onsubmit="handleDiscountSubmit(event)" class="space-y-4">
         <input type="text" id="leadName" required placeholder="First Name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-center"/>
         <input type="email" id="leadEmail" required placeholder="Email Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-center"/>
@@ -155,7 +155,7 @@
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Promo Voucher</label>
           <div class="flex gap-2">
             <input type="text" id="promoCodeInput" placeholder="e.g. OGA-XXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 uppercase font-mono text-sm outline-none focus:border-brandGreen" />
-            <button type="button" onclick="validatePromoCode()" class="bg-brandGreen text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:bg-brandGreenDark transition cursor-pointer active:scale-95">Apply</button>
+            <button type="button" id="applyPromoBtn" onclick="validatePromoCode()" class="bg-brandGreen text-white text-xs px-4 py-2.5 rounded-xl font-bold hover:bg-brandGreenDark transition cursor-pointer active:scale-95">Apply</button>
           </div>
           <p id="promoFeedback" class="text-xs mt-1.5 hidden"></p>
         </div>
@@ -185,7 +185,8 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
     const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const PAYSTACK_PUBLIC_KEY = 'pk_live_YOUR_PAYSTACK_KEY';
+    // Replace with your active Paystack Public Key (pk_test_... or pk_live_...)
+    const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_KEY';
 
     let catalog = [];
     let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
@@ -417,7 +418,7 @@
       feedback.className = "text-xs mt-1.5 block";
 
       if (!email) {
-        feedback.innerText = "Please enter your Email Address above before applying a voucher.";
+        feedback.innerText = "Please fill in your Email Address above before applying a voucher.";
         feedback.className = "text-xs mt-1.5 block text-brandRed font-bold";
         return;
       }
@@ -512,6 +513,7 @@
     
     function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); document.getElementById('checkoutModal').classList.remove('flex'); }
 
+    // PAYSTACK CHECKOUT WITH SPINNER & ERROR RECOVERY
     async function handleCheckout(e) {
       e.preventDefault();
       const btn = document.getElementById('submitOrderBtn');
@@ -521,72 +523,106 @@
       const whatsapp = document.getElementById('custWhatsApp').value.trim();
       const destination = document.getElementById('custDestination').value;
       const address = document.getElementById('custAddress').value.trim();
-      
-      if(!localStorage.getItem('oga_user_email')) {
-        localStorage.setItem('oga_user_email', email);
-        localStorage.setItem('oga_user_name', name);
-        db.from('customers').upsert([{ email: email, first_name: name }]).then();
-      }
 
       const rawSubtotal = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
       const deliveryFee = destination === 'lagos' ? 2500 : 6500;
       const finalPayable = Math.max(0, (rawSubtotal + deliveryFee) - appliedDiscount);
 
-      btn.innerText = "Connecting to Paystack...";
+      // Verify Paystack SDK is present
+      if (typeof PaystackPop === 'undefined') {
+        showAlert("Connection Error", "Paystack failed to load. Please check your internet connection.", true);
+        return;
+      }
+
+      // Verify Key has been replaced
+      if (!PAYSTACK_PUBLIC_KEY || PAYSTACK_PUBLIC_KEY.includes('YOUR_PAYSTACK_KEY')) {
+        showAlert("Configuration Required", "Please replace PAYSTACK_PUBLIC_KEY in store.html with your active Paystack Key.", true);
+        return;
+      }
+
       btn.disabled = true;
+      btn.innerHTML = `
+        <span class="flex items-center justify-center gap-2">
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Connecting to Paystack...</span>
+        </span>
+      `;
 
-      const handler = PaystackPop.setup({
-        key: PAYSTACK_PUBLIC_KEY,
-        email: email,
-        amount: Math.round(finalPayable * 100),
-        currency: 'NGN',
-        metadata: {
-          custom_fields: [
-            { display_name: "Customer Name", variable_name: "customer_name", value: name },
-            { display_name: "WhatsApp Number", variable_name: "whatsapp", value: whatsapp }
-          ]
-        },
-        callback: async function(response) {
-          btn.innerText = "Finalizing Order...";
-
-          const newOrder = {
-            order_ref: '#OGA-' + Math.floor(10000 + Math.random() * 90000),
-            email: email,
-            customer_name: name,
-            whatsapp: whatsapp,
-            destination: destination,
-            delivery_address: address,
-            items: cart,
-            status: 'Sourcing in Market',
-            payment_status: 'Paid',
-            payment_ref: response.reference,
-            discount_applied: appliedDiscount,
-            promo_code: validatedPromoCode
-          };
-
-          const { error } = await db.from('orders').insert([newOrder]);
-
-          if (error) {
-            showAlert("Warning", "Payment recorded, but database returned: " + error.message, true);
-          }
-
-          if (validatedPromoCode) {
-            await db.from('promo_codes').update({ is_used: true, used_at: new Date().toISOString() }).eq('code', validatedPromoCode);
-          }
-
-          await db.from('abandoned_carts').delete().eq('email', email);
-
-          cart = []; saveCart(); updateCartUI(); renderProducts(); closeCheckout();
-          window.location.href = "track.html?email=" + encodeURIComponent(email);
-        },
-        onClose: function() {
-          btn.innerText = "Pay with Paystack";
-          btn.disabled = false;
-          showAlert("Payment Cancelled", "Your shopping bag has been saved.");
+      try {
+        if(!localStorage.getItem('oga_user_email')) {
+          localStorage.setItem('oga_user_email', email);
+          localStorage.setItem('oga_user_name', name);
+          db.from('customers').upsert([{ email: email, first_name: name }]).then();
         }
-      });
 
-      handler.openIframe();
+        const handler = PaystackPop.setup({
+          key: PAYSTACK_PUBLIC_KEY,
+          email: email,
+          amount: Math.round(finalPayable * 100),
+          currency: 'NGN',
+          metadata: {
+            custom_fields: [
+              { display_name: "Customer Name", variable_name: "customer_name", value: name },
+              { display_name: "WhatsApp Number", variable_name: "whatsapp", value: whatsapp }
+            ]
+          },
+          callback: async function(response) {
+            btn.innerHTML = `
+              <span class="flex items-center justify-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Finalizing Order...</span>
+              </span>
+            `;
+
+            const newOrder = {
+              order_ref: '#OGA-' + Math.floor(10000 + Math.random() * 90000),
+              email: email,
+              customer_name: name,
+              whatsapp: whatsapp,
+              destination: destination,
+              delivery_address: address,
+              items: cart,
+              status: 'Sourcing in Market',
+              payment_status: 'Paid',
+              payment_ref: response.reference,
+              discount_applied: appliedDiscount,
+              promo_code: validatedPromoCode
+            };
+
+            const { error } = await db.from('orders').insert([newOrder]);
+
+            if (error) {
+              showAlert("Warning", "Payment recorded, but database returned: " + error.message, true);
+            }
+
+            if (validatedPromoCode) {
+              await db.from('promo_codes').update({ is_used: true, used_at: new Date().toISOString() }).eq('code', validatedPromoCode);
+            }
+
+            await db.from('abandoned_carts').delete().eq('email', email);
+
+            cart = []; saveCart(); updateCartUI(); renderProducts(); closeCheckout();
+            window.location.href = "track?email=" + encodeURIComponent(email);
+          },
+          onClose: function() {
+            btn.innerHTML = "Pay with Paystack";
+            btn.disabled = false;
+            showAlert("Payment Cancelled", "Your shopping bag has been saved.");
+          }
+        });
+
+        handler.openIframe();
+      } catch (err) {
+        btn.innerHTML = "Pay with Paystack";
+        btn.disabled = false;
+        showAlert("Paystack Error", err.message || "Failed to initialize payment gateway.", true);
+      }
     }
 
     window.addEventListener('DOMContentLoaded', init);
