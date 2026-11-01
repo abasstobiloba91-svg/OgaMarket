@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>OgaMarket | Shop Like The Oga</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandGreen: '#085A36',
+            brandGreenDark: '#053E25',
+            brandGold: '#F2A900',
+            brandGoldDark: '#C98C00',
+            surfaceBg: '#F7FAF8',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            body: ['"Inter"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    input, select, textarea, button { font-size: 16px !important; }
+    .glass-panel { background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.95); box-shadow: 0 20px 40px -15px rgba(8, 90, 54, 0.07); }
+    .glass-card { background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 10px 25px -5px rgba(8, 90, 54, 0.05); }
+    .ambient-orb-primary { position: absolute; top: -140px; left: 50%; transform: translateX(-50%); width: 580px; height: 580px; background: radial-gradient(circle, rgba(8, 90, 54, 0.12) 0%, rgba(247, 250, 248, 0) 70%); pointer-events: none; z-index: 0; }
+  </style>
+</head>
+<body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col justify-between selection:bg-brandGreen selection:text-white">
+  <div class="ambient-orb-primary" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-slate-100 transition">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <svg class="w-10 h-10 flex-shrink-0 transition-transform duration-200 group-hover:scale-[1.03]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12" fill="none"/>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6" fill="none"/>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"/>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"/>
+          <circle cx="36" cy="12" r="3.2" fill="#F2A900"/>
+          <circle cx="50" cy="20" r="3.2" fill="#F2A900"/>
+          <circle cx="64" cy="12" r="3.2" fill="#F2A900"/>
+        </svg>
+        <div class="flex flex-col text-left">
+          <span class="text-2xl font-extrabold tracking-tight text-brandGreen leading-none">Oga<span class="text-brandGold">Market</span></span>
+          <span class="text-[10px] tracking-[0.22em] uppercase font-semibold text-slate-400 mt-1">Shop Like The Oga</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-4">
+        <a href="store.html" class="hidden md:inline-flex items-center font-semibold text-sm text-slate-600 hover:text-brandGreen transition">Browse Catalog</a>
+        <a href="admin.html" class="hidden sm:inline-flex items-center gap-1.5 font-semibold text-xs text-slate-500 hover:text-slate-800 transition px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200/80">
+          Staff Portal
+        </a>
+        <a href="store.html" class="bg-brandGreen text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-brandGreenDark transition active:scale-[0.98]">
+          Start Shopping
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-20 flex-grow">
+    <div class="text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-brandGreen text-xs sm:text-sm font-semibold mb-6">
+        <span>Quality-Inspected Nigerian Food Sourcing</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.18] mb-6">The clean, reliable market concierge for your kitchen.</h1>
+      <p class="text-base sm:text-lg text-slate-600 font-body leading-relaxed max-w-2xl mx-auto mb-9">We purchase directly from verified market traders at Mile 12, Oyingbo, and Bodija. Every item is washed, accurately gauged, securely packed in clean branded bags, and dispatched to your residence or shipped nationwide.</p>
+      
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm font-medium text-slate-700 mb-10">
+        <div class="flex items-center gap-2 bg-white/95 px-3.5 py-2 rounded-xl border border-slate-200/90 shadow-sm"><span class="font-semibold text-slate-800">True Gauges (No Cheated Kongos)</span></div>
+        <div class="flex items-center gap-2 bg-white/95 px-3.5 py-2 rounded-xl border border-slate-200/90 shadow-sm"><span class="font-semibold text-slate-800">Express Lagos Doorstep Delivery</span></div>
+        <div class="flex items-center gap-2 bg-white/95 px-3.5 py-2 rounded-xl border border-slate-200/90 shadow-sm"><span class="font-semibold text-slate-800">Interstate Motor Park Waybill</span></div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="store.html" class="w-full sm:w-auto bg-brandGreen text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg shadow-emerald-950/15 hover:bg-brandGreenDark transition text-center">Order Foodstuffs Now</a>
+        <a href="#how-it-works" class="w-full sm:w-auto bg-white/90 text-slate-700 border border-slate-200 px-7 py-4 rounded-xl font-bold text-base hover:bg-slate-50 transition text-center">How It Works</a>
+      </div>
+    </div>
+
+    <!-- WORKFLOW -->
+    <section id="how-it-works" class="mt-20 scroll-mt-24">
+      <div class="glass-panel rounded-3xl p-6 sm:p-10">
+        <div class="flex items-center justify-between border-b border-slate-200/70 pb-5 mb-8">
+          <div>
+            <h2 class="text-xs uppercase tracking-widest font-extrabold text-slate-500">Operational Workflow</h2>
+            <p class="text-xl font-extrabold text-slate-900 mt-0.5">How OgaMarket Delivers</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 bg-emerald-100/80 text-brandGreen text-xs px-3 py-1.5 rounded-full font-bold">Managed Concierge</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-2xl bg-brandGreen text-white font-extrabold flex items-center justify-center flex-shrink-0 text-base shadow-sm">1</div>
+            <div class="flex flex-col text-left">
+              <h3 class="text-base font-bold text-slate-900 mb-1.5">You Order & Pay Safely</h3>
+              <p class="text-sm text-slate-600 font-body leading-relaxed">Browse our curated catalog and checkout as a guest. All transactions are protected via secure Paystack processing.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-2xl bg-brandGreen text-white font-extrabold flex items-center justify-center flex-shrink-0 text-base shadow-sm">2</div>
+            <div class="flex flex-col text-left">
+              <h3 class="text-base font-bold text-slate-900 mb-1.5">We Source & Inspect</h3>
+              <p class="text-sm text-slate-600 font-body leading-relaxed">Our field shoppers handpick verified batches at open markets, verify true measurements, and pack them in sealed branded bags.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-11 h-11 rounded-2xl bg-brandGreen text-white font-extrabold flex items-center justify-center flex-shrink-0 text-base shadow-sm">3</div>
+            <div class="flex flex-col text-left">
+              <h3 class="text-base font-bold text-slate-900 mb-1.5">Direct Dispatch</h3>
+              <p class="text-sm text-slate-600 font-body leading-relaxed">Lagos deliveries arrive at your doorstep via bike courier. Nationwide orders are dispatched via registered interstate park waybill.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <section class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div class="glass-card rounded-2xl p-6 text-left">
+        <h4 class="text-base font-bold text-slate-900 mb-1">Standardized Gauges</h4>
+        <p class="text-sm text-slate-600 font-body leading-relaxed">Eliminating traditional market measurement cheats with standardized liters, weights, and counts.</p>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-left">
+        <h4 class="text-base font-bold text-slate-900 mb-1">Direct Market Pricing</h4>
+        <p class="text-sm text-slate-600 font-body leading-relaxed">Competitive open market wholesale rates without middleman price gouging or haggling stress.</p>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-left">
+        <h4 class="text-base font-bold text-slate-900 mb-1">Live Concierge Support</h4>
+        <p class="text-sm text-slate-600 font-body leading-relaxed">Direct communication with our fulfillment desk for order status, inquiries, or custom requests.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
