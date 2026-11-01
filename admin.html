@@ -25,7 +25,7 @@
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
   </style>
 </head>
-<body class="bg-surfaceBg text-slate-800 p-4 sm:p-8 font-sans min-h-screen flex items-center justify-center">
+<body class="bg-surfaceBg text-slate-800 p-4 sm:p-8 font-sans min-h-screen flex flex-col items-center justify-center">
   <div class="bg-blob-1"></div>
   
   <!-- ADMIN LOGIN VIEW -->
@@ -79,7 +79,6 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Orders & Leads Column -->
       <div class="lg:col-span-2 space-y-8">
         <!-- Active Orders -->
         <div>
@@ -153,7 +152,30 @@
     </div>
   </div>
 
+  <!-- Custom Branded Alert -->
+  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
+      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition">Got it</button>
+    </div>
+  </div>
+
   <script>
+    function showAlert(title, message, isError = false) {
+      document.getElementById('alertTitle').innerText = title;
+      document.getElementById('alertMessage').innerText = message;
+      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeAlert() {
+      document.getElementById('customAlert').classList.add('hidden');
+      document.getElementById('customAlert').classList.remove('flex');
+    }
+
     function handleAdminLogin(e) {
       e.preventDefault();
       const pwd = document.getElementById('adminPassword').value;
@@ -163,7 +185,7 @@
         document.body.classList.remove('items-center', 'justify-center');
         renderAdminInventory();
       } else {
-        alert("Access Denied.");
+        showAlert("Access Denied", "Incorrect security key.", true);
       }
     }
 
@@ -228,7 +250,7 @@
     function handleProductUpload(e) {
       e.preventDefault();
       if (!uploadedImageBase64) {
-        alert("Please select an image for the product.");
+        showAlert("Missing Image", "Please tap the box to upload a product photo.", true);
         return;
       }
       const newProduct = {
@@ -250,7 +272,7 @@
       document.getElementById('imgUploadText').classList.remove('hidden');
       
       renderAdminInventory();
-      alert("Product published successfully!");
+      showAlert("Success", "New product pushed to the live storefront!");
     }
   </script>
 </body>
