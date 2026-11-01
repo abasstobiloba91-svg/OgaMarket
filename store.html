@@ -481,7 +481,7 @@
       await db.from('abandoned_carts').delete().eq('email', email);
 
       cart = []; saveCart(); updateCartUI(); renderProducts(); closeCheckout();
-      window.location.href = "track.html?email=" + encodeURIComponent(email);
+      window.location.href = "track?email=" + encodeURIComponent(email);
     }
 
     window.addEventListener('DOMContentLoaded', init);
