@@ -3,149 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Store — OgaMarket | Shopping like the Oga!</title>
+  <title>Market Store — OgaMarket</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-dock {
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
     }
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .badge-pill {
+      background-color: #E8F8F0;
+      color: #085A36;
     }
   </style>
 </head>
-<body class="bg-[#F8FAF9] text-gray-900 min-h-screen flex flex-col font-sans antialiased selection:bg-[#F2A900] selection:text-black">
+<body class="bg-[#FBFDFB] text-[#111827] min-h-screen flex flex-col pb-28 antialiased selection:bg-[#F2A900] selection:text-black">
 
-  <!-- Header / Navigation Bar -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 group">
-        <div class="w-10 h-10 rounded-full bg-[#085A36] flex items-center justify-center text-[#F2A900] font-black text-xl shadow-sm group-hover:scale-105 transition-transform">
-          Ω
+  <!-- Consistent Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-md mx-auto px-5 h-20 flex items-center justify-between">
+      <!-- Brand Logo & Subtitle matching the screenshot -->
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full border-2 border-dashed border-[#F2A900] p-0.5 flex items-center justify-center bg-white shadow-sm">
+          <div class="w-full h-full rounded-full bg-[#085A36] flex items-center justify-center text-[#F2A900] font-black text-xs">Ω</div>
         </div>
-        <span class="text-2xl font-black text-[#085A36] tracking-tight">Oga<span class="text-[#F2A900]">Market</span></span>
+        <div>
+          <div class="text-xl font-extrabold tracking-tight leading-none text-[#085A36]">
+            Oga<span class="text-[#F2A900]">Market</span>
+          </div>
+          <span class="block text-[8px] font-extrabold tracking-widest text-[#085A36] mt-1 uppercase">Shop Like The Oga</span>
+        </div>
       </a>
 
-      <!-- Clean Navigation Links -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
-        <a href="/" class="hover:text-[#085A36] transition-colors">Home</a>
-        <a href="store" class="text-[#085A36] border-b-2 border-[#085A36] pb-1">Market Store</a>
-        <a href="track" class="hover:text-[#085A36] transition-colors">Track Order</a>
-      </nav>
-
-      <div class="flex items-center gap-4">
-        <button onclick="toggleCart(true)" class="relative p-2.5 bg-[#F0F4F2] text-[#085A36] rounded-full hover:bg-emerald-100 transition shadow-sm">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-          <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-[#F2A900] text-gray-950 font-black text-xs w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
-        </button>
-      </div>
+      <!-- Header Action -->
+      <button onclick="toggleCart(true)" class="bg-[#085A36] text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-[#06482B] transition flex items-center gap-2 shadow-sm">
+        <span>Cart</span>
+        <span id="headerCartCount" class="bg-[#F2A900] text-gray-950 text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+      </button>
     </div>
   </header>
 
-  <!-- Market Hero Banner -->
-  <section class="bg-gradient-to-b from-[#085A36] to-[#064328] text-white py-12 px-4 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto text-center relative z-10">
-      <span class="inline-block px-3 py-1 bg-white/10 rounded-full text-xs font-bold text-[#F2A900] uppercase tracking-wider mb-3">Fresh Morning Stock</span>
-      <h1 class="text-3xl sm:text-5xl font-black tracking-tight">The Fresh Market Store</h1>
-      <p class="text-emerald-100 text-sm sm:text-base max-w-xl mx-auto mt-2">Skip the traffic and stress. Select fresh meats, tubers, and authentic staples sorted and packaged like the Oga.</p>
+  <!-- Store Hero Area -->
+  <main class="max-w-md mx-auto px-5 pt-8 w-full flex-1">
+    
+    <div class="text-center space-y-3 mb-6">
+      <span class="inline-block badge-pill px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
+        Clean & Quality Nigerian Foodstuffs
+      </span>
+      <h1 class="text-3xl font-extrabold text-[#0B1A13] tracking-tight leading-tight">
+        The trusted market plug<br/>for your kitchen.
+      </h1>
+      <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
+        Handpicked directly from real market stalls, measured accurately, and packed neatly for dispatch.
+      </p>
     </div>
-  </section>
 
-  <!-- Categories Filter -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 w-full">
-    <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs font-bold">
-      <button onclick="filterCategory('all')" class="cat-btn px-4 py-2 rounded-full bg-[#085A36] text-white shadow-sm" data-cat="all">All Items</button>
-      <button onclick="filterCategory('Proteins & Meats')" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 hover:border-[#085A36]" data-cat="Proteins & Meats">Proteins & Meats</button>
-      <button onclick="filterCategory('Tubers & Staples')" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 hover:border-[#085A36]" data-cat="Tubers & Staples">Tubers & Staples</button>
-      <button onclick="filterCategory('Soup Ingredients')" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 hover:border-[#085A36]" data-cat="Soup Ingredients">Soup Ingredients</button>
-      <button onclick="filterCategory('Oils & Seasoning')" class="cat-btn px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 hover:border-[#085A36]" data-cat="Oils & Seasoning">Oils & Seasoning</button>
+    <!-- Category Filters -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none text-xs font-bold">
+      <button onclick="filterCategory('all')" class="cat-pill px-4 py-2 rounded-full bg-[#085A36] text-white shadow-sm whitespace-nowrap" data-cat="all">All Items</button>
+      <button onclick="filterCategory('Proteins & Meats')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 whitespace-nowrap" data-cat="Proteins & Meats">Proteins & Meats</button>
+      <button onclick="filterCategory('Tubers & Staples')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 whitespace-nowrap" data-cat="Tubers & Staples">Tubers & Staples</button>
+      <button onclick="filterCategory('Soup Ingredients')" class="cat-pill px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 whitespace-nowrap" data-cat="Soup Ingredients">Soup Ingredients</button>
     </div>
-  </section>
 
-  <!-- Product Catalog Grid -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Products loaded from database or default stock -->
+    <!-- Products List / Grid -->
+    <div id="productGrid" class="space-y-4">
+      <!-- Injected via JavaScript -->
     </div>
+
+    <!-- Info Card Matching "Operational Workflow" from Screenshot -->
+    <div class="mt-8 bg-white border border-gray-100 rounded-3xl p-5 shadow-sm">
+      <span class="text-[10px] font-extrabold text-gray-400 tracking-wider uppercase block">Operational Workflow</span>
+      <h3 class="text-base font-extrabold text-[#0B1A13] mt-1">How OgaMarket Delivers</h3>
+      <div class="mt-2 inline-block badge-pill px-3 py-1 rounded-full text-[11px] font-bold">
+        Managed Concierge
+      </div>
+      <p class="text-xs text-gray-500 mt-3 leading-relaxed">
+        Once your order is confirmed, our live agents hit the market at 7:00 AM, select the freshest lots, share live status updates on WhatsApp, and hand over to our dispatch riders.
+      </p>
+    </div>
+
   </main>
 
-  <!-- Discount Opt-in Popup -->
-  <div id="promoPopup" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl border border-white">
+  <!-- ₦500 Voucher Popup -->
+  <div id="promoPopup" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-5">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative border border-gray-100">
       <button onclick="togglePromoPopup(false)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl font-bold">&times;</button>
-      <div class="text-center">
-        <div class="w-14 h-14 bg-[#F0F4F2] text-[#085A36] rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-black">
-          🎁
-        </div>
-        <h3 class="text-2xl font-black text-gray-900 tracking-tight">Get ₦500 Off Your Market Bag</h3>
-        <p class="text-xs text-gray-500 mt-2">Sign up for fresh market arrival alerts and get a single-use voucher code sent to your inbox.</p>
-      </div>
+      
+      <span class="inline-block badge-pill px-3 py-1 rounded-full text-[11px] font-bold">First Order Gift</span>
+      <h3 class="text-2xl font-extrabold text-[#0B1A13] mt-2">Get ₦500 Off</h3>
+      <p class="text-xs text-gray-500 mt-1">Enter your details to generate your single-use market coupon code.</p>
 
-      <form id="promoForm" onsubmit="handlePromoSubmit(event)" class="mt-6 space-y-3">
-        <input type="text" id="popupFirstName" placeholder="Your First Name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#085A36] outline-none" />
-        <input type="email" id="popupEmail" placeholder="Email Address" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#085A36] outline-none" />
-        <button type="submit" id="popupSubmitBtn" class="w-full bg-[#085A36] hover:bg-[#07472b] text-white font-bold py-3.5 rounded-xl transition text-sm shadow-md">Claim ₦500 Voucher</button>
+      <form onsubmit="handlePromoSubmit(event)" class="mt-5 space-y-3">
+        <input type="text" id="popupFirstName" placeholder="First Name" required class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+        <input type="email" id="popupEmail" placeholder="Email Address" required class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+        <button type="submit" id="popupSubmitBtn" class="w-full bg-[#085A36] text-white text-xs font-bold py-3.5 rounded-2xl hover:bg-[#06482B] transition">
+          Claim ₦500 Voucher
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- Cart / Checkout Drawer -->
+  <!-- Cart & Paystack Drawer -->
   <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex justify-end">
     <div class="bg-white w-full max-w-md h-full p-6 overflow-y-auto flex flex-col justify-between shadow-2xl">
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-gray-100">
           <div class="flex items-center gap-2">
-            <span class="text-xl font-black text-[#085A36]">Market Bag</span>
-            <span id="drawerCount" class="text-xs bg-[#F0F4F2] text-[#085A36] px-2 py-0.5 rounded-full font-bold">0</span>
+            <h2 class="text-lg font-extrabold text-[#0B1A13]">Your Market Bag</h2>
+            <span id="drawerBadge" class="badge-pill px-2 py-0.5 rounded-full text-[10px] font-black">0</span>
           </div>
-          <button onclick="toggleCart(false)" class="text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+          <button onclick="toggleCart(false)" class="text-gray-400 text-2xl font-bold">&times;</button>
         </div>
 
-        <!-- Cart Items -->
-        <div id="cartItemsList" class="divide-y divide-gray-100 my-4 max-h-56 overflow-y-auto">
-          <!-- Rendered via JS -->
+        <div id="cartList" class="divide-y divide-gray-100 my-4 max-h-52 overflow-y-auto">
+          <!-- Populated by JS -->
         </div>
 
-        <!-- Checkout Form Details -->
-        <div class="mt-4 space-y-2.5">
-          <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Delivery Details</h4>
-          <input type="text" id="custName" placeholder="Full Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
-          <input type="email" id="custEmail" placeholder="Email (For Receipt & Tracking)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
-          <input type="tel" id="custPhone" placeholder="WhatsApp Number" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
-          <input type="text" id="custAddress" placeholder="Street Address / Drop-off Point" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
-          <select id="custDestination" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]">
+        <!-- Checkout Inputs -->
+        <div class="space-y-2.5 pt-2">
+          <span class="text-[10px] font-extrabold text-gray-400 tracking-wider uppercase block">Delivery Information</span>
+          <input type="text" id="orderName" placeholder="Full Name" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+          <input type="email" id="orderEmail" placeholder="Email (For Receipt & Tracking)" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+          <input type="tel" id="orderPhone" placeholder="WhatsApp Phone Number" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+          <input type="text" id="orderAddress" placeholder="Street Address or Drop-off Point" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]" />
+          <select id="orderDestination" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-xs outline-none focus:border-[#085A36]">
             <option value="lagos">Lagos Doorstep Dispatch</option>
             <option value="interstate">Interstate Motor Park Waybill</option>
           </select>
         </div>
 
-        <!-- Single-Use Voucher Input -->
+        <!-- Promo Code Input -->
         <div class="mt-4 pt-3 border-t border-gray-100">
-          <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Have a ₦500 Promo Voucher?</label>
+          <span class="text-[10px] font-extrabold text-gray-400 tracking-wider uppercase block mb-1">Single-Use Voucher</span>
           <div class="flex gap-2">
-            <input type="text" id="promoInput" placeholder="e.g. OGA-XXXXX" class="w-full text-xs px-3 py-2 border rounded-xl uppercase tracking-wider focus:outline-none focus:border-[#085A36]" />
-            <button type="button" onclick="applyPromoCode()" class="bg-[#085A36] text-white text-xs px-4 py-2 rounded-xl font-bold hover:bg-opacity-95">Apply</button>
+            <input type="text" id="promoInput" placeholder="e.g. OGA-XXXXX" class="w-full text-xs px-3 py-2 border rounded-xl uppercase tracking-wider outline-none focus:border-[#085A36]" />
+            <button type="button" onclick="applyPromoCode()" class="bg-[#085A36] text-white text-xs px-4 py-2 rounded-xl font-bold">Apply</button>
           </div>
           <p id="promoMessage" class="text-xs mt-1.5 hidden"></p>
         </div>
       </div>
 
-      <!-- Checkout Footer -->
+      <!-- Totals & Paystack Trigger -->
       <div class="pt-4 border-t border-gray-100">
-        <div class="space-y-1.5 mb-3 text-xs">
+        <div class="space-y-1 mb-3 text-xs">
           <div class="flex justify-between text-gray-500">
             <span>Subtotal</span>
-            <span id="subtotalDisplay" class="font-bold">₦0</span>
+            <span id="subtotalDisplay" class="font-bold text-gray-900">₦0</span>
           </div>
           <div class="flex justify-between text-[#085A36] font-bold" id="discountRow" style="display: none;">
-            <span>Voucher Applied</span>
+            <span>Voucher Deducted</span>
             <span id="discountDisplay">-₦500</span>
           </div>
           <div class="flex justify-between text-sm font-black text-gray-900 pt-2 border-t border-gray-100">
@@ -154,87 +168,95 @@
           </div>
         </div>
 
-        <button onclick="handlePaystackCheckout()" id="payBtn" class="w-full bg-[#085A36] hover:bg-[#07472b] text-white font-extrabold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
-          <span>Pay & Order Now</span>
+        <button onclick="handlePaystackPayment()" class="w-full bg-[#085A36] hover:bg-[#06482B] text-white font-extrabold py-4 rounded-2xl shadow-md transition text-xs flex items-center justify-center gap-2">
+          <span>Pay & Confirm Order</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Standard Branded Footer -->
-  <footer class="bg-white border-t border-gray-100 py-8 text-center text-xs text-gray-500 mt-auto">
-    <div class="flex items-center justify-center gap-2 mb-2">
-      <div class="w-6 h-6 rounded-full bg-[#085A36] text-[#F2A900] font-black text-xs flex items-center justify-center">Ω</div>
-      <span class="font-black text-[#085A36] text-sm">OgaMarket</span>
+  <!-- WhatsApp Floating Action Bubble (Identical to Screenshot) -->
+  <a href="https://wa.me/234XXXXXXXXXX" target="_blank" class="fixed right-5 bottom-24 z-40 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform" aria-label="Chat with concierge">
+    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  </a>
+
+  <!-- Fixed Bottom Navigation Bar (Identical to Screenshot) -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 glass-dock">
+    <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-around">
+      <a href="/" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-bold">Home</span>
+      </a>
+
+      <a href="store" class="flex flex-col items-center gap-1 text-[#085A36]">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span class="text-[10px] font-bold">Store</span>
+      </a>
+
+      <a href="track" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+        <span class="text-[10px] font-bold">Track</span>
+      </a>
     </div>
-    <p class="font-bold text-[#085A36]">Shopping like the Oga!</p>
-    <p class="mt-1">© 2026 OgaMarket. All rights reserved.</p>
-  </footer>
+  </nav>
 
   <script>
-    // Supabase Configuration
     const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Paystack Configuration
     const PAYSTACK_PUBLIC_KEY = "pk_live_YOUR_PAYSTACK_KEY";
 
-    // Fallback Initial Stock
-    const initialProducts = [
-      { id: "1", name: "Boneless Goat Meat", category: "Proteins & Meats", price: 12500, gauge: "1 Fresh Cut Basket (Cleaned)", image: "🥩" },
-      { id: "2", name: "Fresh Catfish (Cut & Prepped)", category: "Proteins & Meats", price: 9500, gauge: "1kg Medium Cut", image: "🐟" },
-      { id: "3", name: "Selected Abuja Yams", category: "Tubers & Staples", price: 8000, gauge: "3 Large Tubers", image: "🥔" },
-      { id: "4", name: "Royal Oloyin Beans", category: "Tubers & Staples", price: 6500, gauge: "1 Clean Paint Bucket", image: "🫘" },
-      { id: "5", name: "Pure Nsukka Palm Oil", category: "Oils & Seasoning", price: 7200, gauge: "5 Litres Unadulterated", image: "🫗" },
-      { id: "6", name: "Oron Smoked Crayfish", category: "Soup Ingredients", price: 4500, gauge: "Cleaned Blended/Whole", image: "🦐" },
-      { id: "7", name: "Fresh Ripe Tomatoes & Pepper", category: "Soup Ingredients", price: 5500, gauge: "1 Full Market Basket", image: "🍅" },
-      { id: "8", name: "White Garri Ijebu", category: "Tubers & Staples", price: 4800, gauge: "1 Paint Rubber (Crunchy)", image: "🥣" }
+    const defaultCatalog = [
+      { id: "1", name: "Fresh Boneless Goat Meat", category: "Proteins & Meats", price: 12500, gauge: "1 Fresh Basket (Cleaned & Prepped)", icon: "🥩" },
+      { id: "2", name: "Live Cut Point-and-Kill Catfish", category: "Proteins & Meats", price: 9500, gauge: "1kg Medium Cut & Washed", icon: "🐟" },
+      { id: "3", name: "Selected Abuja Yams", category: "Tubers & Staples", price: 8000, gauge: "3 Heavy White Tubers", icon: "🥔" },
+      { id: "4", name: "Clean Royal Oloyin Beans", category: "Tubers & Staples", price: 6500, gauge: "1 Standard Paint Bucket", icon: "🫘" },
+      { id: "5", name: "Pure Nsukka Red Palm Oil", category: "Soup Ingredients", price: 7200, gauge: "5 Litres Unadulterated", icon: "🫗" },
+      { id: "6", name: "Oron Smoked Crayfish", category: "Soup Ingredients", price: 4500, gauge: "Cleaned Blended/Whole", icon: "🦐" }
     ];
 
-    let liveProducts = [];
+    let itemsCatalog = [];
     let cart = JSON.parse(localStorage.getItem("ogacart") || "[]");
     let appliedDiscount = 0;
     let validatedPromoCode = null;
 
     document.addEventListener("DOMContentLoaded", () => {
-      loadCatalog();
+      fetchLiveProduce();
       updateCartUI();
 
       if (!localStorage.getItem("oga_popup_seen")) {
-        setTimeout(() => togglePromoPopup(true), 4000);
+        setTimeout(() => togglePromoPopup(true), 3500);
       }
     });
 
-    async function loadCatalog() {
-      const grid = document.getElementById("productGrid");
-      const { data: dbProducts, error } = await supabaseClient.from("products").select("*");
-
-      if (!error && dbProducts && dbProducts.length > 0) {
-        liveProducts = dbProducts;
+    async function fetchLiveProduce() {
+      const { data, error } = await supabaseClient.from("products").select("*");
+      if (!error && data && data.length > 0) {
+        itemsCatalog = data;
       } else {
-        liveProducts = initialProducts;
+        itemsCatalog = defaultCatalog;
       }
-
-      renderProducts(liveProducts);
+      renderCards(itemsCatalog);
     }
 
-    function renderProducts(list) {
+    function renderCards(list) {
       const grid = document.getElementById("productGrid");
       grid.innerHTML = list.map(item => `
-        <div class="glass-card rounded-3xl p-5 border border-white hover:shadow-lg transition-all duration-300 flex flex-col justify-between group">
-          <div>
-            <div class="h-44 w-full bg-[#F0F4F2] rounded-2xl flex items-center justify-center mb-4 text-5xl group-hover:scale-105 transition-transform overflow-hidden">
-              ${item.image_url ? `<img src="${item.image_url}" class="h-full w-full object-cover"/>` : (item.image || '🥬')}
+        <div class="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-[#E8F8F0] flex items-center justify-center text-3xl shrink-0">
+              ${item.icon || '🥬'}
             </div>
-            <span class="text-[11px] font-bold text-[#085A36] bg-[#085A36]/10 px-2.5 py-1 rounded-md uppercase tracking-wider">${item.category || 'Fresh Market'}</span>
-            <h3 class="font-black text-gray-900 mt-2 text-base">${item.name}</h3>
-            <p class="text-xs text-gray-500 mt-0.5">${item.gauge || 'Sold per measure'}</p>
+            <div class="flex-1 min-w-0">
+              <span class="text-[10px] font-extrabold text-[#085A36] uppercase tracking-wider block">${item.category || 'Fresh Stock'}</span>
+              <h3 class="text-sm font-extrabold text-[#0B1A13] truncate">${item.name}</h3>
+              <p class="text-[11px] text-gray-400 truncate mt-0.5">${item.gauge || 'Sold per measure'}</p>
+            </div>
           </div>
-          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <span class="text-lg font-black text-[#085A36]">₦${Number(item.price).toLocaleString()}</span>
-            <button onclick="addToBag('${item.id}')" class="bg-[#085A36] hover:bg-[#07472b] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm">
+          <div class="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+            <span class="text-base font-black text-[#085A36]">₦${Number(item.price).toLocaleString()}</span>
+            <button onclick="addToCart('${item.id}')" class="bg-[#085A36] text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-[#06482B] transition">
               Add to Bag
             </button>
           </div>
@@ -243,36 +265,30 @@
     }
 
     function filterCategory(category) {
-      document.querySelectorAll(".cat-btn").forEach(b => {
-        b.className = b.dataset.cat === category
-          ? "cat-btn px-4 py-2 rounded-full bg-[#085A36] text-white shadow-sm"
-          : "cat-btn px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 hover:border-[#085A36]";
+      document.querySelectorAll(".cat-pill").forEach(btn => {
+        btn.className = btn.dataset.cat === category
+          ? "cat-pill px-4 py-2 rounded-full bg-[#085A36] text-white shadow-sm whitespace-nowrap"
+          : "cat-pill px-4 py-2 rounded-full bg-white text-gray-600 border border-gray-200 whitespace-nowrap";
       });
 
       if (category === "all") {
-        renderProducts(liveProducts);
+        renderCards(itemsCatalog);
       } else {
-        renderProducts(liveProducts.filter(p => p.category === category));
+        renderCards(itemsCatalog.filter(p => p.category === category));
       }
     }
 
-    function addToBag(productId) {
-      const prod = liveProducts.find(p => p.id == productId);
-      if (!prod) return;
+    function addToCart(id) {
+      const p = itemsCatalog.find(i => i.id == id);
+      if (!p) return;
 
-      const existing = cart.find(i => i.id == productId);
+      const existing = cart.find(i => i.id == id);
       if (existing) {
         existing.quantity += 1;
       } else {
-        cart.push({
-          id: prod.id,
-          name: prod.name,
-          price: prod.price,
-          gauge: prod.gauge || "Standard Measure",
-          quantity: 1
-        });
+        cart.push({ id: p.id, name: p.name, price: p.price, gauge: p.gauge || 'Standard', quantity: 1 });
       }
-      persistCart();
+      saveCart();
       toggleCart(true);
     }
 
@@ -281,33 +297,33 @@
       if (!item) return;
       item.quantity += delta;
       if (item.quantity <= 0) cart = cart.filter(i => i.id != id);
-      persistCart();
+      saveCart();
     }
 
-    function persistCart() {
+    function saveCart() {
       localStorage.setItem("ogacart", JSON.stringify(cart));
       updateCartUI();
     }
 
     function updateCartUI() {
       const count = cart.reduce((sum, i) => sum + i.quantity, 0);
-      document.getElementById("cartCountBadge").textContent = count;
-      document.getElementById("drawerCount").textContent = count;
+      document.getElementById("headerCartCount").textContent = count;
+      document.getElementById("drawerBadge").textContent = count;
 
-      const list = document.getElementById("cartItemsList");
+      const list = document.getElementById("cartList");
       if (cart.length === 0) {
         list.innerHTML = `<p class="py-8 text-center text-xs text-gray-400">Your market bag is empty.</p>`;
       } else {
         list.innerHTML = cart.map(i => `
           <div class="py-3 flex items-center justify-between text-xs">
             <div>
-              <p class="font-extrabold text-gray-900">${i.name}</p>
-              <p class="text-gray-400 mt-0.5">₦${Number(i.price).toLocaleString()} x ${i.quantity}</p>
+              <p class="font-extrabold text-[#0B1A13]">${i.name}</p>
+              <p class="text-gray-400">₦${Number(i.price).toLocaleString()} x ${i.quantity}</p>
             </div>
             <div class="flex items-center gap-2">
-              <button onclick="updateQty('${i.id}', -1)" class="w-6 h-6 rounded bg-gray-100 text-gray-700 font-bold flex items-center justify-center hover:bg-gray-200">-</button>
+              <button onclick="updateQty('${i.id}', -1)" class="w-6 h-6 rounded-lg bg-gray-100 text-gray-700 font-bold flex items-center justify-center">-</button>
               <span class="font-bold w-4 text-center">${i.quantity}</span>
-              <button onclick="updateQty('${i.id}', 1)" class="w-6 h-6 rounded bg-gray-100 text-gray-700 font-bold flex items-center justify-center hover:bg-gray-200">+</button>
+              <button onclick="updateQty('${i.id}', 1)" class="w-6 h-6 rounded-lg bg-gray-100 text-gray-700 font-bold flex items-center justify-center">+</button>
             </div>
           </div>
         `).join("");
@@ -321,65 +337,59 @@
       document.getElementById("discountRow").style.display = appliedDiscount > 0 ? "flex" : "none";
     }
 
-    // Dynamic Promo Code Verification
     async function applyPromoCode() {
       const code = document.getElementById("promoInput").value.trim().toUpperCase();
-      const email = document.getElementById("custEmail").value.trim().toLowerCase();
+      const email = document.getElementById("orderEmail").value.trim().toLowerCase();
       const msg = document.getElementById("promoMessage");
       msg.className = "text-xs mt-1.5 block";
 
       if (!email) {
-        msg.textContent = "Please fill in your Email above before applying voucher.";
-        msg.className = "text-xs mt-1.5 block text-red-600 font-semibold";
+        msg.textContent = "Please enter your email above before applying voucher.";
+        msg.className = "text-xs mt-1.5 block text-red-600 font-bold";
         return;
       }
       if (!code) {
-        msg.textContent = "Please enter your voucher code.";
-        msg.className = "text-xs mt-1.5 block text-red-600 font-semibold";
+        msg.textContent = "Please enter a valid code.";
+        msg.className = "text-xs mt-1.5 block text-red-600 font-bold";
         return;
       }
 
-      const { data, error } = await supabaseClient
-        .from("promo_codes")
-        .select("*")
-        .eq("code", code)
-        .single();
+      const { data, error } = await supabaseClient.from("promo_codes").select("*").eq("code", code).single();
 
       if (error || !data) {
-        msg.textContent = "Invalid promo code.";
-        msg.className = "text-xs mt-1.5 block text-red-600 font-semibold";
+        msg.textContent = "Invalid code.";
+        msg.className = "text-xs mt-1.5 block text-red-600 font-bold";
         return;
       }
       if (data.email.toLowerCase() !== email) {
-        msg.textContent = "This voucher is reserved strictly for the email it was issued to.";
-        msg.className = "text-xs mt-1.5 block text-red-600 font-semibold";
+        msg.textContent = "Voucher code valid only for its issued email.";
+        msg.className = "text-xs mt-1.5 block text-red-600 font-bold";
         return;
       }
       if (data.is_used) {
-        msg.textContent = "This voucher has already been redeemed.";
-        msg.className = "text-xs mt-1.5 block text-red-600 font-semibold";
+        msg.textContent = "Voucher has already been redeemed.";
+        msg.className = "text-xs mt-1.5 block text-red-600 font-bold";
         return;
       }
 
       appliedDiscount = Number(data.discount_amount);
       validatedPromoCode = data.code;
-      msg.textContent = `Voucher applied: ₦${appliedDiscount.toLocaleString()} deducted!`;
-      msg.className = "text-xs mt-1.5 block text-[#085A36] font-extrabold";
+      msg.textContent = `Applied: ₦${appliedDiscount.toLocaleString()} deducted!`;
+      msg.className = "text-xs mt-1.5 block text-[#085A36] font-bold";
       updateCartUI();
     }
 
-    // Paystack Checkout Integration
-    function handlePaystackCheckout() {
+    function handlePaystackPayment() {
       if (cart.length === 0) {
-        alert("Your bag is empty!");
+        alert("Your market bag is empty.");
         return;
       }
 
-      const name = document.getElementById("custName").value.trim();
-      const email = document.getElementById("custEmail").value.trim().toLowerCase();
-      const phone = document.getElementById("custPhone").value.trim();
-      const address = document.getElementById("custAddress").value.trim();
-      const destination = document.getElementById("custDestination").value;
+      const name = document.getElementById("orderName").value.trim();
+      const email = document.getElementById("orderEmail").value.trim().toLowerCase();
+      const phone = document.getElementById("orderPhone").value.trim();
+      const address = document.getElementById("orderAddress").value.trim();
+      const destination = document.getElementById("orderDestination").value;
 
       if (!name || !email || !phone || !address) {
         alert("Please complete all delivery fields.");
@@ -392,36 +402,29 @@
       const handler = PaystackPop.setup({
         key: PAYSTACK_PUBLIC_KEY,
         email: email,
-        amount: Math.round(payable * 100), // Kobo conversion
+        amount: Math.round(payable * 100),
         currency: "NGN",
-        metadata: {
-          custom_fields: [
-            { display_name: "Customer Name", variable_name: "customer_name", value: name },
-            { display_name: "WhatsApp Phone", variable_name: "whatsapp", value: phone }
-          ]
-        },
         callback: function(response) {
-          finalizeOrder(response.reference, { name, email, phone, address, destination, payable });
+          saveCompletedOrder(response.reference, { name, email, phone, address, destination, payable });
         },
         onClose: function() {
-          alert("Payment window closed. Your bag is still preserved.");
+          alert("Payment session closed.");
         }
       });
 
       handler.openIframe();
     }
 
-    async function finalizeOrder(payRef, info) {
+    async function saveCompletedOrder(payRef, customer) {
       const orderRef = "OGA-" + Math.floor(100000 + Math.random() * 900000);
 
-      // Insert Order (Automatically triggers SQL confirmation email via pg_net)
-      const { error } = await supabaseClient.from("orders").insert([{
+      await supabaseClient.from("orders").insert([{
         order_ref: orderRef,
-        customer_name: info.name,
-        email: info.email,
-        whatsapp: info.phone,
-        delivery_address: info.address,
-        destination: info.destination,
+        customer_name: customer.name,
+        email: customer.email,
+        whatsapp: customer.phone,
+        delivery_address: customer.address,
+        destination: customer.destination,
         items: cart,
         status: "Processing",
         payment_status: "Paid",
@@ -430,23 +433,14 @@
         promo_code: validatedPromoCode
       }]);
 
-      if (error) {
-        alert("Order registered with warning: " + error.message);
-      }
-
-      // Mark single-use voucher as used
       if (validatedPromoCode) {
-        await supabaseClient
-          .from("promo_codes")
-          .update({ is_used: true, used_at: new Date().toISOString() })
-          .eq("code", validatedPromoCode);
+        await supabaseClient.from("promo_codes").update({ is_used: true, used_at: new Date().toISOString() }).eq("code", validatedPromoCode);
       }
 
       localStorage.removeItem("ogacart");
-      window.location.href = `track?email=${encodeURIComponent(info.email)}`;
+      window.location.href = `track?email=${encodeURIComponent(customer.email)}`;
     }
 
-    // Lead Capture Popup Handler
     async function handlePromoSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById("popupSubmitBtn");
@@ -454,18 +448,14 @@
       const email = document.getElementById("popupEmail").value.trim().toLowerCase();
 
       btn.disabled = true;
-      btn.textContent = "Generating Your Voucher...";
+      btn.textContent = "Generating...";
 
-      const { error } = await supabaseClient.from("customers").insert([{
-        first_name: firstName,
-        email: email
-      }]);
-
+      const { error } = await supabaseClient.from("customers").insert([{ first_name: firstName, email: email }]);
       if (error) {
         alert("Notice: " + error.message);
       } else {
         localStorage.setItem("oga_popup_seen", "true");
-        alert("Welcome to the market! Your ₦500 voucher has been dispatched to your email.");
+        alert("Welcome! Your ₦500 voucher has been dispatched to your email.");
         togglePromoPopup(false);
       }
       btn.disabled = false;
