@@ -74,7 +74,7 @@
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Vendor Leads</span>
-        <span class="text-2xl font-extrabold text-brandGreenDark mt-1">3</span>
+        <span class="text-2xl font-extrabold text-brandGreenDark mt-1">0</span>
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Sales</span>
@@ -95,11 +95,8 @@
         <!-- Vendor Leads -->
         <div>
           <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Vendor Approvals</h2>
-          <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3">
-            <div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-              <div><p class="font-bold text-sm">Iya Basit (Mile 12)</p><p class="text-[11px] text-slate-500">Tomatoes & Peppers</p></div>
-              <button type="button" onclick="showAlert('Vendor Approved', 'Iya Basit enrolled into verified supplier roster.')" class="bg-brandGreen text-white px-3 py-1.5 rounded text-[10px] uppercase font-bold cursor-pointer hover:bg-brandGreenDark active:scale-95">Approve</button>
-            </div>
+          <div id="vendorsContainer" class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3 max-h-96 overflow-y-auto">
+            <p class="text-xs text-slate-400">No pending vendor approvals.</p>
           </div>
         </div>
       </div>
@@ -143,7 +140,6 @@
     </div>
   </div>
 
-  <!-- BRANDED MODAL ALERT -->
   <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
@@ -154,9 +150,9 @@
   </div>
 
   <script>
-    // RENAMED FROM 'supabase' to 'db' TO FIX SYNTAX COLLISION ERROR
+    // Corrected JWT API Key
     const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
-    const supabaseKey = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
     const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     function showAlert(title, message, isError = false) {
