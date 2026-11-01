@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>OgaMarket | Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brandGreen: '#085A36', brandGold: '#F2A900' },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-slate-800 p-4 sm:p-8 font-sans min-h-screen">
+  
+  <div class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200">
+    
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-slate-100 pb-6">
+      <div>
+        <h1 class="text-2xl font-extrabold text-brandGreen">OgaMarket Staff Operations</h1>
+        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Concierge Terminal</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="index.html" class="text-sm bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-semibold transition">Landing</a>
+        <a href="store.html" class="text-sm bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-semibold transition">Storefront</a>
+      </div>
+    </div>
+
+    <!-- Active Pipeline -->
+    <div class="mb-10">
+      <h2 class="font-bold text-lg mb-4">Active Fulfillment Pipeline</h2>
+      <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+        <div class="flex justify-between items-center py-3 border-b border-slate-200 last:border-0">
+          <div><p class="font-bold text-sm">#OGA-99104 - Bolanle Adeyemi</p><p class="text-xs text-slate-500 mt-1">2x White Ijebu Garri, 1x Egusi (4L)</p></div>
+          <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full">Sourcing in Market</span>
+        </div>
+        <div class="flex justify-between items-center py-3 border-b border-slate-200 last:border-0">
+          <div><p class="font-bold text-sm">#OGA-99105 - Emeka Okoro</p><p class="text-xs text-slate-500 mt-1">3x Heavy Benue Yam</p></div>
+          <span class="bg-brandGreen text-white font-bold text-xs px-3 py-1 rounded-full">Dispatched</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Inventory -->
+    <div id="inventory">
+      <h2 class="font-bold text-lg mb-4">Live Inventory & Prices <span class="text-xs font-normal text-slate-500">(Auto-synced to public store)</span></h2>
+      <ul id="adminInv" class="bg-slate-50 rounded-2xl p-4 border border-slate-200 divide-y divide-slate-200"></ul>
+    </div>
+  </div>
+
+  <script>
+    const catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || [];
+    
+    function renderAdminInventory() {
+      const container = document.getElementById('adminInv');
+      if (catalog.length === 0) {
+        container.innerHTML = '<p class="text-sm text-slate-500 py-2">Catalog is empty.</p>';
+        return;
+      }
+      container.innerHTML = catalog.map(i => `
+        <li class="flex items-center justify-between py-3">
+          <div class="flex items-center gap-4">
+            <img src="${i.image}" class="w-12 h-12 rounded-lg object-cover border border-slate-200" />
+            <div>
+              <span class="font-bold text-sm block text-slate-900">${i.name}</span>
+              <span class="text-xs text-slate-500">${i.gauge}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-xs font-bold text-slate-400">₦</span>
+            <input type="number" value="${i.price}" onchange="updatePrice('${i.id}', this.value)" class="w-24 bg-white border border-slate-300 rounded-lg px-2 py-1 font-mono text-sm font-bold focus:border-brandGreen focus:outline-none"/>
+          </div>
+        </li>
+      `).join('');
+    }
+
+    function updatePrice(id, newPrice) {
+      const idx = catalog.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        catalog[idx].price = Number(newPrice);
+        localStorage.setItem('ogamarket_catalog', JSON.stringify(catalog));
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderAdminInventory);
+  </script>
+</body>
+</html>
