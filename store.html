@@ -93,6 +93,7 @@
     </div>
   </div>
 
+  <!-- CART SLIDE-OVER -->
   <div id="cartModal" class="fixed inset-0 z-[70] hidden">
     <div onclick="closeCart()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm cursor-pointer"></div>
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col z-10">
@@ -157,8 +158,9 @@
       document.getElementById('alertTitle').innerText = title;
       document.getElementById('alertMessage').innerText = message;
       document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
-      document.getElementById('customAlert').classList.remove('hidden');
-      document.getElementById('customAlert').classList.add('flex');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
     function closeAlert() { document.getElementById('customAlert').classList.add('hidden'); document.getElementById('customAlert').classList.remove('flex'); }
 
@@ -313,12 +315,15 @@
       } else {
         container.innerHTML = cart.map(item => `
           <div class="flex justify-between items-center py-3 border-b border-slate-100 last:border-0 gap-3">
-            <div>
-              <p class="font-bold text-sm text-slate-900">${item.name}</p>
-              <p class="text-[11px] text-slate-500">${item.gauge}</p>
-              <p class="text-xs font-mono text-brandGreen font-bold mt-0.5">&#8358;${Number(item.price).toLocaleString()}</p>
+            <div class="flex items-center gap-3 flex-1 cursor-pointer hover:bg-slate-50 p-1 -ml-1 rounded-lg transition" onclick="closeCart(); openDetails('${item.id}');">
+              <img src="${item.image}" alt="${item.name}" class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-cover border border-slate-200 flex-shrink-0" />
+              <div>
+                <p class="font-bold text-sm text-slate-900 line-clamp-1">${item.name}</p>
+                <p class="text-[11px] text-slate-500">${item.gauge}</p>
+                <p class="text-xs font-mono text-brandGreen font-bold mt-0.5">&#8358;${Number(item.price).toLocaleString()}</p>
+              </div>
             </div>
-            <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+            <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg flex-shrink-0">
               <button type="button" onclick="updateQuantity('${item.id}', -1, event)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">-</button>
               <span class="font-mono text-sm font-bold w-4 text-center">${item.quantity}</span>
               <button type="button" onclick="updateQuantity('${item.id}', 1, event)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">+</button>
