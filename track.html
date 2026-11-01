@@ -1,172 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Track Order — OgaMarket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>OgaMarket | Track Order</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', brandRed: '#D9381E', surfaceBg: '#F0F4F2' },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .glass-dock {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
-    }
-    .badge-pill {
-      background-color: #E8F8F0;
-      color: #085A36;
-    }
+    input, select, textarea, button { font-size: 16px !important; }
+    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
   </style>
 </head>
-<body class="bg-[#FBFDFB] text-[#111827] min-h-screen flex flex-col pb-28 antialiased selection:bg-[#F2A900] selection:text-black">
+<body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen flex flex-col pb-24 sm:pb-0">
+  <div class="bg-blob-1"></div>
 
-  <!-- Consistent Top Navigation Bar -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100">
-    <div class="max-w-md mx-auto px-5 h-20 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-full border-2 border-dashed border-[#F2A900] p-0.5 flex items-center justify-center bg-white shadow-sm">
-          <div class="w-full h-full rounded-full bg-[#085A36] flex items-center justify-center text-[#F2A900] font-black text-xs">Ω</div>
-        </div>
-        <div>
-          <div class="text-xl font-extrabold tracking-tight leading-none text-[#085A36]">
-            Oga<span class="text-[#F2A900]">Market</span>
-          </div>
-          <span class="block text-[8px] font-extrabold tracking-widest text-[#085A36] mt-1 uppercase">Shop Like The Oga</span>
-        </div>
+  <header class="sticky top-0 z-40 glass-nav shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
+          <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
+          <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
+        </svg>
+        <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none pointer-events-none">Oga<span class="text-brandGold">Market</span></span>
       </a>
-
-      <a href="store" class="bg-[#085A36] text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-[#06482B] transition shadow-sm">
-        Shop Now
-      </a>
+      <div class="hidden sm:flex items-center gap-4">
+        <a href="store.html" class="font-semibold text-sm text-slate-600 hover:text-brandGreen cursor-pointer">Browse Market</a>
+        <a href="store.html" class="bg-brandGreen text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-brandGreenDark cursor-pointer">Start Shopping</a>
+      </div>
     </div>
   </header>
 
-  <!-- Track Hero Area -->
-  <main class="max-w-md mx-auto px-5 pt-8 w-full flex-1">
-    
-    <div class="text-center space-y-3 mb-6">
-      <span class="inline-block badge-pill px-4 py-1.5 rounded-full text-xs font-bold tracking-wide">
-        Real-Time Concierge Tracking
-      </span>
-      <h1 class="text-3xl font-extrabold text-[#0B1A13] tracking-tight leading-tight">
-        Track your market<br/>dispatch live.
-      </h1>
-      <p class="text-xs text-gray-500 leading-relaxed max-w-xs mx-auto">
-        Enter the email address you entered at checkout to monitor preparation, sorting, and rider handoff.
-      </p>
-    </div>
-
-    <!-- Search Input -->
-    <div class="bg-white border border-gray-200 rounded-2xl p-2 shadow-sm flex items-center gap-2 mb-6">
-      <input type="email" id="trackEmail" placeholder="Enter your checkout email" class="w-full px-3 py-2 text-xs outline-none bg-transparent" />
-      <button onclick="searchOrders()" class="bg-[#085A36] text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-[#06482B] transition shrink-0">
-        Track
-      </button>
-    </div>
-
-    <!-- Results Area -->
-    <div id="resultsArea" class="space-y-4">
-      <!-- Populated via JS -->
-    </div>
-
-  </main>
-
-  <!-- WhatsApp Floating Action Bubble -->
-  <a href="https://wa.me/234XXXXXXXXXX" target="_blank" class="fixed right-5 bottom-24 z-40 w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform" aria-label="Chat with concierge">
-    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-  </a>
-
-  <!-- Fixed Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 inset-x-0 z-40 glass-dock">
-    <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-around">
-      <a href="/" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-        <span class="text-[10px] font-bold">Home</span>
-      </a>
-
-      <a href="store" class="flex flex-col items-center gap-1 text-gray-400 hover:text-[#085A36] transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        <span class="text-[10px] font-bold">Store</span>
-      </a>
-
-      <a href="track" class="flex flex-col items-center gap-1 text-[#085A36]">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-        <span class="text-[10px] font-bold">Track</span>
-      </a>
-    </div>
+  <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[60] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+    <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+      <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+      <span class="text-[10px] font-bold mt-1 pointer-events-none">Home</span>
+    </a>
+    <a href="store.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
+      <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+      <span class="text-[10px] font-bold mt-1 pointer-events-none">Store</span>
+    </a>
+    <a href="track.html" class="flex flex-col items-center justify-center flex-1 h-full text-brandGreen cursor-pointer active:scale-95 transition-transform">
+      <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 001 1h1m0-1h2a1 1 0 001-1v-4l-3-4h-3v8zm0-8h.01"></path></svg>
+      <span class="text-[10px] font-bold mt-1 pointer-events-none">Track</span>
+    </a>
   </nav>
 
-  <script>
-    const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <main class="relative z-10 max-w-md mx-auto px-4 sm:px-6 pt-10 pb-10 flex-grow w-full flex flex-col items-center justify-center">
+    
+    <!-- STEP 1: Enter Email -->
+    <div id="step-email" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Track Your Order</h2>
+      <p class="text-sm text-slate-600 mb-6">Enter the email you used at checkout.</p>
+      <form onsubmit="handleEmailCheck(event)" class="space-y-4">
+        <input type="email" id="trackEmail" required placeholder="name@email.com" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-center"/>
+        <button id="checkEmailBtn" type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Continue</button>
+      </form>
+    </div>
 
-    document.addEventListener("DOMContentLoaded", () => {
+    <!-- STEP 2: Register -->
+    <div id="step-register" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Order Found!</h2>
+      <p class="text-sm text-slate-600 mb-6">Create a password to track this shipment, or skip and receive live status updates on WhatsApp.</p>
+      <form onsubmit="handleRegister(event)" class="space-y-3 text-left">
+        <div class="relative">
+          <input type="password" id="regPassword" required placeholder="Create Password" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3"/>
+          <button type="button" onclick="toggleVisibility('regPassword')" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer">
+            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </button>
+        </div>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Save Profile & Track</button>
+        <button type="button" onclick="skipToWhatsAppTracking()" class="w-full bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 py-3.5 rounded-xl font-bold text-sm cursor-pointer transition active:scale-95 flex items-center justify-center gap-2 mt-2 shadow-sm">
+          <svg class="w-4 h-4 text-emerald-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+          <span>Skip & Track on WhatsApp</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- STEP 3: Login -->
+    <div id="step-login" class="glass-panel w-full rounded-3xl p-6 sm:p-8 text-center shadow-lg hidden">
+      <h2 class="text-2xl font-extrabold text-brandGreen mb-2">Welcome Back</h2>
+      <p class="text-sm text-slate-600 mb-6">Enter your password to view your active delivery status.</p>
+      <form onsubmit="handleLogin(event)" class="space-y-4 text-left">
+        <div class="relative">
+          <input type="password" id="loginPassword" required placeholder="Enter Password" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3"/>
+          <button type="button" onclick="toggleVisibility('loginPassword')" class="absolute right-4 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer">
+            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </button>
+        </div>
+        <div class="text-right">
+          <button type="button" onclick="showAlert('Reset Dispatched', 'A password reset link has been dispatched to your email address.')" class="text-xs font-bold text-brandGreen hover:underline cursor-pointer">Forgot password?</button>
+        </div>
+        <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95 shadow-sm">Log In & Track</button>
+      </form>
+    </div>
+
+    <!-- STEP 4: Tracking Dashboard -->
+    <div id="step-tracking" class="w-full hidden">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-lg">
+        
+        <div id="waBanner" class="hidden mb-6 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-left flex items-start gap-3">
+          <svg class="w-5 h-5 text-emerald-700 flex-shrink-0 mt-0.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div class="text-xs text-slate-700">
+            <span class="font-bold text-emerald-900 block mb-0.5">WhatsApp Concierge Active</span>
+            The OgaMarket fulfillment team will reach out directly to your WhatsApp with live market pictures and dispatch waybills.
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center border-b border-slate-200/70 pb-4 mb-6">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900">Order Status</h2>
+            <p class="text-xs text-slate-500 font-mono mt-0.5" id="trackOrderRef"></p>
+          </div>
+          <span class="bg-amber-100 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full" id="trackStatusBadge">Sourcing in Market</span>
+        </div>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-brandGreen text-white flex items-center justify-center"><svg class="w-3 h-3 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+              <div class="w-1 h-12 bg-brandGreen"></div>
+            </div>
+            <div class="pt-0.5">
+              <p class="font-bold text-sm text-slate-900">Order Confirmed</p>
+              <p class="text-xs text-slate-500">Payment received via Paystack</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-amber-400 text-white flex items-center justify-center border-2 border-white shadow-sm"></div>
+              <div class="w-1 h-12 bg-slate-200" id="dispatchLine"></div>
+            </div>
+            <div class="pt-0.5">
+              <p class="font-bold text-sm text-slate-900">Sourcing in Market</p>
+              <p class="text-xs text-slate-500" id="trackSourcingText">Field shopper is handpicking batches at open market.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 rounded-full bg-slate-200" id="dispatchDot"></div>
+            </div>
+            <div class="pt-0.5" id="dispatchText" style="opacity: 0.5;">
+              <p class="font-bold text-sm text-slate-900">Dispatched</p>
+              <p class="text-xs text-slate-500">Waybill/Bike dispatch details will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
+      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Got it</button>
+    </div>
+  </div>
+
+  <button class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-50 flex items-center gap-2 group cursor-pointer" onclick="showAlert('OgaMarket Concierge', 'Our fulfillment line is active on WhatsApp: +234 800 OGAMARKET')">
+    <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+    <span class="font-bold text-sm hidden sm:inline-block max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap pointer-events-none">Chat with us</span>
+  </button>
+
+  <script>
+    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let activeEmail = "";
+    let myLiveOrder = null;
+
+    function showAlert(title, message, isError = false) {
+      document.getElementById('alertTitle').innerText = title;
+      document.getElementById('alertMessage').innerText = message;
+      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeAlert() {
+      const modal = document.getElementById('customAlert');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const email = urlParams.get("email");
-      if (email) {
-        document.getElementById("trackEmail").value = email;
-        fetchOrderTracking(email);
+      if(urlParams.has('email')) {
+        document.getElementById('trackEmail').value = urlParams.get('email');
+        handleEmailCheck(null);
       }
     });
 
-    function searchOrders() {
-      const email = document.getElementById("trackEmail").value.trim();
-      if (!email) {
-        alert("Please enter an email address.");
-        return;
-      }
-      fetchOrderTracking(email);
+    function toggleVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === "password" ? "text" : "password";
     }
 
-    async function fetchOrderTracking(email) {
-      const area = document.getElementById("resultsArea");
-      area.innerHTML = `<p class="text-center py-8 text-xs text-gray-400">Searching market records...</p>`;
+    function switchStep(stepId) {
+      document.getElementById('step-email').classList.add('hidden');
+      document.getElementById('step-register').classList.add('hidden');
+      document.getElementById('step-login').classList.add('hidden');
+      document.getElementById('step-tracking').classList.add('hidden');
+      document.getElementById(stepId).classList.remove('hidden');
+    }
 
-      const { data: orders, error } = await supabaseClient
-        .from("orders")
-        .select("*")
-        .ilike("email", email)
-        .order("created_at", { ascending: false });
+    async function handleEmailCheck(e) {
+      if(e) e.preventDefault();
+      const btn = document.getElementById('checkEmailBtn');
+      if(btn) btn.innerText = "Checking...";
+      
+      activeEmail = document.getElementById('trackEmail').value.trim().toLowerCase();
+      
+      const { data, error } = await db.from('orders').select('*').eq('email', activeEmail).order('created_at', { ascending: false }).limit(1);
+      
+      if(btn) btn.innerText = "Continue";
 
-      if (error || !orders || orders.length === 0) {
-        area.innerHTML = `
-          <div class="bg-white border border-gray-100 rounded-3xl p-6 text-center shadow-sm">
-            <p class="text-xs text-gray-400">No market orders found for <strong class="text-gray-700">${email}</strong>.</p>
-          </div>
-        `;
-        return;
+      if (data && data.length > 0) {
+        myLiveOrder = data[0];
+        const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+        if(users[activeEmail]) {
+          switchStep('step-login');
+        } else {
+          switchStep('step-register');
+        }
+      } else {
+        showAlert("No Past Orders", "We haven't found an order for " + activeEmail + " in the database yet.", true);
       }
+    }
 
-      area.innerHTML = orders.map(o => `
-        <div class="bg-white border border-gray-100 rounded-3xl p-5 shadow-sm space-y-3">
-          <div class="flex items-center justify-between pb-3 border-b border-gray-50">
-            <div>
-              <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block">Order Reference</span>
-              <p class="text-sm font-extrabold text-[#0B1A13] font-mono">${o.order_ref}</p>
-            </div>
-            <span class="px-3 py-1 rounded-full text-[10px] font-extrabold ${o.status === 'Dispatched' ? 'bg-blue-50 text-blue-700' : 'badge-pill'}">
-              ${o.status}
-            </span>
-          </div>
+    function handleRegister(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('regPassword').value;
+      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+      users[activeEmail] = pwd;
+      localStorage.setItem('ogamarket_users', JSON.stringify(users));
+      loadDashboard(false);
+    }
 
-          <div class="text-xs text-gray-500 space-y-1">
-            <p><strong>Customer:</strong> ${o.customer_name}</p>
-            <p><strong>Destination:</strong> ${o.destination === 'lagos' ? 'Lagos Doorstep Dispatch' : 'Interstate Motor Park Waybill'}</p>
-            <p class="truncate"><strong>Address:</strong> ${o.delivery_address}</p>
-          </div>
+    function skipToWhatsAppTracking() {
+      loadDashboard(true);
+    }
 
-          <div class="bg-[#F8FAF9] p-3 rounded-2xl text-[11px] text-gray-500 border border-gray-100">
-            <span class="font-bold text-[#085A36] block mb-0.5">Live Status:</span>
-            ${o.status === 'Dispatched' ? 'Your fresh items have departed the market and are on route with the dispatch agent.' : 'Market agents are actively picking fresh morning cuts and sorting measurements.'}
-          </div>
-        </div>
-      `).join("");
+    function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('loginPassword').value;
+      const users = JSON.parse(localStorage.getItem('ogamarket_users')) || {};
+      if(users[activeEmail] === pwd) {
+        loadDashboard(false);
+      } else {
+        showAlert("Access Denied", "Incorrect password. Please verify your credentials.", true);
+      }
+    }
+
+    function loadDashboard(showWhatsAppBanner = false) {
+      switchStep('step-tracking');
+      if(myLiveOrder) {
+        document.getElementById('trackStatusBadge').innerText = myLiveOrder.status;
+        document.getElementById('trackOrderRef').innerText = myLiveOrder.order_ref;
+        
+        if (myLiveOrder.status === 'Dispatched') {
+           document.getElementById('dispatchDot').classList.replace('bg-slate-200', 'bg-brandGreen');
+           document.getElementById('dispatchLine').classList.replace('bg-slate-200', 'bg-brandGreen');
+           document.getElementById('dispatchText').style.opacity = "1";
+        }
+      }
+      if(showWhatsAppBanner) {
+        document.getElementById('waBanner').classList.remove('hidden');
+      }
     }
   </script>
 </body>
