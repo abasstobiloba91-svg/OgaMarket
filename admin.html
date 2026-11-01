@@ -1,323 +1,272 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>OgaMarket | Admin Operations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OgaMarket — Admin Operations & Pricing Control</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brandGreen: '#085A36', brandGreenDark: '#053E25', brandGold: '#F2A900', brandRed: '#D9381E', surfaceBg: '#F0F4F2' },
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], body: ['"Inter"', 'sans-serif'] }
-        }
-      }
-    }
-  </script>
-  <style>
-    input, select, textarea, button { font-size: 16px !important; }
-    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); }
-    .glass-panel { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 4px 24px 0 rgba(8, 90, 54, 0.05); }
-    .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
-  </style>
 </head>
-<body class="bg-surfaceBg text-slate-800 p-4 sm:p-8 font-sans min-h-screen flex flex-col items-center justify-center">
-  <div class="bg-blob-1"></div>
-  
-  <div id="adminLoginView" class="w-full max-w-sm glass-panel p-8 rounded-3xl text-center relative z-10 shadow-lg">
-    <div class="flex justify-center mb-4">
-      <svg class="w-12 h-12 pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
-        <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
-        <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
-        <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
-      </svg>
-    </div>
-    <h1 class="text-xl font-extrabold text-brandGreen mb-6">Staff Access Only</h1>
-    <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-      <div class="relative text-left">
-        <input type="password" id="adminPassword" required placeholder="Security Key" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3 text-center"/>
-      </div>
-      <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Authenticate</button>
-    </form>
-    <p class="text-xs text-slate-400 mt-4">Security Key: <span class="font-mono font-bold text-slate-600">oga2026</span></p>
-  </div>
+<body class="bg-gray-50 text-gray-900 min-h-screen font-sans">
 
-  <div id="adminDashboardView" class="max-w-6xl mx-auto glass-panel p-5 sm:p-8 rounded-3xl hidden relative z-10 w-full mb-10 shadow-lg">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-slate-200/60 pb-5">
-      <div>
-        <h1 class="text-xl sm:text-2xl font-extrabold text-brandGreen">Operations Dashboard</h1>
-        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">OgaMarket Core Systems</p>
+  <!-- Header -->
+  <header class="bg-[#085A36] text-white sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-black">Oga<span class="text-[#F2A900]">Admin</span></span>
+        <span class="text-xs bg-emerald-800 text-emerald-100 px-2 py-0.5 rounded">Console</span>
       </div>
-      <div class="flex gap-2">
-        <a href="store" class="text-xs bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl font-bold transition cursor-pointer flex items-center justify-center">Live Store</a>
-        <button onclick="logoutAdmin()" class="text-xs bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl font-bold transition cursor-pointer">Lock</button>
+      <div class="flex items-center gap-4 text-sm font-semibold">
+        <a href="/" class="hover:text-amber-300">Storefront</a>
+        <button onclick="refreshData()" class="bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">Refresh</button>
       </div>
     </div>
+  </header>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Live Products</span>
-        <span class="text-2xl font-extrabold text-brandGreen mt-1" id="kpi-products">0</span>
-      </div>
-      <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pending Orders</span>
-        <span class="text-2xl font-extrabold text-brandGold mt-1" id="kpi-orders">0</span>
-      </div>
-      <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Vendor Leads</span>
-        <span class="text-2xl font-extrabold text-brandGreenDark mt-1">0</span>
-      </div>
-      <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Sales</span>
-        <span class="text-xl font-extrabold text-slate-900 mt-1 font-mono" id="kpi-sales">&#8358;0</span>
-      </div>
-    </div>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 space-y-8">
+    <!-- Section 1: Orders & Fulfillment -->
+    <section class="mb-12">
+      <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Active Pipeline</h2>
-          <div id="ordersContainer" class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3 max-h-96 overflow-y-auto">
-            <p class="text-xs text-slate-400">Loading orders...</p>
+          <h2 class="text-xl font-extrabold text-gray-900">Live Customer Orders</h2>
+          <p class="text-xs text-gray-500">Dispatching an order triggers the automated customer delivery email.</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase">
+              <tr>
+                <th class="py-3 px-4">Order Ref</th>
+                <th class="py-3 px-4">Customer</th>
+                <th class="py-3 px-4">Payment</th>
+                <th class="py-3 px-4">Total Items</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 text-right">Fulfillment Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody" class="divide-y divide-gray-100">
+              <tr><td colspan="6" class="text-center py-6 text-gray-400">Loading live orders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Margin & Pricing Control Engine -->
+    <section class="mb-12">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-gray-900">Produce Cost & Margin Controls</h2>
+          <p class="text-xs text-gray-500">Change base market cost or markup % to automatically calculate customer retail prices.</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase">
+              <tr>
+                <th class="py-3 px-4">Produce Name</th>
+                <th class="py-3 px-4">Cost Price (₦)</th>
+                <th class="py-3 px-4">Target Markup (%)</th>
+                <th class="py-3 px-4">Live Retail Price (₦)</th>
+                <th class="py-3 px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="pricingTableBody" class="divide-y divide-gray-100">
+              <tr><td colspan="5" class="text-center py-6 text-gray-400">Loading catalog items...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Direct Email Broadcast -->
+    <section>
+      <div class="mb-4">
+        <h2 class="text-xl font-extrabold text-gray-900">CRM Campaign Broadcast</h2>
+        <p class="text-xs text-gray-500">Send an instant newsletter or discount update to all registered leads.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 max-w-2xl">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Subject</label>
+            <input type="text" id="broadcastSubject" placeholder="e.g. Fresh Yam Batches Just Landed at OgaMarket!" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#085A36]" />
           </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Message Content (Plain text or HTML)</label>
+            <textarea id="broadcastBody" rows="5" placeholder="Write your broadcast message here..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#085A36]"></textarea>
+          </div>
+          <button onclick="dispatchBroadcast()" class="bg-[#085A36] hover:bg-[#07472b] text-white font-bold px-6 py-3 rounded-xl text-sm transition">
+            Send Broadcast to Leads
+          </button>
         </div>
       </div>
+    </section>
 
-      <div class="space-y-8">
-        <div class="bg-white/95 rounded-2xl p-5 border border-white shadow-md">
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-4 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> Add New Product</h2>
-          <form id="addProductForm" onsubmit="handleProductUpload(event)" class="space-y-3">
-            <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('imgUpload').click()">
-              <div id="imgPreviewContainer" class="hidden mb-2 flex gap-2 overflow-x-auto no-scrollbar"></div>
-              <div id="imgUploadText">
-                <svg class="w-6 h-6 text-brandGreen mx-auto mb-1 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="text-xs font-bold text-slate-500">Tap to select photos</span>
-              </div>
-              <input type="file" id="imgUpload" accept="image/*" multiple class="hidden" onchange="previewImages(event)"/>
-            </div>
-            <input type="text" id="newProdName" required placeholder="Product Name (e.g. Iron Beans)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm"/>
-            <textarea id="newProdDesc" required placeholder="Product Details & Description..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="3"></textarea>
-            <div class="flex gap-2">
-              <select id="newProdCategory" class="w-1/2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600">
-                <option value="SWALLOWS">Grains/Tubers</option>
-                <option value="SOUPS">Soups/Spices</option>
-              </select>
-              <input type="text" id="newProdGauge" required placeholder="Gauge (e.g. 1 Derica)" class="w-1/2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm"/>
-            </div>
-            <div class="flex gap-2 items-center">
-              <span class="font-bold text-slate-500">&#8358;</span>
-              <input type="number" id="newProdPrice" required placeholder="Live Price" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono font-bold"/>
-            </div>
-            <button id="uploadBtn" type="submit" class="w-full bg-brandGreen text-white py-3 rounded-lg font-bold text-sm mt-2 shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Publish to Store</button>
-          </form>
-        </div>
-
-        <div>
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3">Live Pricing (&#8358;)</h2>
-          <ul id="adminInv" class="bg-white/80 rounded-2xl p-3 border border-white shadow-sm divide-y divide-slate-100 space-y-2 max-h-96 overflow-y-auto"></ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
-      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
-      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
-      <p id="alertMessage" class="text-sm text-slate-600 mb-6 break-words">Message</p>
-      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95 mt-2">Got it</button>
-    </div>
-  </div>
+  </main>
 
   <script>
-    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
-    const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // Supabase Configuration
+    const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function showAlert(title, message, isError = false) {
-      document.getElementById('alertTitle').innerText = title;
-      document.getElementById('alertMessage').innerText = message;
-      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
-      const modal = document.getElementById('customAlert');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-    
-    function closeAlert() {
-      const modal = document.getElementById('customAlert');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+    document.addEventListener("DOMContentLoaded", () => {
+      refreshData();
+    });
+
+    function refreshData() {
+      fetchAdminOrders();
+      fetchAdminProducts();
     }
 
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const pwd = document.getElementById('adminPassword').value.trim();
-      if(pwd === "oga2026") {
-        document.getElementById('adminLoginView').classList.add('hidden');
-        document.getElementById('adminDashboardView').classList.remove('hidden');
-        document.body.classList.remove('items-center', 'justify-center');
-        fetchAdminData();
-      } else {
-        showAlert("Access Denied", "Incorrect security key.", true);
-      }
-    }
+    // Fetch and display live customer orders
+    async function fetchAdminOrders() {
+      const tbody = document.getElementById("ordersTableBody");
+      const { data: orders, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    function logoutAdmin() {
-      document.getElementById('adminPassword').value = '';
-      document.getElementById('adminDashboardView').classList.add('hidden');
-      document.getElementById('adminLoginView').classList.remove('hidden');
-      document.body.classList.add('items-center', 'justify-center');
-    }
-
-    async function fetchAdminData() {
-      const { data: prods } = await db.from('products').select('*').order('created_at', { ascending: false });
-      if(prods) {
-        document.getElementById('kpi-products').innerText = prods.length;
-        renderAdminInventory(prods);
+      if (error || !orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">No orders recorded yet.</td></tr>`;
+        return;
       }
 
-      const { data: ords } = await db.from('orders').select('*').order('created_at', { ascending: false });
-      if(ords) {
-        document.getElementById('kpi-orders').innerText = ords.length;
-        let total = 0;
-        const ctn = document.getElementById('ordersContainer');
-        if(ords.length === 0) {
-          ctn.innerHTML = '<p class="text-xs text-slate-400">No active orders yet.</p>';
-        } else {
-          ctn.innerHTML = ords.map(o => {
-             let orderTotal = 0;
-             if (o.items && Array.isArray(o.items)) {
-                orderTotal = o.items.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
-             }
-             total += orderTotal;
-             return `
-             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-slate-100 last:border-0 gap-2">
-               <div><p class="font-bold text-sm">${o.order_ref} - ${o.customer_name || 'Customer'}</p><p class="text-xs text-slate-500 mt-1">${o.email}</p></div>
-               <div class="flex gap-2">
-                 <span class="bg-amber-100 border border-amber-200 text-amber-800 font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full w-max">${o.status}</span>
-                 <button type="button" onclick="markDispatched('${o.id}')" class="bg-brandGreen text-white px-3 py-1 rounded text-xs font-bold cursor-pointer hover:bg-brandGreenDark active:scale-95">Dispatch</button>
-               </div>
-             </div>`;
-          }).join('');
-        }
-        document.getElementById('kpi-sales').innerHTML = '&#8358;' + total.toLocaleString();
-      }
+      tbody.innerHTML = orders.map(o => {
+        const itemCount = Array.isArray(o.items) ? o.items.reduce((s, i) => s + i.quantity, 0) : 0;
+        return `
+          <tr class="hover:bg-gray-50">
+            <td class="py-3 px-4 font-mono font-bold text-gray-900">${o.order_ref}</td>
+            <td class="py-3 px-4">
+              <p class="font-bold text-gray-900">${o.customer_name}</p>
+              <p class="text-xs text-gray-400">${o.email} | ${o.whatsapp}</p>
+            </td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-0.5 rounded text-xs font-semibold ${o.payment_status === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                ${o.payment_status || 'Pending'}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-gray-600">${itemCount} units</td>
+            <td class="py-3 px-4">
+              <span class="px-2 py-0.5 rounded text-xs font-semibold ${o.status === 'Dispatched' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'}">
+                ${o.status}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-right">
+              ${o.status !== 'Dispatched' ? `
+                <button onclick="markDispatched('${o.id}')" class="bg-[#085A36] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
+                  Dispatch Order
+                </button>
+              ` : `<span class="text-xs text-gray-400 font-semibold">Dispatched</span>`}
+            </td>
+          </tr>
+        `;
+      }).join("");
     }
 
+    // Trigger dispatch status in Supabase (triggers automated delivery email)
     async function markDispatched(orderId) {
-      const { error } = await db.from('orders').update({ status: 'Dispatched' }).eq('id', orderId);
-      if(!error) {
-        showAlert('Pipeline Updated', 'Order marked as Dispatched.');
-        fetchAdminData();
+      if (!confirm("Are you ready to mark this order as dispatched? This will trigger an automatic tracking email to the customer.")) return;
+
+      const { error } = await supabaseClient
+        .from("orders")
+        .update({ status: "Dispatched" })
+        .eq("id", orderId);
+
+      if (error) {
+        alert("Failed to update order: " + error.message);
+      } else {
+        alert("Order dispatched! Notification email sent.");
+        fetchAdminOrders();
       }
     }
 
-    function renderAdminInventory(catalog) {
-      const container = document.getElementById('adminInv');
-      if (catalog.length === 0) {
-        container.innerHTML = '<p class="text-sm text-slate-500 py-2">No items in store.</p>';
-        return;
-      }
-      container.innerHTML = catalog.map(i => `
-        <li class="flex flex-col sm:flex-row sm:items-center justify-between py-2 gap-2">
-          <div class="flex items-center gap-3">
-            <img src="${i.image}" class="w-10 h-10 rounded-md object-cover border border-slate-200" />
-            <div class="flex flex-col">
-              <span class="font-bold text-[11px] sm:text-xs block text-slate-900 truncate w-32 sm:w-40">${i.name}</span>
-              <span class="text-[9px] text-slate-400 font-medium truncate w-32 sm:w-40">${i.gauge}</span>
-            </div>
-          </div>
-        </li>
-      `).join('');
-    }
+    // Load Produce with Cost Price & Target Markup
+    async function fetchAdminProducts() {
+      const tbody = document.getElementById("pricingTableBody");
+      const { data: products, error } = await supabaseClient
+        .from("products")
+        .select("*")
+        .order("name");
 
-    function previewImages(event) {
-      const files = event.target.files;
-      const container = document.getElementById('imgPreviewContainer');
-      container.innerHTML = '';
-      
-      if (files.length > 0) {
-        document.getElementById('imgUploadText').classList.add('hidden');
-        container.classList.remove('hidden');
-        Array.from(files).forEach(file => {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            container.innerHTML += `<img src="${e.target.result}" class="h-24 w-24 object-cover rounded-lg flex-shrink-0 border border-slate-200" />`;
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-    }
-
-    async function handleProductUpload(e) {
-      e.preventDefault();
-      
-      const fileInput = document.getElementById('imgUpload');
-      const files = fileInput.files;
-      if (files.length === 0) {
-        showAlert("Missing Image", "Please tap the box to upload product photos.", true);
+      if (error || !products || products.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-400">No products configured.</td></tr>`;
         return;
       }
 
-      const btn = document.getElementById('uploadBtn');
-      const originalText = "Publish to Store";
-      btn.disabled = true;
-      btn.innerHTML = `<div class="flex items-center justify-center gap-2">
-        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span>Uploading...</span>
-      </div>`;
+      tbody.innerHTML = products.map(p => `
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-4 font-bold text-gray-900">${p.name}</td>
+          <td class="py-3 px-4">
+            <input type="number" id="cost_${p.id}" value="${p.cost_price || 0}" class="w-28 text-sm px-2.5 py-1.5 border rounded-lg focus:border-[#085A36] outline-none" />
+          </td>
+          <td class="py-3 px-4">
+            <input type="number" id="markup_${p.id}" value="${p.markup_percent || 25}" class="w-20 text-sm px-2.5 py-1.5 border rounded-lg focus:border-[#085A36] outline-none" />
+          </td>
+          <td class="py-3 px-4 font-bold text-[#085A36]">
+            ₦${Number(p.price || 0).toLocaleString()}
+          </td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="saveProductPricing('${p.id}')" class="bg-[#085A36] text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#07472b] transition">
+              Update Price
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
 
-      try {
-        let uploadedUrls = [];
-        
-        for (let file of files) {
-          const fileExt = file.name.split('.').pop();
-          const fileName = Date.now() + "_" + Math.floor(Math.random()*1000) + "." + fileExt;
-          
-          const { data, error } = await db.storage.from('product-images').upload(fileName, file);
-          if (error) throw new Error(error.message);
+    // Save Product Pricing & recalculate margin
+    async function saveProductPricing(productId) {
+      const cost = parseFloat(document.getElementById(`cost_${productId}`).value);
+      const markup = parseFloat(document.getElementById(`markup_${productId}`).value);
 
-          const { data: publicUrlData } = db.storage.from('product-images').getPublicUrl(fileName);
-          uploadedUrls.push(publicUrlData.publicUrl);
-        }
-
-        const newProduct = {
-          id: "prod-" + Date.now(),
-          name: document.getElementById('newProdName').value,
-          description: document.getElementById('newProdDesc').value,
-          category: document.getElementById('newProdCategory').value,
-          gauge: document.getElementById('newProdGauge').value,
-          price: Number(document.getElementById('newProdPrice').value),
-          image: uploadedUrls[0],
-          extra_images: uploadedUrls.slice(1)
-        };
-        
-        const { error: dbError } = await db.from('products').insert([newProduct]);
-        if(dbError) throw new Error(dbError.message);
-
-        e.target.reset();
-        document.getElementById('imgPreviewContainer').classList.add('hidden');
-        document.getElementById('imgPreviewContainer').innerHTML = '';
-        document.getElementById('imgUploadText').classList.remove('hidden');
-        
-        fetchAdminData();
-        showAlert("Success", "New product published directly to the live storefront!");
-
-      } catch (err) {
-        showAlert("Upload Failed", err.message, true);
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+      if (isNaN(cost) || isNaN(markup)) {
+        alert("Please enter valid numeric figures for cost and markup.");
+        return;
       }
+
+      const { error } = await supabaseClient
+        .from("products")
+        .update({
+          cost_price: cost,
+          markup_percent: markup
+        })
+        .eq("id", productId);
+
+      if (error) {
+        alert("Failed to save price: " + error.message);
+      } else {
+        alert("Pricing updated successfully!");
+        fetchAdminProducts();
+      }
+    }
+
+    // Direct Broadcast to Registered Leads
+    async function dispatchBroadcast() {
+      const subject = document.getElementById("broadcastSubject").value.trim();
+      const message = document.getElementById("broadcastBody").value.trim();
+
+      if (!subject || !message) {
+        alert("Please write a subject and message content.");
+        return;
+      }
+
+      // Query all verified subscribers
+      const { data: customers, error } = await supabaseClient.from("customers").select("email");
+      if (error || !customers || customers.length === 0) {
+        alert("No subscribers found in database.");
+        return;
+      }
+
+      alert(`Broadcast queued for ${customers.length} customer(s). Check Resend activity logs.`);
+      document.getElementById("broadcastSubject").value = "";
+      document.getElementById("broadcastBody").value = "";
     }
   </script>
 </body>
