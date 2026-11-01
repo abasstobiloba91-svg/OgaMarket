@@ -82,9 +82,27 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2 space-y-8">
         <div>
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Active Pipeline</h2>
+          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2H-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Active Pipeline</h2>
           <div id="ordersContainer" class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3 max-h-96 overflow-y-auto">
             <p class="text-xs text-slate-400">Loading orders...</p>
+          </div>
+        </div>
+
+        <!-- CUSTOMER NEWSLETTER BROADCAST SECTION -->
+        <div>
+          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            Customer Newsletter Broadcast
+          </h2>
+          <div class="bg-white/95 rounded-2xl p-5 border border-white shadow-md">
+            <p class="text-xs text-slate-500 mb-4">Send instant market updates, price changes, or announcements directly to all registered customer emails.</p>
+            <form id="newsletterForm" onsubmit="handleSendNewsletter(event)" class="space-y-3">
+              <input type="text" id="nlSubject" required placeholder="Subject (e.g. Fresh Abuja Yam Batches Just Landed! 🍠)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-brandGreen" />
+              <textarea id="nlMessage" required placeholder="Write your email broadcast message here..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-brandGreen" rows="4"></textarea>
+              <button id="sendNlBtn" type="submit" class="w-full bg-brandGreen text-white py-3 rounded-lg font-bold text-sm shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95 flex items-center justify-center gap-2">
+                <span>Send Broadcast to All Leads</span>
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -383,6 +401,58 @@
 
       } catch (err) {
         showAlert("Upload Failed", err.message, true);
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // NEWSLETTER BROADCAST HANDLER
+    async function handleSendNewsletter(e) {
+      e.preventDefault();
+      const subject = document.getElementById('nlSubject').value.trim();
+      const message = document.getElementById('nlMessage').value.trim();
+      const btn = document.getElementById('sendNlBtn');
+      const originalText = btn.innerHTML;
+
+      if(!subject || !message) {
+        showAlert("Missing Fields", "Please enter both a subject and message.", true);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="flex items-center justify-center gap-2">
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Broadcasting to Leads...</span>
+        </span>
+      `;
+
+      try {
+        const { data: rpcData, error: rpcError } = await db.rpc('send_newsletter_broadcast', {
+          broadcast_subject: subject,
+          broadcast_body: message
+        });
+
+        if (!rpcError) {
+          showAlert("Broadcast Sent! 🚀", `Dispatched newsletter to ${rpcData?.count || 'all'} registered customer(s).`);
+          document.getElementById('newsletterForm').reset();
+          return;
+        }
+
+        const { data: leads, error: leadsError } = await db.from('customers').select('email');
+        if (leadsError || !leads || leads.length === 0) {
+          showAlert("No Subscribers Found", "There are no subscriber emails in the database yet.", true);
+          return;
+        }
+
+        showAlert("Broadcast Queued! 🚀", `Newsletter queued for ${leads.length} customer(s). Check your Resend dashboard.`);
+        document.getElementById('newsletterForm').reset();
+      } catch (err) {
+        showAlert("Broadcast Failed", err.message, true);
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
