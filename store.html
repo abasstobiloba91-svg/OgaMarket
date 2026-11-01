@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>OgaMarket | Online Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -20,29 +21,24 @@
   </script>
   <style>
     input, select, textarea, button { font-size: 16px !important; }
-    .glass-panel { background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
-    .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); }
-    .glass-nav { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
+    .glass-panel { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 8px 32px 0 rgba(8, 90, 54, 0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 4px 24px -5px rgba(8, 90, 54, 0.08); transition: transform 0.2s; }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.9); border-bottom: 1px solid rgba(255, 255, 255, 0.9); }
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; pointer-events: none; }
-    
-    @keyframes badgePop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.35); }
-      100% { transform: scale(1); }
-    }
+    @keyframes badgePop { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
     .badge-pop { animation: badgePop 0.25s ease-in-out; }
   </style>
 </head>
 <body class="bg-surfaceBg text-slate-800 antialiased font-sans relative overflow-x-hidden min-h-screen pb-24 sm:pb-0">
   <div class="bg-blob-1"></div>
 
-  <!-- TOP HEADER -->
   <header class="sticky top-0 z-40 glass-nav shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 sm:gap-3 cursor-pointer">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 pointer-events-none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
           <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+          <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
           <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
         </svg>
         <span class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-none pointer-events-none">Oga<span class="text-brandGold">Market</span></span>
@@ -58,7 +54,6 @@
     </div>
   </header>
 
-  <!-- MOBILE BOTTOM BAR -->
   <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-[50] flex items-center justify-around px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
     <a href="index.html" class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 hover:text-brandGreen cursor-pointer active:scale-95 transition-transform">
       <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -74,7 +69,6 @@
     </a>
   </nav>
 
-  <!-- STOREFRONT -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-10 flex-grow w-full">
     <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar">
       <button type="button" onclick="filterCategory('ALL')" id="tab-ALL" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-brandGreen text-white whitespace-nowrap cursor-pointer active:scale-95">All</button>
@@ -82,10 +76,11 @@
       <button type="button" onclick="filterCategory('SOUPS')" id="tab-SOUPS" class="category-tab px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 whitespace-nowrap cursor-pointer active:scale-95">Soups & Spices</button>
     </div>
     
+    <!-- Loader -->
+    <div id="loader" class="text-center py-12 text-slate-400 font-bold">Loading live market inventory...</div>
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
-  <!-- CART SLIDE-OVER -->
   <div id="cartModal" class="fixed inset-0 z-[70] hidden">
     <div onclick="closeCart()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm cursor-pointer"></div>
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col z-10">
@@ -104,7 +99,6 @@
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
     <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative bg-white">
       <button type="button" onclick="closeCheckout()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-2xl cursor-pointer leading-none">&times;</button>
@@ -118,47 +112,65 @@
           <option value="interstate">Interstate Motor Park Waybill (&#8358;6,500)</option>
         </select>
         <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
-        <button type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Pay Securely via Paystack</button>
+        <button id="submitOrderBtn" type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Pay Securely via Paystack</button>
       </form>
     </div>
   </div>
 
-  <!-- FLOATING SUPPORT BUTTON -->
-  <button type="button" class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-40 flex items-center gap-2 cursor-pointer" onclick="alert('Our market concierge line is active on WhatsApp: +234 800 OGAMARKET')">
+  <button type="button" class="fixed bottom-20 sm:bottom-8 right-4 sm:right-8 bg-black text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-transform z-40 flex items-center gap-2 cursor-pointer" onclick="showAlert('Our market concierge line is active on WhatsApp: +234 800 OGAMARKET')">
     <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
     <span class="font-bold text-sm hidden sm:inline-block pointer-events-none">Chat with us</span>
   </button>
 
+  <!-- BRANDED MODAL ALERT -->
+  <div id="customAlert" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
+      <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
+      <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Got it</button>
+    </div>
+  </div>
+
   <script>
-    const defaultCatalog = [
-      { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
-      { id: "prod-2", name: "Heavy Benue Yams", category: "SWALLOWS", gauge: "Set of 3 Heavy Tubers", price: 14000, image: "https://images.unsplash.com/photo-1596450514735-111a2fe02935?w=600&q=80" },
-      { id: "prod-3", name: "Clean Egusi", category: "SOUPS", gauge: "Paint Bucket (4L)", price: 9200, image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80" },
-      { id: "prod-4", name: "Oron Smoked Crayfish", category: "SOUPS", gauge: "1 Large Derica", price: 4200, image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80" }
-    ];
+    // Initialize Supabase Live Connection
+    const supabaseUrl = 'https://pbrrysybqwsqdxuuedci.supabase.co';
+    const supabaseKey = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBicnJ5c3licXdzcWR4dXVlZGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MzkwOTEsImV4cCI6MjEwOTExNTA5MX0.laJXb1cFo9uiZGydu4_eUCSGzecIkV6RZFmElm21KWM';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    let catalog = defaultCatalog;
-    try {
-      const stored = JSON.parse(localStorage.getItem('ogamarket_catalog'));
-      if (Array.isArray(stored) && stored.length > 0) catalog = stored;
-      else localStorage.setItem('ogamarket_catalog', JSON.stringify(defaultCatalog));
-    } catch (e) {
-      catalog = defaultCatalog;
-    }
-
-    let cart = [];
-    try {
-      const storedCart = JSON.parse(localStorage.getItem('ogamarket_cart'));
-      if (Array.isArray(storedCart)) cart = storedCart;
-    } catch(e) {
-      cart = [];
-    }
-
+    let catalog = [];
+    let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
     let currentCategory = 'ALL';
 
-    function init() {
-      renderProducts();
+    function showAlert(title, message, isError = false) {
+      document.getElementById('alertTitle').innerText = title;
+      document.getElementById('alertMessage').innerText = message;
+      document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
+      const modal = document.getElementById('customAlert');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeAlert() {
+      const modal = document.getElementById('customAlert');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function init() {
+      await fetchProducts();
       updateCartUI();
+    }
+
+    async function fetchProducts() {
+      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      document.getElementById('loader').classList.add('hidden');
+      if (error) {
+        console.error(error);
+        document.getElementById('productGrid').innerHTML = '<p class="col-span-full text-center text-brandRed">Failed to load inventory.</p>';
+      } else {
+        catalog = data;
+        renderProducts();
+      }
     }
 
     function renderProducts() {
@@ -188,41 +200,26 @@
         btn.classList.remove('bg-brandGreen', 'text-white');
         btn.classList.add('bg-white', 'text-slate-600');
       });
-      const activeBtn = document.getElementById('tab-' + cat);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-brandGreen', 'text-white');
-        activeBtn.classList.remove('bg-white', 'text-slate-600');
-      }
+      document.getElementById('tab-' + cat).classList.add('bg-brandGreen', 'text-white');
+      document.getElementById('tab-' + cat).classList.remove('bg-white', 'text-slate-600');
       renderProducts();
     }
 
-    // SILENT ADD: Increments count and pulses the bag button without opening the drawer
     function addToCart(id, btnElem) {
       const item = catalog.find(p => String(p.id) === String(id));
       if (!item) return;
-
       const existing = cart.find(c => String(c.id) === String(id));
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({ ...item, quantity: 1 });
-      }
+      if (existing) existing.quantity += 1; else cart.push({ ...item, quantity: 1 });
+      
+      saveCart(); updateCartUI();
 
-      saveCart();
-      updateCartUI();
-
-      // Button feedback
       if(btnElem) {
         const originalText = btnElem.innerHTML;
         btnElem.innerHTML = `<svg class="w-4 h-4 text-brandGold pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span>Added</span>`;
         setTimeout(() => { btnElem.innerHTML = originalText; }, 900);
       }
-
-      // Pulse badge
       const badge = document.getElementById('cartCountBadge');
-      badge.classList.remove('badge-pop');
-      void badge.offsetWidth; // trigger reflow
-      badge.classList.add('badge-pop');
+      badge.classList.remove('badge-pop'); void badge.offsetWidth; badge.classList.add('badge-pop');
     }
 
     function updateQuantity(id, delta) {
@@ -231,25 +228,16 @@
         cart[index].quantity += delta;
         if (cart[index].quantity <= 0) cart.splice(index, 1);
       }
-      saveCart();
-      updateCartUI();
+      saveCart(); updateCartUI();
     }
 
-    function saveCart() {
-      localStorage.setItem('ogamarket_cart', JSON.stringify(cart));
-    }
+    function saveCart() { localStorage.setItem('ogamarket_cart', JSON.stringify(cart)); }
 
     function updateCartUI() {
-      const totalCount = cart.reduce((acc, cur) => acc + (cur.quantity || 1), 0);
-      document.getElementById('cartCountBadge').innerText = totalCount;
-
+      document.getElementById('cartCountBadge').innerText = cart.reduce((acc, cur) => acc + (cur.quantity || 1), 0);
       const container = document.getElementById('cartItemsContainer');
       if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 text-slate-400">
-            <p class="text-sm">Your shopping bag is empty.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="text-center py-12 text-slate-400"><p class="text-sm">Your shopping bag is empty.</p></div>`;
         document.getElementById('checkoutTriggerBtn').disabled = true;
         document.getElementById('checkoutTriggerBtn').classList.add('opacity-50', 'pointer-events-none');
       } else {
@@ -270,49 +258,44 @@
         document.getElementById('checkoutTriggerBtn').disabled = false;
         document.getElementById('checkoutTriggerBtn').classList.remove('opacity-50', 'pointer-events-none');
       }
-
       const subtotal = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
       document.getElementById('cartSubtotalText').innerHTML = '&#8358;' + subtotal.toLocaleString();
     }
 
-    function openCart() {
-      document.getElementById('cartModal').classList.remove('hidden');
-    }
+    function openCart() { document.getElementById('cartModal').classList.remove('hidden'); }
+    function closeCart() { document.getElementById('cartModal').classList.add('hidden'); }
+    function openCheckout() { closeCart(); document.getElementById('checkoutModal').classList.remove('hidden'); document.getElementById('checkoutModal').classList.add('flex'); }
+    function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); document.getElementById('checkoutModal').classList.remove('flex'); }
 
-    function closeCart() {
-      document.getElementById('cartModal').classList.add('hidden');
-    }
-
-    function openCheckout() {
-      closeCart();
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeCheckout() {
-      const modal = document.getElementById('checkoutModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    function handleCheckout(e) {
+    async function handleCheckout(e) {
       e.preventDefault();
+      const btn = document.getElementById('submitOrderBtn');
+      btn.innerText = "Processing...";
+      btn.disabled = true;
+
       const email = document.getElementById('custEmail').value.trim().toLowerCase();
-      let orders = JSON.parse(localStorage.getItem('ogamarket_orders')) || [];
-      orders.push({
+      
+      const newOrder = {
+        order_ref: '#OGA-' + Math.floor(10000 + Math.random() * 90000),
         email: email,
-        ref: '#OGA-' + Math.floor(10000 + Math.random() * 90000),
-        status: 'Sourcing in Market',
-        date: new Date().toLocaleDateString()
-      });
-      localStorage.setItem('ogamarket_orders', JSON.stringify(orders));
+        customer_name: document.getElementById('custName').value,
+        whatsapp: document.getElementById('custWhatsApp').value,
+        destination: document.getElementById('custDestination').value,
+        delivery_address: document.getElementById('custAddress').value,
+        items: cart,
+        status: 'Sourcing in Market'
+      };
 
-      cart = [];
-      saveCart();
-      updateCartUI();
-      closeCheckout();
+      const { error } = await supabase.from('orders').insert([newOrder]);
 
+      if (error) {
+        showAlert("Checkout failed", error.message, true);
+        btn.innerText = "Pay Securely via Paystack";
+        btn.disabled = false;
+        return;
+      }
+
+      cart = []; saveCart(); updateCartUI(); closeCheckout();
       window.location.href = "track.html?email=" + encodeURIComponent(email);
     }
 
