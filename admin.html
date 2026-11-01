@@ -25,30 +25,48 @@
     .bg-blob-1 { position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(8,90,54,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: -1; }
   </style>
 </head>
-<body class="bg-surfaceBg text-slate-800 p-4 sm:p-8 font-sans min-h-screen pb-24 sm:pb-8">
+<body class="bg-surfaceBg text-slate-800 p-4 sm:p-8 font-sans min-h-screen flex items-center justify-center">
   <div class="bg-blob-1"></div>
   
-  <div class="max-w-6xl mx-auto glass-panel p-5 sm:p-8 rounded-3xl">
+  <!-- ADMIN LOGIN VIEW -->
+  <div id="adminLoginView" class="w-full max-w-sm glass-panel p-8 rounded-3xl text-center relative z-10">
+    <div class="flex justify-center mb-4">
+      <svg class="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="56" r="32" stroke="#085A36" stroke-width="12"></circle>
+        <circle cx="50" cy="56" r="32" stroke="#F2A900" stroke-width="12" stroke-dasharray="10 6"></circle>
+        <path d="M40 32C40 26 44 22 50 22C56 22 60 26 60 32" stroke="#085A36" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M28 26L36 12L50 20L64 12L72 26H28Z" fill="#085A36"></path>
+      </svg>
+    </div>
+    <h1 class="text-xl font-extrabold text-brandGreen mb-6">Staff Access Only</h1>
+    <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+      <div class="relative text-left">
+        <input type="password" id="adminPassword" required placeholder="Security Key" class="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-12 py-3 text-center"/>
+      </div>
+      <button type="submit" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold cursor-pointer hover:bg-brandGreenDark transition">Authenticate</button>
+    </form>
+    <p class="text-xs text-slate-400 mt-4">Hint: oga2026</p>
+  </div>
+
+  <!-- ADMIN DASHBOARD VIEW (Hidden until login) -->
+  <div id="adminDashboardView" class="max-w-6xl mx-auto glass-panel p-5 sm:p-8 rounded-3xl hidden relative z-10 w-full mb-10">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-slate-200/60 pb-5">
       <div>
         <h1 class="text-xl sm:text-2xl font-extrabold text-brandGreen">Operations Dashboard</h1>
         <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">OgaMarket Core Systems</p>
       </div>
-      <div class="hidden sm:flex gap-3">
-        <a href="index.html" class="text-xs bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl font-bold transition cursor-pointer">View Home</a>
-        <a href="store.html" class="text-xs bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl font-bold transition cursor-pointer">View Store</a>
-      </div>
+      <button onclick="logoutAdmin()" class="text-xs bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-xl font-bold transition cursor-pointer">Lock System</button>
     </div>
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Live Products</span>
-        <span class="text-2xl font-extrabold text-brandGreen mt-1" id="kpi-products">4</span>
+        <span class="text-2xl font-extrabold text-brandGreen mt-1" id="kpi-products">0</span>
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pending Orders</span>
-        <span class="text-2xl font-extrabold text-brandGold mt-1">12</span>
+        <span class="text-2xl font-extrabold text-brandGold mt-1">1</span>
       </div>
       <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm flex flex-col justify-center">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Vendor Leads</span>
@@ -63,10 +81,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Orders & Leads Column -->
       <div class="lg:col-span-2 space-y-8">
-        
         <!-- Active Orders -->
         <div>
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg> Active Pipeline</h2>
+          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg> Active Pipeline</h2>
           <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-slate-100 last:border-0 gap-2">
               <div><p class="font-bold text-sm">#OGA-99104 - Bolanle Adeyemi</p><p class="text-xs text-slate-500 mt-1">2x White Ijebu Garri, 1x Clean Egusi</p></div>
@@ -75,54 +92,38 @@
                 <button class="bg-brandGreen text-white px-3 py-1 rounded text-xs font-bold cursor-pointer hover:bg-brandGreenDark">Dispatch</button>
               </div>
             </div>
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-slate-100 last:border-0 gap-2">
-              <div><p class="font-bold text-sm">#OGA-99105 - Emeka Okoro</p><p class="text-xs text-slate-500 mt-1">3x Heavy Benue Yam</p></div>
-              <div class="flex gap-2">
-                <span class="bg-brandGreen border border-brandGreenDark text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-full w-max">Dispatched</span>
-                <button class="bg-slate-200 text-slate-600 px-3 py-1 rounded text-xs font-bold cursor-pointer hover:bg-slate-300">Close</button>
-              </div>
-            </div>
           </div>
         </div>
 
         <!-- Vendor Leads -->
         <div>
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Vendor Approvals</h2>
+          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Vendor Approvals</h2>
           <div class="bg-white/80 rounded-2xl p-4 border border-white shadow-sm space-y-3">
             <div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
               <div><p class="font-bold text-sm">Iya Basit (Mile 12)</p><p class="text-[11px] text-slate-500">Tomatoes & Peppers</p></div>
               <button class="bg-brandGreen text-white px-3 py-1.5 rounded text-[10px] uppercase font-bold cursor-pointer hover:bg-brandGreenDark">Approve</button>
             </div>
-            <div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-              <div><p class="font-bold text-sm">Baba Ojo Tubers</p><p class="text-[11px] text-slate-500">Yams, Potatoes (Bodija)</p></div>
-              <button class="bg-brandGreen text-white px-3 py-1.5 rounded text-[10px] uppercase font-bold cursor-pointer hover:bg-brandGreenDark">Approve</button>
-            </div>
           </div>
         </div>
-
       </div>
 
       <!-- Inventory CRUD Column -->
       <div class="space-y-8">
-        
         <!-- Add Product Form -->
         <div class="bg-white/95 rounded-2xl p-5 border border-white shadow-md">
-          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-4 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg> Add New Product</h2>
+          <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-4 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> Add New Product</h2>
           <form id="addProductForm" onsubmit="handleProductUpload(event)" class="space-y-3">
-            
             <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('imgUpload').click()">
               <div id="imgPreviewContainer" class="hidden mb-2">
                 <img id="imgPreview" src="" class="w-full h-32 object-cover rounded-lg mx-auto" />
               </div>
               <div id="imgUploadText">
-                <svg class="w-6 h-6 text-brandGreen mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <svg class="w-6 h-6 text-brandGreen mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span class="text-xs font-bold text-slate-500">Tap to upload real image</span>
               </div>
               <input type="file" id="imgUpload" accept="image/*" class="hidden" onchange="previewImage(event)"/>
             </div>
-
             <input type="text" id="newProdName" required placeholder="Product Name (e.g. Iron Beans)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm"/>
-            
             <div class="flex gap-2">
               <select id="newProdCategory" class="w-1/2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600">
                 <option value="SWALLOWS">Grains/Tubers</option>
@@ -131,17 +132,14 @@
               </select>
               <input type="text" id="newProdGauge" required placeholder="Gauge (e.g. 1 Derica)" class="w-1/2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm"/>
             </div>
-
             <div class="flex gap-2 items-center">
               <span class="font-bold text-slate-500">&#8358;</span>
               <input type="number" id="newProdPrice" required placeholder="Live Price" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono font-bold"/>
             </div>
-            
             <label class="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer">
               <input type="checkbox" id="interstateSafe" checked class="rounded border-slate-300 text-brandGreen focus:ring-brandGreen" />
               Interstate Safe (Non-Perishable)
             </label>
-
             <button type="submit" class="w-full bg-brandGreen text-white py-2.5 rounded-lg font-bold text-sm mt-2 shadow-sm cursor-pointer hover:bg-brandGreenDark transition">Publish to Store</button>
           </form>
         </div>
@@ -151,35 +149,32 @@
           <h2 class="font-extrabold text-sm uppercase tracking-wider text-slate-600 mb-3">Live Pricing (&#8358;)</h2>
           <ul id="adminInv" class="bg-white/80 rounded-2xl p-3 border border-white shadow-sm divide-y divide-slate-100 space-y-2 max-h-96 overflow-y-auto"></ul>
         </div>
-
       </div>
     </div>
   </div>
 
-  <nav class="sm:hidden fixed bottom-0 left-0 w-full glass-nav z-50 flex items-center justify-around pb-safe pt-2 px-2 h-16 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-    <a href="index.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-      <span class="text-[10px] font-bold">Home</span>
-    </a>
-    <a href="store.html" class="flex flex-col items-center gap-1 text-slate-400 hover:text-brandGreen p-2 transition cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-      <span class="text-[10px] font-bold">Store</span>
-    </a>
-    <a href="admin.html" class="flex flex-col items-center gap-1 text-brandGreen p-2 cursor-pointer">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      <span class="text-[10px] font-bold">Admin</span>
-    </a>
-  </nav>
-
   <script>
-    const initialCatalog = [
-      { id: "prod-1", name: "Premium White Ijebu Garri", category: "SWALLOWS", gauge: "Paint Bucket (4L)", price: 4500, image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" },
-      { id: "prod-2", name: "Heavy Benue Yams", category: "SWALLOWS", gauge: "Set of 3 Heavy Tubers", price: 14000, image: "https://images.unsplash.com/photo-1596450514735-111a2fe02935?w=600&q=80" },
-      { id: "prod-3", name: "Clean Egusi", category: "SOUPS", gauge: "Paint Bucket (4L)", price: 9200, image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80" },
-      { id: "prod-4", name: "Oron Smoked Crayfish", category: "SOUPS", gauge: "1 Large Derica", price: 4200, image: "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=600&q=80" }
-    ];
-    
-    let catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || initialCatalog;
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('adminPassword').value;
+      if(pwd === "oga2026") {
+        document.getElementById('adminLoginView').classList.add('hidden');
+        document.getElementById('adminDashboardView').classList.remove('hidden');
+        document.body.classList.remove('items-center', 'justify-center');
+        renderAdminInventory();
+      } else {
+        alert("Access Denied.");
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('adminDashboardView').classList.add('hidden');
+      document.getElementById('adminLoginView').classList.remove('hidden');
+      document.body.classList.add('items-center', 'justify-center');
+    }
+
+    let catalog = JSON.parse(localStorage.getItem('ogamarket_catalog')) || [];
     let uploadedImageBase64 = "";
 
     function renderAdminInventory() {
@@ -257,8 +252,6 @@
       renderAdminInventory();
       alert("Product published successfully!");
     }
-
-    window.addEventListener('DOMContentLoaded', renderAdminInventory);
   </script>
 </body>
 </html>
