@@ -80,6 +80,19 @@
     <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"></div>
   </main>
 
+  <!-- PRODUCT DETAILS MODAL -->
+  <div id="detailsModal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-6 text-left my-8 shadow-2xl relative bg-white flex flex-col">
+      <button type="button" onclick="closeDetails()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-2xl cursor-pointer leading-none z-10">&times;</button>
+      <div id="detailsImages" class="flex overflow-x-auto snap-x snap-mandatory gap-2 no-scrollbar mb-4 -mx-2 px-2"></div>
+      <h3 id="detailsName" class="text-xl font-extrabold text-slate-900 leading-tight mb-1"></h3>
+      <p id="detailsGauge" class="text-xs text-slate-500 mb-2"></p>
+      <p id="detailsPrice" class="text-lg font-extrabold font-mono text-brandGreen mb-4"></p>
+      <p id="detailsDesc" class="text-sm text-slate-700 leading-relaxed mb-6 whitespace-pre-line"></p>
+      <div id="detailsActionBtn" class="mt-auto"></div>
+    </div>
+  </div>
+
   <div id="cartModal" class="fixed inset-0 z-[70] hidden">
     <div onclick="closeCart()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm cursor-pointer"></div>
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col z-10">
@@ -98,7 +111,7 @@
     </div>
   </div>
 
-  <div id="checkoutModal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+  <div id="checkoutModal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
     <div class="glass-panel rounded-3xl max-w-lg w-full p-6 text-left my-8 shadow-2xl relative bg-white">
       <button type="button" onclick="closeCheckout()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold text-2xl cursor-pointer leading-none">&times;</button>
       <h3 class="text-xl font-extrabold mb-4 text-slate-900">Delivery Details</h3>
@@ -111,7 +124,7 @@
           <option value="interstate">Interstate Motor Park Waybill (&#8358;6,500)</option>
         </select>
         <textarea id="custAddress" required placeholder="Full Delivery Address" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm" rows="3"></textarea>
-        <button id="submitOrderBtn" type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Pay Securely via Paystack</button>
+        <button id="submitOrderBtn" type="submit" class="w-full bg-brandGreen text-white py-4 rounded-xl font-bold shadow-md cursor-pointer active:scale-95 transition">Submit Order</button>
       </form>
     </div>
   </div>
@@ -125,8 +138,8 @@
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative overflow-hidden">
       <div id="alertTopBar" class="absolute top-0 left-0 w-full h-1.5 bg-brandGreen"></div>
       <h3 id="alertTitle" class="text-xl font-extrabold mb-2 mt-2 text-slate-900">Notice</h3>
-      <p id="alertMessage" class="text-sm text-slate-600 mb-6">Message</p>
-      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95">Got it</button>
+      <p id="alertMessage" class="text-sm text-slate-600 mb-6 break-words">Message</p>
+      <button onclick="closeAlert()" class="w-full bg-brandGreen text-white py-3 rounded-xl font-bold shadow-sm cursor-pointer hover:bg-brandGreenDark transition active:scale-95 mt-2">Got it</button>
     </div>
   </div>
 
@@ -138,20 +151,16 @@
     let catalog = [];
     let cart = JSON.parse(localStorage.getItem('ogamarket_cart')) || [];
     let currentCategory = 'ALL';
+    let detailsIdOpened = null;
 
     function showAlert(title, message, isError = false) {
       document.getElementById('alertTitle').innerText = title;
       document.getElementById('alertMessage').innerText = message;
       document.getElementById('alertTopBar').className = 'absolute top-0 left-0 w-full h-1.5 ' + (isError ? 'bg-brandRed' : 'bg-brandGreen');
-      const modal = document.getElementById('customAlert');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      document.getElementById('customAlert').classList.remove('hidden');
+      document.getElementById('customAlert').classList.add('flex');
     }
-    function closeAlert() {
-      const modal = document.getElementById('customAlert');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
+    function closeAlert() { document.getElementById('customAlert').classList.add('hidden'); document.getElementById('customAlert').classList.remove('flex'); }
 
     async function init() {
       await fetchProducts();
@@ -162,7 +171,6 @@
       const { data, error } = await db.from('products').select('*').order('created_at', { ascending: false });
       document.getElementById('loader').classList.add('hidden');
       if (error) {
-        console.error(error);
         document.getElementById('productGrid').innerHTML = '<p class="col-span-full text-center text-brandRed font-bold py-10">Failed to load inventory.</p>';
       } else {
         catalog = data || [];
@@ -178,21 +186,36 @@
       const grid = document.getElementById('productGrid');
       const filtered = catalog.filter(item => currentCategory === 'ALL' || item.category === currentCategory);
       
-      grid.innerHTML = filtered.map(item => `
-        <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm bg-white">
-          <img src="${item.image}" alt="${item.name}" class="h-32 sm:h-48 w-full object-cover"/>
-          <div class="p-3 sm:p-4">
+      grid.innerHTML = filtered.map(item => {
+        const cartItem = cart.find(c => String(c.id) === String(item.id));
+        const qty = cartItem ? cartItem.quantity : 0;
+        
+        let btnHtml = '';
+        if(qty > 0) {
+          btnHtml = `
+            <div class="flex items-center justify-between bg-brandGreen text-white rounded-lg overflow-hidden shadow-sm h-9 sm:h-10">
+              <button type="button" onclick="updateQuantity('${item.id}', -1, event)" class="w-10 h-full font-bold hover:bg-brandGreenDark transition active:scale-95">-</button>
+              <span class="font-bold text-sm pointer-events-none">${qty}</span>
+              <button type="button" onclick="updateQuantity('${item.id}', 1, event)" class="w-10 h-full font-bold hover:bg-brandGreenDark transition active:scale-95">+</button>
+            </div>
+          `;
+        } else {
+          btnHtml = `<button type="button" onclick="addToCart('${item.id}', event)" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1.5 h-9 sm:h-10">Add to Bag</button>`;
+        }
+
+        return `
+        <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm bg-white cursor-pointer hover:shadow-md transition" onclick="openDetails('${item.id}')">
+          <img src="${item.image}" class="h-32 sm:h-48 w-full object-cover pointer-events-none"/>
+          <div class="p-3 sm:p-4 pointer-events-none">
             <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-tight mb-1 truncate">${item.name}</h3>
             <p class="text-[10px] sm:text-xs text-slate-500 mb-2 truncate">${item.gauge}</p>
             <p class="text-sm sm:text-lg font-extrabold font-mono text-brandGreen">&#8358;${Number(item.price).toLocaleString()}</p>
           </div>
           <div class="p-3 pt-0">
-            <button type="button" onclick="addToCart('${item.id}', this)" class="w-full bg-brandGreen text-white py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm active:scale-95 transition cursor-pointer flex items-center justify-center gap-1.5">
-              <span>Add to Bag</span>
-            </button>
+            ${btnHtml}
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     function filterCategory(cat) {
@@ -206,30 +229,76 @@
       renderProducts();
     }
 
-    function addToCart(id, btnElem) {
+    function openDetails(id) {
+      const item = catalog.find(p => String(p.id) === String(id));
+      if(!item) return;
+      detailsIdOpened = id;
+      
+      const imagesContainer = document.getElementById('detailsImages');
+      let allImages = [item.image];
+      if(item.extra_images && Array.isArray(item.extra_images)) {
+        allImages = allImages.concat(item.extra_images);
+      }
+      imagesContainer.innerHTML = allImages.map(img => `<img src="${img}" class="h-48 w-4/5 object-cover rounded-xl snap-center flex-shrink-0" />`).join('');
+      
+      document.getElementById('detailsName').innerText = item.name;
+      document.getElementById('detailsGauge').innerText = item.gauge;
+      document.getElementById('detailsPrice').innerHTML = '&#8358;' + Number(item.price).toLocaleString();
+      document.getElementById('detailsDesc').innerText = item.description || "No description provided.";
+      
+      refreshDetailsButton();
+      
+      document.getElementById('detailsModal').classList.remove('hidden');
+      document.getElementById('detailsModal').classList.add('flex');
+    }
+
+    function refreshDetailsButton() {
+      if(!detailsIdOpened) return;
+      const cartItem = cart.find(c => String(c.id) === String(detailsIdOpened));
+      const qty = cartItem ? cartItem.quantity : 0;
+      
+      let btnHtml = '';
+      if(qty > 0) {
+        btnHtml = `
+          <div class="flex items-center justify-between bg-brandGreen text-white rounded-xl overflow-hidden shadow-sm h-12 w-full">
+            <button type="button" onclick="updateQuantity('${detailsIdOpened}', -1, event)" class="w-16 h-full font-bold hover:bg-brandGreenDark transition active:scale-95 text-lg">-</button>
+            <span class="font-bold text-base pointer-events-none">${qty} in Bag</span>
+            <button type="button" onclick="updateQuantity('${detailsIdOpened}', 1, event)" class="w-16 h-full font-bold hover:bg-brandGreenDark transition active:scale-95 text-lg">+</button>
+          </div>
+        `;
+      } else {
+        btnHtml = `<button type="button" onclick="addToCart('${detailsIdOpened}', event)" class="w-full bg-brandGreen text-white py-3.5 rounded-xl font-bold active:scale-95 transition cursor-pointer">Add to Bag</button>`;
+      }
+      document.getElementById('detailsActionBtn').innerHTML = btnHtml;
+    }
+
+    function closeDetails() {
+      document.getElementById('detailsModal').classList.add('hidden');
+      document.getElementById('detailsModal').classList.remove('flex');
+      detailsIdOpened = null;
+    }
+
+    function addToCart(id, e) {
+      if(e) e.stopPropagation();
       const item = catalog.find(p => String(p.id) === String(id));
       if (!item) return;
       const existing = cart.find(c => String(c.id) === String(id));
       if (existing) existing.quantity += 1; else cart.push({ ...item, quantity: 1 });
       
-      saveCart(); updateCartUI();
-
-      if(btnElem) {
-        const originalText = btnElem.innerHTML;
-        btnElem.innerHTML = `<svg class="w-4 h-4 text-brandGold pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span>Added</span>`;
-        setTimeout(() => { btnElem.innerHTML = originalText; }, 900);
-      }
+      saveCart(); updateCartUI(); renderProducts(); refreshDetailsButton();
+      
       const badge = document.getElementById('cartCountBadge');
       badge.classList.remove('badge-pop'); void badge.offsetWidth; badge.classList.add('badge-pop');
     }
 
-    function updateQuantity(id, delta) {
+    function updateQuantity(id, delta, e) {
+      if(e) e.stopPropagation();
       const index = cart.findIndex(c => String(c.id) === String(id));
       if (index > -1) {
         cart[index].quantity += delta;
         if (cart[index].quantity <= 0) cart.splice(index, 1);
       }
-      saveCart(); updateCartUI();
+      saveCart(); updateCartUI(); renderProducts(); refreshDetailsButton();
     }
 
     function saveCart() { localStorage.setItem('ogamarket_cart', JSON.stringify(cart)); }
@@ -250,9 +319,9 @@
               <p class="text-xs font-mono text-brandGreen font-bold mt-0.5">&#8358;${Number(item.price).toLocaleString()}</p>
             </div>
             <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
-              <button type="button" onclick="updateQuantity('${item.id}', -1)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">-</button>
+              <button type="button" onclick="updateQuantity('${item.id}', -1, event)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">-</button>
               <span class="font-mono text-sm font-bold w-4 text-center">${item.quantity}</span>
-              <button type="button" onclick="updateQuantity('${item.id}', 1)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">+</button>
+              <button type="button" onclick="updateQuantity('${item.id}', 1, event)" class="w-7 h-7 bg-white rounded font-bold shadow-sm active:bg-slate-50 cursor-pointer">+</button>
             </div>
           </div>
         `).join('');
@@ -291,12 +360,12 @@
 
       if (error) {
         showAlert("Checkout failed", error.message, true);
-        btn.innerText = "Pay Securely via Paystack";
+        btn.innerText = "Submit Order";
         btn.disabled = false;
         return;
       }
 
-      cart = []; saveCart(); updateCartUI(); closeCheckout();
+      cart = []; saveCart(); updateCartUI(); renderProducts(); closeCheckout();
       window.location.href = "track.html?email=" + encodeURIComponent(email);
     }
 
